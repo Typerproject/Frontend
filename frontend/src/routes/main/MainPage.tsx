@@ -4,6 +4,8 @@
 
 export default function MainPage() {
   return (
-    <div>MainPage</div>
+    <div
+    className="bg-red-500"
+    >MainPage</div>
   )
 }
