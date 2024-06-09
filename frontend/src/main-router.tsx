@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import MainPage from "./routes/main/MainPage";
-import PostDetail from "./routes/postDetail/PostDetail";
+import PostDetail from "./routes/postDetail/PostDetailPage";
 import MyPage from "./routes/my/MyPage";
 import EditorPage from "./routes/editor/EditorPage";
 
