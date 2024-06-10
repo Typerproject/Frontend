@@ -4,6 +4,8 @@ import PostDetail from "./routes/postDetail/PostDetailPage";
 import MyPage from "./routes/my/MyPage";
 import EditorPage from "./routes/editor/EditorPage";
 
+import Layout from "./components/Layout";
+
 const routers = [
     {
         path: "/",
@@ -22,8 +24,15 @@ const routers = [
     },
     {
         path: "/post",
-        element: <PostDetail />,
+        element: <Layout />,
         // index: true
+        children: [
+            {
+                path: "",
+                element: <PostDetail />,
+                index: true
+            }
+        ]
     }
 ];
 
