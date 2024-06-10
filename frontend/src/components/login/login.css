@@ -1,0 +1,78 @@
+@import url("https://fonts.googleapis.com/css2?family=ABeeZee&display=swap");
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 456px;
+  height: 813px;
+  background: white;
+  align-items: center;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.modal-content {
+  width: 362px;
+  height: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-self: start;
+  align-items: center;
+}
+
+.comment {
+  padding-bottom: 30px;
+}
+
+.comment > p {
+  font-size: 17px;
+  font-family: "ABeeZee", sans-serif;
+  font-weight: 590;
+}
+
+.login-button {
+  width: 356px;
+  height: 58px;
+  background-image: url("../../assets/loginButton.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: none;
+  cursor: pointer;
+}
+
+.line {
+  width: 87%;
+  height: 1px;
+  background-color: #ddd;
+  margin: 25px 0;
+}
+
+.preview {
+  width: 120px;
+  height: 19px;
+}
+
+.preview > a {
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+
+.close-button {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  width: 20px;
+  height: 20px;
+  background-image: url("../../assets/close.svg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: none;
+  cursor: pointer;
+  opacity: 0.5;
+}
