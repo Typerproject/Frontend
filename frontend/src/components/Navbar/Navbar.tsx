@@ -13,8 +13,8 @@ export default function Navbar() {
         </NavLink>
 
         <div className="relative">
-          <IoMdSearch className="absolute top-[25%] left-[10px]"/>
-          <input className="h-[30px] rounded-full pl-[30px] pr-[10px] py-[5px] bg-[#E5E5E5]" />
+          <IoMdSearch className="absolute top-[30%] left-[10px]"/>
+          <input className="h-[35px] rounded-full pl-[30px] pr-[10px] py-[5px] bg-[#E5E5E5]" />
         </div>
       </div>
 
