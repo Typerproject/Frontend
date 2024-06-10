@@ -5,7 +5,7 @@ import InputComment from "./component/InputComment";
 
 export default function PostDetail() {
   return (
-    <div className="mt-[7rem] mx-[2rem]">
+    <div className="mt-[7rem] mx-[2rem] md:mx-[10rem]">
       <PostContent />
       <InputComment />
       <CommentList />

@@ -4,7 +4,7 @@ import WriterInfo from "./WriterInfo"
 
 export default function PostContent() {
   return (
-    <div className="w-full h-full min-h-70 rounded-[10px] shadow-lg shadow-[0_0_8px_5px] shadow-gray-200 p-[2rem]">
+    <div className="w-full h-full min-h-70 rounded-[10px] shadow-[0_0_8px_5px] shadow-gray-200 p-[2rem]">
 
         {/* 글 제목, 날짜, 글쓴이 기본 정보 */}
         <h1 className="text-3xl	font-bold">게시글 상세 페이지</h1>
