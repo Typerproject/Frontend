@@ -1,9 +1,11 @@
-// import React from 'react'
-
+// import React from 'react' 
+import PostContent from "./component/PostContent"
 // type Props = {}
 
 export default function PostDetail() {
   return (
-    <div>PostDetail</div>
+    <div className="mt-[7rem] mx-[1rem]">
+      <PostContent />
+    </div>
   )
 }
