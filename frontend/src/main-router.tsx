@@ -7,33 +7,40 @@ import EditorPage from "./routes/editor/EditorPage";
 import Layout from "./components/Layout";
 
 const routers = [
-    {
-        path: "/",
-        element: <MainPage />,
-        // index: true
-    }, 
-    {
-        path: "/my",
+  {
+    path: "/",
+    element: <MainPage />,
+    // index: true
+  },
+  {
+    path: "/my",
+    element: <Layout />,
+    // index: true
+    children: [
+      {
+        path: "",
         element: <MyPage />,
-        // index: true
-    },
-    {
-        path: "/editor",
-        element: <EditorPage />,
-        // index: true
-    },
-    {
-        path: "/post",
-        element: <Layout />,
-        // index: true
-        children: [
-            {
-                path: "",
-                element: <PostDetail />,
-                index: true
-            }
-        ]
-    }
+        index: true,
+      },
+    ],
+  },
+  {
+    path: "/editor",
+    element: <EditorPage />,
+    // index: true
+  },
+  {
+    path: "/post",
+    element: <Layout />,
+    // index: true
+    children: [
+      {
+        path: "",
+        element: <PostDetail />,
+        index: true,
+      },
+    ],
+  },
 ];
 
 const router = createBrowserRouter(routers);
