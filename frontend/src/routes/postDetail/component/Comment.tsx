@@ -5,7 +5,7 @@ export default function Comment() {
   const navigate = useNavigate();
 
   return (
-    <div className="flex gap-[1rem] items-center">
+    <div className="flex gap-[1rem] items-center cursor-pointer">
       <div onClick={()=>navigate("/my")}
       className="flex gap-[1rem] items-center"
       >

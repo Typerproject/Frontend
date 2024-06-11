@@ -11,7 +11,7 @@ export default function InputComment() {
       />
       <p className="text-sm">로그인 한 user</p>
       <div className="grow relative bg-gray-300 rounded-2xl pl-[1.25rem] pr-[4.25rem] py-[0.75rem] ">
-        <textarea className="w-full bg-transparent outline-none	h-[40px] resize-none"/>
+        <textarea className="w-full bg-transparent outline-none	max-h-[50px] h-[20px]"/>
         <button className="absolute right-[0px] top-[50%]  translate-y-[-50%] translate-x-[-25%] bg-black text-white rounded-full border-[1px] border-black text-xs px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-black duration-300">등록</button>
       </div>
     </div>
