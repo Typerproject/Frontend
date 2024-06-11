@@ -137,6 +137,6 @@ export default function ViewEditor() {
     //   });
 
   return (<div id="viewEditor">
-    <p>view Editor임</p>
+    <p>view Editor 더미데이터, 예시 코드 추가요</p>
   </div>);
 }

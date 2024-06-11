@@ -15,7 +15,7 @@ export default function Comment() {
       />
       <p className="text-sm">댓글 단 user</p>
       </div>
-      <div className="relative grow bg-gray-300 rounded-full pl-[1.25rem] pr-[4.25rem] py-[0.75rem]">
+      <div className="relative grow bg-gray-300 rounded-2xl pl-[1.25rem] pr-[4.25rem] py-[0.75rem]">
         <p>오 글 좋네요 하트 누름^_^</p>
         <button className="absolute right-[0px] top-[50%] translate-y-[-50%] translate-x-[-25%] bg-black text-white rounded-full border-[1px] border-black text-xs px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-black duration-300">
           삭제
