@@ -1,8 +1,14 @@
 import React, { useRef, useEffect } from "react";
 import EditorJS from "@editorjs/editorjs";
-import "./Editor.css";
+import "../../../index.css";
+import Header from "@editorjs/header";
+import { type ToolConstructable, OutputData } from "@editorjs/editorjs";
 
-export default function Editor() {
+type Props = {
+  setContent: (value: OutputData) => void;
+};
+
+export default function Editor({ setContent }: Props) {
   const ejInstance = useRef<EditorJS | null>(null);
 
   const initEditor = () => {
@@ -13,10 +19,19 @@ export default function Editor() {
         ejInstance.current = editor;
       },
       onChange: async () => {
-        const content = await editor.saver.save();
-        console.log(content);
+        setContent(await editor.save());
       },
       minHeight: 400,
+      tools: {
+        header: {
+          class: Header as unknown as ToolConstructable,
+          config: {
+            placeholder: "Enter a header",
+            levels: [1, 2, 3, 4],
+            defaultLevel: 3,
+          },
+        },
+      },
     });
   };
 
@@ -34,7 +49,7 @@ export default function Editor() {
   return (
     <div
       id="editorjs"
-      className="w-11/12 mt-2 border-solid border-2 rounded-2xl shadow-md mb-5 overflow-y-auto max-h-[62vh]"
+      className="w-11/12 mt-2 border-solid border-2 rounded-2xl shadow-md mb-5 overflow-y-auto max-h-[63vh]"
     ></div>
   );
 }
