@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import FollowList from "./component/FollowList";
+import Post from "../../components/Post/Post";
 
 // type Props = {}
 
@@ -38,10 +39,15 @@ export default function MyPage() {
 
   return (
     <div className="mt-[7rem]">
-      {/*글 목록*/}
       <div className="grid grid-cols-3">
-        <div className="col-span-2 flex justify-center  text-5xl">
+        {/*글목록*/}
+        <div className="col-span-2 text-5xl flex flex-col items-center gap-[2rem]">
           <p>{userName}'s Typer</p>
+          <div onClick={() => navigate("/post")}>
+            {/*가져온 글 목록을 map돌면서 출력*/}
+            <Post />
+            <Post />
+          </div>
         </div>
 
         {/*프로필*/}
