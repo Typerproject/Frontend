@@ -3,6 +3,7 @@ import EditorJS from "@editorjs/editorjs";
 import "../../../index.css";
 import Header from "@editorjs/header";
 import { type ToolConstructable, OutputData } from "@editorjs/editorjs";
+import { ChartBLock } from "./blockTools/ChartBlock";
 
 type Props = {
   setContent: (value: OutputData) => void;
@@ -31,6 +32,7 @@ export default function Editor({ setContent }: Props) {
             defaultLevel: 3,
           },
         },
+        charts: ChartBLock,
       },
     });
   };
