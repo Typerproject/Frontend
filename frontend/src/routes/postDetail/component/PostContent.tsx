@@ -30,7 +30,7 @@ export default function PostContent() {
       <div className="flex flex-row-reverse items-center gap-[1rem]">
         <p>123</p>
         <div onClick={() => handleLike()} className="cursor-pointer">
-          {validHeart ? <FaHeart size={20}/> : <FaRegHeart size={20}/>}
+          {validHeart ? <FaHeart size={20} /> : <FaRegHeart size={20} />}
         </div>
       </div>
     </div>
