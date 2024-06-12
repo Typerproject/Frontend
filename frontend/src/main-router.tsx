@@ -4,7 +4,7 @@ import PostDetail from "./routes/postDetail/PostDetailPage";
 import MyPage from "./routes/my/MyPage";
 import EditorPage from "./routes/editor/EditorPage";
 
-// import Layout from "./components/Layout";
+import Layout from "./components/Layout";
 import LoginModal from "./components/login/LoginModal";
 import Redirect from "./components/login/Redirect";
 
@@ -16,8 +16,15 @@ const routers = [
   },
   {
     path: "/my",
-    element: <MyPage />,
+    element: <Layout />,
     // index: true
+    children: [
+      {
+        path: "",
+        element: <MyPage />,
+        index: true,
+      },
+    ],
   },
   {
     path: "/editor",
