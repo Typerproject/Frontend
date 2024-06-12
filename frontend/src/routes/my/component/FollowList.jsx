@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function Follow() {
+export default function FollowList() {
   //props로 id, 이름, 프사 받아오기
   const [userName, setUserName] = useState("DogisCute");
   const [profileImg, setProfileImg] = useState(

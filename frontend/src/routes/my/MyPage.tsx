@@ -1,7 +1,7 @@
 // import React from 'react'
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Follow from "./component/Follow";
+import FollowList from "./component/FollowList";
 
 // type Props = {}
 
@@ -98,7 +98,7 @@ export default function MyPage() {
             {follow != false && (
               //클릭 시 해당 사람의 마이페이지로
               <div className="cursor-pointer" onClick={() => navigate(`/post`)}>
-                <Follow />
+                <FollowList />
               </div>
             )}
           </div>
