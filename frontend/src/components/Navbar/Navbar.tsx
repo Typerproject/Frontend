@@ -8,13 +8,13 @@ export default function Navbar() {
       <div className="flex gap-[2rem] items-center">
         <NavLink to="/">
           <p className="text-white text-[20px]">
-            <span className="text-[35px]">T</span>yper
+            <span className="text-[35px]">Typer</span>
           </p>
         </NavLink>
 
-        <div className="relative">
-          <IoMdSearch className="absolute top-[25%] left-[10px]"/>
-          <input className="h-[30px] rounded-full pl-[30px] pr-[10px] py-[5px] bg-[#E5E5E5]" />
+        <div className="relative hidden md:inline-block ">
+          <IoMdSearch className="absolute top-[30%] left-[10px]"/>
+          <input className="h-[35px] rounded-full pl-[30px] pr-[10px] py-[5px] bg-[#E5E5E5]" />
         </div>
       </div>
 
@@ -27,9 +27,10 @@ export default function Navbar() {
 
         <div>
           <NavLink to="/my" className="bg-white">
-            <img 
-            className="w-[40px] rounded-full"
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTD68cSMsrBiEs6YloK8MVPO1DlJ7LqKt4OxT7ioMJn7xh-1iqPV0FVFjvTA7Cvlv-Y9Yc&usqp=CAU"/>
+            <img
+              className="w-[40px] rounded-full"
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTD68cSMsrBiEs6YloK8MVPO1DlJ7LqKt4OxT7ioMJn7xh-1iqPV0FVFjvTA7Cvlv-Y9Yc&usqp=CAU"
+            />
           </NavLink>
         </div>
       </div>
