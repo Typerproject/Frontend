@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import { IoMdSearch } from "react-icons/io";
 export default function Navbar() {
   return (
-    <nav className="bg-black fixed w-full h-fit py-[0.75em] px-[1.5rem] top-0 flex justify-between">
+    <nav className="bg-black fixed w-full h-fit py-[0.75em] px-[1.5rem] top-0 flex justify-between z-[100]">
       <div className="flex gap-[2rem] items-center">
         <NavLink to="/">
           <p className="text-white text-[20px]">
