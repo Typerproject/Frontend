@@ -8,6 +8,10 @@ interface UserState {
   profile: string | null;
 }
 
+type userInfo = {
+  user: UserState;
+}
+
 const initialState: UserState = {
   _id: null,
   nickname: null,
@@ -20,16 +24,16 @@ const userSlice = createSlice({
   name: "user",
   initialState: initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<UserState>) => {
+    setUser: (state, action: PayloadAction<userInfo>) => {
       console.log(state);
       console.log(action);
       //PayloadAction은 action 객체의 payload에 대해 redux toolkit에서 제공하는 type
       //로그인 했을 때 로직
-      state._id = action.payload._id;
-      state.nickname = action.payload.nickname;
-      state.email = action.payload.email;
-      state.comment = action.payload.comment;
-      state.profile = action.payload.profile;
+      state._id = action.payload.user._id;
+      state.nickname = action.payload.user.nickname;
+      state.email = action.payload.user.email;
+      state.comment = action.payload.user.comment;
+      state.profile = action.payload.user.profile;
     },
     logoutUser: (state) => {
       console.log(state);
