@@ -7,17 +7,6 @@ import {
 import storage from "redux-persist/lib/storage";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
-// const store = configureStore({
-//   reducer: {
-//     user: userReducer,
-//   },
-//   middleware: (getDefaultMiddleware) => {
-//     const middlewares = getDefaultMiddleware();
-//     // middlewares.push(myMiddleware); //커스텀 미들웨어 적용 시
-//     return middlewares;
-//   },
-// });
-
 const reducers = combineReducers({
   user: userReducer,
 });
@@ -38,8 +27,6 @@ const store = configureStore({
         ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
       },
     });
-    // Add custom middleware here if needed
-    // middlewares.push(myMiddleware);
     return middlewares;
   },
 });

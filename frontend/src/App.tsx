@@ -11,7 +11,6 @@ export const persistor = persistStore(store);
 function App() {
   return (
     <Provider store={store}>
-      {/* <RouterProvider router={MainRouter}></RouterProvider> */}
       <PersistGate loading={null} persistor={persistor}>
         <RouterProvider router={MainRouter} />
       </PersistGate>
