@@ -21,13 +21,7 @@ const Redirect: React.FC = () => {
           console.log("유저어", user);
 
           dispatch(
-            setUser({
-              _id: user._id,
-              nickname: user.nickname,
-              comment: user.comment,
-              profile: user.profile,
-              email: user.email,
-            })
+            setUser(user)
           );
 
           navigate("/");
