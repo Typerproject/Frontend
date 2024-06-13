@@ -6,6 +6,7 @@ export default class BaseApi {
     axios.defaults.withCredentials = true;
     this.fetcher = axios.create({
       baseURL: url,
+      withCredentials: true,
       headers: {
         "Content-Type": "application/json",
       },

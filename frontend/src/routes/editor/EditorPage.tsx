@@ -3,10 +3,13 @@ import Editor from "./component/Editor";
 import Timer from "./component/Timer";
 import { IoMdLock, IoMdUnlock } from "react-icons/io";
 import { OutputData } from "@editorjs/editorjs";
+import postAPI from "../../api/postDetailAPI";
+
+const service = new postAPI(import.meta.env.VITE_SERVER_POST_API_URI);
 
 export default function EditorPage() {
   const [isPublic, setPublic] = useState(true);
-
+  const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<OutputData>();
 
   const changeVisibility = () => {
@@ -19,7 +22,11 @@ export default function EditorPage() {
       return;
     }
 
-    console.log(content);
+    service.addPost({
+      title: title,
+      content: content,
+      public: isPublic,
+    });
   };
 
   return (
@@ -32,6 +39,7 @@ export default function EditorPage() {
             className="block w-11/12 p-4 text-4xl mb-4"
             placeholder="제목을 입력해주세요"
             maxLength={25}
+            onChange={(e) => setTitle(e.target.value)}
           />
 
           <Timer />
