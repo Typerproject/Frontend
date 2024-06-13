@@ -24,4 +24,12 @@ export default class editorAPI extends BaseApi {
 
     return resp.data;
   }
+
+  async getNewsData(newsUrl: string) {
+    const resp = await this.fetcher.post("/news", {
+      url: newsUrl,
+    });
+
+    return resp.data;
+  }
 }

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import CreateDOM from "react-dom/client";
 import JsonChartTest from "./Chart";
-import editorAPI from "../../../../api/editorAPI";
+import editorAPI from "../../../../../api/editorAPI";
 
 const service = new editorAPI(import.meta.env.VITE_SERVER_EDITOR_API_URI);
 
