@@ -1,8 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FaHeart } from "react-icons/fa6"; // 채워진 하트
 import { FaRegHeart } from "react-icons/fa6"; // 빈 하트
+import { FaRegComment } from "react-icons/fa";
 
 export default function Post() {
+  const navigate = useNavigate();
   //게시글 아이디를 전달받아서 api호출을 통해 게시글 정보를 받아옴
   const title: string = "테스트 게시글 입니다.";
   const date: string = "2024-06-12 15:24:32";
@@ -20,29 +23,40 @@ export default function Post() {
 
   return (
     <div className="w-full p-[2rem]">
-      {/* 날짜, 글쓴이 기본 정보 */}
-      <div className="flex gap-[17rem] items-center">
-        <div className="flex gap-[0.5rem] items-center">
-          <img
-            className="w-[40px] rounded-full"
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTD68cSMsrBiEs6YloK8MVPO1DlJ7LqKt4OxT7ioMJn7xh-1iqPV0FVFjvTA7Cvlv-Y9Yc&usqp=CAU"
-          />
-          <p className="text-sm">{userName}</p>
+      <div className="cursor-pointer ">
+        {/* 날짜, 글쓴이 기본 정보 */}
+        <div className="flex gap-[17rem] items-center">
+          <div
+            onClick={() => navigate("/my")}
+            className="flex gap-[0.5rem] items-center"
+          >
+            <img
+              className="w-[40px] rounded-full"
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTD68cSMsrBiEs6YloK8MVPO1DlJ7LqKt4OxT7ioMJn7xh-1iqPV0FVFjvTA7Cvlv-Y9Yc&usqp=CAU"
+            />
+            <p className="text-sm">{userName}</p>
+          </div>
+          <p className="text-sm text-gray-400">{date}</p>
         </div>
-        <p className="text-sm text-gray-400">{date}</p>
+
+        {/* 글 내용 */}
+        <div onClick={() => navigate("/post")}>
+          <div className="text-4xl mt-[1rem]">{title}</div>
+          <p className="text-base py-[2rem] text-gray-500">{content}</p>
+        </div>
       </div>
 
-      <div className="text-4xl mt-[1rem]">{title}</div>
-
-      {/* 글 내용 */}
-      <p className="text-base py-[2rem] text-gray-500">{content}</p>
-
-      <div className="text-base flex items-center gap-[0.5rem]">
-        <div onClick={() => handleLike()} className="cursor-pointer">
-          {validHeart ? <FaHeart size={20} /> : <FaRegHeart size={20} />}
+      <div className="text-base flex items-center gap-[1.5rem]">
+        <div className="flex items-center gap-[0.5rem] ">
+          <div onClick={() => handleLike()} className="cursor-pointer">
+            {validHeart ? <FaHeart size={20} /> : <FaRegHeart size={20} />}
+          </div>
+          <p>{like}</p>
         </div>
-        <p>{like}</p>
-        <p>{comment}</p>
+        <div className="flex items-center gap-[0.5rem] ">
+          <FaRegComment size={20} />
+          <p>{comment}</p>
+        </div>
       </div>
     </div>
   );

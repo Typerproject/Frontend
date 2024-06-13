@@ -41,7 +41,7 @@ export default function MyPage() {
         {/*글목록*/}
         <div className="col-span-2 text-5xl flex flex-col items-center gap-[2rem]">
           <p>{userName}'s Typer</p>
-          <div onClick={() => navigate("/post")}>
+          <div>
             {/*가져온 글 목록을 map돌면서 출력*/}
             <Post />
             <Post />
