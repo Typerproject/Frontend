@@ -8,7 +8,7 @@ export default defineConfig({
       '/analyst': {
         target: 'https://consensus.hankyung.com',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
+        rewrite: (path) => path.replace(/^\/analyst/, ''),
         configure: (proxy) => {
           proxy.on('proxyReq', (proxyReq, req, res) => {
             console.log('Proxying request:', req.method, req.url);
