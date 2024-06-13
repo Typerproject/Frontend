@@ -10,7 +10,7 @@ interface UserState {
 
 type userInfo = {
   user: UserState;
-}
+};
 
 const initialState: UserState = {
   _id: null,

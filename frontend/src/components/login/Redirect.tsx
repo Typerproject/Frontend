@@ -20,9 +20,7 @@ const Redirect: React.FC = () => {
           const user = response.data;
           console.log("유저어", user);
 
-          dispatch(
-            setUser(user)
-          );
+          dispatch(setUser(user));
 
           navigate("/");
         })
