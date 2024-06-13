@@ -20,7 +20,7 @@ const routers = [
     // index: true
     children: [
       {
-        path: "",
+        path: ":id",
         element: <MyPage />,
         index: true,
       },

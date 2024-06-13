@@ -1,7 +1,11 @@
 // import React from 'react'
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { useAppSelector } from "../../store";
 import FollowList from "./component/FollowList";
 import Post from "../../components/Post/Post";
+import userAPI from "../../api/userAPI";
 
 // type Props = {}
 
@@ -18,6 +22,16 @@ export default function MyPage() {
   const [followerCount, setFollowerCount] = useState(1231);
   const [followingCount, setFollowingCount] = useState(53);
   const [follow, setFollow] = useState<State>(false);
+
+  //현재 접속한 유저 아이디 가져오기
+  // const userId = useAppSelector((state) => state.user._id);
+  // const userName = useAppSelector((state) => state.user.nickname);
+  // const profileImg = useAppSelector((state) => state.user.profile);
+  // const profileIntro = useAppSelector((state) => state.user.comment);
+
+  //현재 접속한 마이 페이지의 유저 아이디
+  const { id } = useParams();
+  //console.log(id);
 
   const handleFollowerBtn = () => {
     if (follow != "follower") {
