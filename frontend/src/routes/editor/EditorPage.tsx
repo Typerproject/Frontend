@@ -9,7 +9,7 @@ const service = new postAPI(import.meta.env.VITE_SERVER_POST_API_URI);
 
 export default function EditorPage() {
   const [isPublic, setPublic] = useState(true);
-  const [title, setTitle] = useState<string>("");
+  const [title, setTitle] = useState<string | null>(null);
   const [content, setContent] = useState<OutputData>();
 
   const changeVisibility = () => {
@@ -18,7 +18,11 @@ export default function EditorPage() {
 
   const publish = () => {
     if (!content?.blocks) {
-      console.log("데이터가 존재하지 않음");
+      alert("내용이 없습니다. 내용을 작성해주세요");
+      return;
+    }
+    if (title === null) {
+      alert("제목이 없습니다. 제목을 작성해주세요");
       return;
     }
 
