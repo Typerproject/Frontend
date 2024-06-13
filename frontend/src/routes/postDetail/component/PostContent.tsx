@@ -2,6 +2,7 @@ import WriterInfo from "./WriterInfo";
 import { FaHeart } from "react-icons/fa6"; // 채워진 하트
 import { FaRegHeart } from "react-icons/fa6"; // 빈 하트
 import { useState } from "react";
+import ViewEditor from "./ViewEditor";
 
 // type Props = {}
 
@@ -24,7 +25,7 @@ export default function PostContent() {
       <div className="h-[0.5px] my-[0.75rem] w-full bg-current"></div>
 
       {/* 글 내용 */}
-      <p className="py-[0.75rem]">글 내용 (따로 컴포로 뺄 예정)</p>
+      <ViewEditor />
 
       <div className="flex flex-row-reverse items-center gap-[1rem]">
         <p>123</p>
