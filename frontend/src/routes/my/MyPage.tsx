@@ -1,6 +1,5 @@
 // import React from 'react'
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import FollowList from "./component/FollowList";
 import Post from "../../components/Post/Post";
 
@@ -9,7 +8,6 @@ import Post from "../../components/Post/Post";
 type State = "follower" | "following" | false;
 
 export default function MyPage() {
-  const navigate = useNavigate();
   const [userName, setUserName] = useState("CatisCute");
   const [profileImg, setProfileImg] = useState(
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTD68cSMsrBiEs6YloK8MVPO1DlJ7LqKt4OxT7ioMJn7xh-1iqPV0FVFjvTA7Cvlv-Y9Yc&usqp=CAU"
@@ -77,6 +75,8 @@ export default function MyPage() {
             <p className="flex gap-10 text-[#88898a] mt-[0.7rem]">
               {profileIntro}
             </p>
+            {/*나의 페이지면 Edit 버튼으로*/}
+            {/*나의 페이지가 아니면 팔로우 버튼으로*/}
             <button className="text-xs mt-[0.7rem] border-[1px] bg-black text-white rounded-full border-black text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-black duration-300">
               팔로우
             </button>
@@ -103,7 +103,7 @@ export default function MyPage() {
             가져온 정보 배열을 map 돌면서 props로 넘겨주기*/}
             {follow != false && (
               //클릭 시 해당 사람의 마이페이지로
-              <div className="cursor-pointer" onClick={() => navigate(`/post`)}>
+              <div className="mt-[1rem]">
                 <FollowList />
               </div>
             )}
