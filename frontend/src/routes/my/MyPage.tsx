@@ -260,7 +260,7 @@ export default function MyPage() {
             {/* 코멘트 */}
             {isEditing ? (
               <textarea
-                className="flex gap-10 text-[#88898a] text-blue-500 border-none rounded-md italic w-full p-2 h-10
+                className="flex gap-10 text-[#88898a] text-blue-500 border-none italic w-full
                 shadow-md rounded px-8 pt-6 pb-8 bg-gray-50
                 text-base mt-2 text-color text-blue-500 italic p-2  h-10"
                 value={editedComment}
