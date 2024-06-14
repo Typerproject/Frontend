@@ -4,10 +4,13 @@ import Timer from "./component/Timer";
 import { IoMdLock, IoMdUnlock } from "react-icons/io";
 import { OutputData } from "@editorjs/editorjs";
 import postAPI from "../../api/postDetailAPI";
+import { useNavigate } from "react-router-dom";
 
 const service = new postAPI(import.meta.env.VITE_SERVER_POST_API_URI);
 
 export default function EditorPage() {
+  const navigate = useNavigate();
+
   const [isPublic, setPublic] = useState(true);
   const [title, setTitle] = useState<string | null>(null);
   const [content, setContent] = useState<OutputData>();
@@ -16,7 +19,7 @@ export default function EditorPage() {
     setPublic(!isPublic);
   };
 
-  const publish = () => {
+  const publish = async () => {
     if (!content?.blocks) {
       alert("내용이 없습니다. 내용을 작성해주세요");
       return;
@@ -26,11 +29,13 @@ export default function EditorPage() {
       return;
     }
 
-    service.addPost({
+    const result = await service.addPost({
       title: title,
       content: content,
       public: isPublic,
     });
+
+    navigate(`/post/${result._id}`);
   };
 
   return (
