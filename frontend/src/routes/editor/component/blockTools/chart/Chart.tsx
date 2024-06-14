@@ -9,13 +9,13 @@ function formatDate(dateStr: string) {
   return `${year}-${month}-${day}`;
 }
 
-function JsonChartTest({ stockData }) {
+function JsonChartTest({ stockData }:any) {
   if (!stockData) {
     return <div>No data available</div>;
   }
 
   const formattedDataForCandle = stockData.data
-    .map((item) => {
+    .map((item:any) => {
       const open = Number(item.open);
       const high = Number(item.high);
       const low = Number(item.low);
@@ -32,7 +32,7 @@ function JsonChartTest({ stockData }) {
         y: [open, high, low, close],
       };
     })
-    .filter((data) => data !== null); // 유효하지 않은 데이터를 제거
+    .filter((data:any) => data !== null); // 유효하지 않은 데이터를 제거
 
   const series = [
     {
