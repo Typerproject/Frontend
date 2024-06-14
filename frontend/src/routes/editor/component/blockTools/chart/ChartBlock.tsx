@@ -5,6 +5,10 @@ import editorAPI from "../../../../../api/editorAPI";
 
 const service = new editorAPI(import.meta.env.VITE_SERVER_EDITOR_API_URI);
 
+interface chartBlockProps {
+  data: stockResp;
+}
+
 interface stockResp {
   stockTitle: string;
   data: stockData[];
@@ -21,7 +25,7 @@ export class ChartBLock {
   data: stockResp;
   nodes: HTMLElement | null;
 
-  constructor(data: stockResp) {
+  constructor({ data }: chartBlockProps) {
     this.data = data;
     this.nodes = null;
   }
@@ -40,8 +44,11 @@ export class ChartBLock {
     const setData = (data: stockResp) => {
       this.data = data;
     };
+    console.log(this.data);
 
-    CreateDOM.createRoot(rootNode).render(<ChartModal setData={setData} />);
+    CreateDOM.createRoot(rootNode).render(
+      <ChartModal setData={setData} injectedData={this.data} />
+    );
     return rootNode;
   }
 
@@ -52,11 +59,13 @@ export class ChartBLock {
 
 interface ChartModalProps {
   setData: (data: stockResp) => void;
+  injectedData: stockResp;
 }
 
-const ChartModal = ({ setData }: ChartModalProps) => {
+const ChartModal = ({ setData, injectedData }: ChartModalProps) => {
+  console.log(injectedData);
   const [show, setShow] = useState(true);
-  const [chartData, setChartData] = useState<object | null>(null);
+  const [chartData, setChartData] = useState<stockResp>(injectedData);
   const [formData, setFormData] = useState({
     marketCode: "J",
     stockCode: "",
@@ -93,7 +102,7 @@ const ChartModal = ({ setData }: ChartModalProps) => {
 
   return (
     <>
-      {show && (
+      {show && !chartData?.data && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
           <div className="fixed inset-0 bg-black opacity-50"></div>
           <div className="bg-white rounded-lg shadow-lg overflow-hidden w-full max-w-md mx-2 z-10">
@@ -122,20 +131,6 @@ const ChartModal = ({ setData }: ChartModalProps) => {
             </div>
             <div className="p-4">
               <form>
-                {/* 주석 처리된 Form.Group은 그대로 유지 */}
-                {/* 
-              <div className="mb-4">
-                <label className="block text-gray-700">시장 분류 코드</label>
-                <input
-                  type="text"
-                  placeholder="J (주식)"
-                  name="marketCode"
-                  value={formData.marketCode}
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                  disabled
-                />
-              </div>
-              */}
                 <div className="mb-4">
                   <label className="block text-gray-700">종목 코드</label>
                   <input
@@ -224,7 +219,7 @@ const ChartModal = ({ setData }: ChartModalProps) => {
         </div>
       )}
 
-      {chartData && <JsonChartTest stockData={chartData} />}
+      {chartData?.data && <JsonChartTest stockData={chartData} />}
     </>
   );
 };
