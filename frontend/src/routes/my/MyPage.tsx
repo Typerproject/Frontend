@@ -147,7 +147,7 @@ export default function MyPage() {
     } else {
       console.log("아디 없으면", currentUser);
     }
-  }, [currentUser]);
+  }, [currentUser, id]);
 
   const handleFollowerBtn = () => {
     if (follow != "follower") {
@@ -276,11 +276,7 @@ export default function MyPage() {
             {/* <p className="flex gap-10 text-[#88898a] mt-[0.7rem]">
               {userInfo?.comment}
             </p> */}
-            {/*나의 페이지면 Edit 버튼으로*/}
-            {/*나의 페이지가 아니면 팔로우 버튼으로*/}
-            {/* <button className="text-xs mt-[0.7rem] border-[1px] bg-black text-white rounded-full border-black text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-black duration-300">
-              팔로우
-            </button> */}
+
             {currentUser._id === id && isEditing ? (
               <div className="flex gap-10 mt-[0.7rem]">
                 <button
@@ -330,17 +326,11 @@ export default function MyPage() {
                   <p className="text-lg">Follower</p>
                   <ul className="space-y-4">
                     {followerInfo?.followerUsers.map((user) => (
-                      <li
-                        key={user._id}
-                        className="flex items-center space-x-4"
-                      >
-                        <img
-                          src={user.profile}
-                          alt="Profile"
-                          className="size-10 rounded-full"
-                        />
-                        <span>{user.nickname}</span>
-                      </li>
+                      <FollowList
+                        userId={user._id}
+                        userName={user.nickname}
+                        profileImg={user.profile}
+                      />
                     ))}
                   </ul>
                 </div>
@@ -352,17 +342,11 @@ export default function MyPage() {
                   <p className="text-lg">Following</p>
                   <ul className="space-y-4">
                     {followerInfo?.followingUsers.map((user) => (
-                      <li
-                        key={user._id}
-                        className="flex items-center space-x-4"
-                      >
-                        <img
-                          src={user.profile}
-                          alt="Profile"
-                          className="size-10 rounded-full"
-                        />
-                        <span>{user.nickname}</span>
-                      </li>
+                      <FollowList
+                        userId={user._id}
+                        userName={user.nickname}
+                        profileImg={user.profile}
+                      />
                     ))}
                   </ul>
                 </div>
@@ -371,12 +355,12 @@ export default function MyPage() {
 
             {/*보여줄 리스트가 팔로잉인지 팔로워인지 구분해서 api 호출
             가져온 정보 배열을 map 돌면서 props로 넘겨주기*/}
-            {follow != false && (
+            {/* {follow != false && (
               //클릭 시 해당 사람의 마이페이지로
               <div className="mt-[1rem]">
                 <FollowList />
               </div>
-            )}
+            )} */}
           </div>
         </div>
       </div>

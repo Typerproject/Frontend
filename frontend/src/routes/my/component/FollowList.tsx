@@ -2,24 +2,36 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GoKebabHorizontal } from "react-icons/go";
 
-export default function FollowList() {
+interface FollowListProps {
+  userId: string;
+  userName: string;
+  profileImg: string;
+}
+
+export default function FollowList({
+  userId,
+  userName,
+  profileImg,
+}: FollowListProps) {
   const navigate = useNavigate();
   //props로 id, 이름, 프사 받아오기
-  const [userName, setUserName] = useState("DogisCute");
-  const [profileImg, setProfileImg] = useState(
-    "https://i.namu.wiki/i/eZE2tbZyRnZq-oHCEprbnLd6F_yU0ZReQKV66QcwYXz9Ru-4OQ6ueDU84bcZRKDW3toounG6AqOLG_H23ifmdZqkKAZZ28AfmHXq0RmpJgMNA3yAan5j2rNOP0xacfeirE4FjMiemSIHtLTC8RKQ8w.webp"
-  );
+  //const [userName, setUserName] = useState("DogisCute");
+  // const [profileImg, setProfileImg] = useState(
+  //   "https://i.namu.wiki/i/eZE2tbZyRnZq-oHCEprbnLd6F_yU0ZReQKV66QcwYXz9Ru-4OQ6ueDU84bcZRKDW3toounG6AqOLG_H23ifmdZqkKAZZ28AfmHXq0RmpJgMNA3yAan5j2rNOP0xacfeirE4FjMiemSIHtLTC8RKQ8w.webp"
+  // );
   const [dropBtn, setDropBtn] = useState(false);
 
   function handleDrop() {
     setDropBtn(!dropBtn);
   }
 
+  console.log("이 사람의 id는 ", userId);
+
   return (
     <div className="flex gap-[10rem] items-center">
       <div
         className="flex gap-[1rem] cursor-pointer "
-        onClick={() => navigate(`/post`)}
+        onClick={() => navigate(`/my/${userId}`)}
       >
         <img className="size-10 rounded-full" src={profileImg} />
         <p className="text-sm mt-[0.7rem] ">{userName}</p>
