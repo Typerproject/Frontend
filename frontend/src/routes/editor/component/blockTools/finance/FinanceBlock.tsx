@@ -3,14 +3,35 @@ import ReactDOM from 'react-dom/client';
 import FinanceModal from './FinanceModal';
 import Creatediv from './Creatediv';
 
+
+interface FinanceBlockData {
+  data: IFinanceData;
+}
+
+
+interface DataItem {
+  bsns_year: number;
+  account_nm: string;
+  thstrm_amount: number;
+}
+
+
+export interface IFinanceData {
+  data:DataItem[]
+  company:string
+}
+
+
 export class FinanceBlock {
 
-  public wrapper: HTMLDivElement | null = null;
-  public div: HTMLDivElement | null = null;
-  public state: IState
-
-  constructor() {
   
+  data: IFinanceData | null;
+  wrapper: HTMLDivElement | null = null;
+  div: HTMLDivElement | null = null;
+
+  constructor({data}:FinanceBlockData) {
+  
+    this.data = data || null;
     this.wrapper = null;
     this.div = null;
 
@@ -26,30 +47,41 @@ export class FinanceBlock {
 
   render() {
     this.wrapper = document.createElement("div");
-    
+
+  
+    if (this.data && Object.keys(this.data).length > 0){
+
+      this.creatediv(this.data.data,this.data.company);
+    }
+    else{
     ReactDOM.createRoot(this.wrapper).render(<FinanceModal creatediv={this.creatediv}/>);
+    }
     
 
     return this.wrapper;
   }
 
-  creatediv(data:any, company:any) {
-    if (this.wrapper){
-    ReactDOM.createRoot(this.wrapper).render(
-      <Creatediv data={data} company={company}/>
-    );
-    }else{
-      console.error('Wrapper element is not')
-    }
+  static get isReadOnlySupported() {
+    return true;
   }
 
 
-    
+  creatediv(data: DataItem[], company: string) {
+    if (this.wrapper) {
+      ReactDOM.createRoot(this.wrapper).render(<Creatediv data={data} company={company} />)
   
+      this.data = { data, company }; // Assigning data directly
+    } else {
+      console.error('Wrapper element is not available');
+    }
+  }
+
+    
 
   save(blockContent:string) {
+
     return {
-      // data: this.data.name
+      data: this.data
     };
   }
 }
