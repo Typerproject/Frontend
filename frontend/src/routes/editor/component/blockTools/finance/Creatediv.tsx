@@ -1,25 +1,33 @@
-import React,{useState,useEffect} from 'react'
+import React, { useState, useEffect } from 'react';
 
-export default function Creatediv(data,company) {
+interface DataItem {
+  bsns_year: number;
+  account_nm: string;
+  thstrm_amount: number;
+}
 
-    const [date, setDate] = useState([]);
-    
+interface DataProps {
+  data: DataItem[];
+  company:string;
+}
 
-    console.log(date);
-  
+interface GroupedData {
+  [key: number]: DataItem[];
+}
+
+export default function Creatediv({ data, company }: DataProps) {
+  const [date, setDate] = useState<DataItem[]>([]);
 
 
   useEffect(() => {
-    setDate(data.data);
-
+    setDate(data);
   }, [data]);
 
-  const formatNumber = (num) => {
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원';
+  const formatNumber = (num: number) => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' 원';
   };
 
-    const groupedData = date.reduce((acc, item) => {
-
+  const groupedData: GroupedData = date.reduce((acc: GroupedData, item: DataItem) => {
     const year = item.bsns_year;
     if (!acc[year]) {
       acc[year] = [];
@@ -30,34 +38,30 @@ export default function Creatediv(data,company) {
 
   return (
     <div>
-      <table border="1" cellPadding="5">
+      <table >
         <thead>
           <tr>
-            
+            <th >{company}</th>
           </tr>
         </thead>
         <tbody>
           {Object.keys(groupedData).map((year) => (
-            <>
-            <div>
-              <tr key={year}>
-                <td colSpan="3">{year}년도 재무제표</td>
+            <React.Fragment key={year}>
+              <tr>
+                <td colSpan={3}>{year}년도 재무제표</td>
               </tr>
-              {groupedData[year].map((item, index) => (
-                
+              {groupedData[Number(year)].map((item, index) => (
                 <tr key={index}>
                   <td></td>
                   <td>{item.account_nm}</td>
                   <td>{formatNumber(item.thstrm_amount)}</td>
                 </tr>
-               
               ))}
-              </div> 
-            </>
+            </React.Fragment>
           ))}
         </tbody>
       </table>
     </div>
   );
-};
+}
 
