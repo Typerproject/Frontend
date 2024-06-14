@@ -32,7 +32,7 @@ const PdfViewer: React.FC<PdfViewerProps> = ({ url, pageNumber = 1 }) => {
   const renderPage = async (pdf: pdfjsLib.PDFDocumentProxy, pageNumber: number) => {
     try {
       const page = await pdf.getPage(pageNumber);
-      const scale = 1;
+      const scale = 1.2; // 고화질로 설정하기 위해 스케일을 높임
       const viewport = page.getViewport({ scale });
 
       const canvas = canvasRef.current;
@@ -66,17 +66,25 @@ const PdfViewer: React.FC<PdfViewerProps> = ({ url, pageNumber = 1 }) => {
   };
 
   return (
-    <div>
-      <canvas ref={canvasRef}></canvas>
-      <div>
-        <button onClick={goToPrevPage} disabled={pageNum <= 1}>
+    <div className="flex flex-col items-center justify-center mx-auto">
+      <canvas className="w-50 h-auto" ref={canvasRef}></canvas>
+      <div className="flex space-x-4 mt-4">
+        <button 
+          onClick={goToPrevPage} 
+          disabled={pageNum <= 1} 
+          className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+        >
           Previous
         </button>
-        <button onClick={goToNextPage} disabled={numPages !== null && pageNum >= numPages}>
+        <button 
+          onClick={goToNextPage} 
+          disabled={numPages !== null && pageNum >= numPages} 
+          className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+        >
           Next
         </button>
       </div>
-      <p>
+      <p className="mt-2">
         Page {pageNum} of {numPages}
       </p>
     </div>
