@@ -37,7 +37,12 @@ export class ChartBLock {
     };
   }
 
+  static get isReadOnlySupported() {
+    return true;
+  }
+
   render() {
+    console.log(this.data);
     const rootNode = document.createElement("div");
     this.nodes = rootNode;
 

@@ -37,7 +37,7 @@ const routers = [
     // index: true
     children: [
       {
-        path: "",
+        path: ":id",
         element: <PostDetail />,
         index: true,
       },

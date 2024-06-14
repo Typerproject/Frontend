@@ -1,7 +1,6 @@
-import PostContent from "./component/PostContent"
+import PostContent from "./component/PostContent";
 import CommentList from "./component/CommentList";
 import InputComment from "./component/InputComment";
-// type Props = {}
 
 export default function PostDetail() {
   return (
@@ -10,5 +9,5 @@ export default function PostDetail() {
       <InputComment />
       <CommentList />
     </div>
-  )
+  );
 }
