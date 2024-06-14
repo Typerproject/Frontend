@@ -13,13 +13,13 @@ export default function EditorPage() {
   const [title, setTitle] = useState<string | null>(null);
   const [content, setContent] = useState<OutputData>();
 
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
   const changeVisibility = () => {
     setPublic(!isPublic);
   };
 
-  const publish = () => {
+  const publish = async () => {
     if (!content?.blocks) {
       alert("내용이 없습니다. 내용을 작성해주세요");
       return;
@@ -29,11 +29,13 @@ export default function EditorPage() {
       return;
     }
 
-    service.addPost({
+    const result = await service.addPost({
       title: title,
       content: content,
       public: isPublic,
     });
+
+    navigate(`/post/${result._id}`);
   };
 
   return (
@@ -54,7 +56,9 @@ export default function EditorPage() {
           <Editor setContent={setContent} />
         </div>
         <footer className="bg-black h-14 sticky top-[100vh] flex items-center justify-between	px-16">
-          <p className="text-white text-xl" onClick={()=>navigate("/my")}>나가기</p>
+          <p className="text-white text-xl" onClick={() => navigate("/my")}>
+            나가기
+          </p>
 
           <div className="flex items-center w-[10%] justify-between	">
             {isPublic ? (

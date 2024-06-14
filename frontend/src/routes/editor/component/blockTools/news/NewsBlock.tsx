@@ -14,11 +14,10 @@ export interface INewsData {
 }
 
 export class NewsBlock {
-
   nodes: HTMLElement | null;
   data: INewsData;
 
-  constructor({data}: NewsBlockData) {
+  constructor({ data }: NewsBlockData) {
     this.data = data;
     this.nodes = null;
   }
@@ -35,22 +34,22 @@ export class NewsBlock {
   }
 
   render() {
-    const setNewsData = (data :INewsData):void => {
+    const setNewsData = (data: INewsData): void => {
       this.data = data;
     };
 
     const rootNode = document.createElement("div");
     this.nodes = rootNode;
 
-    CreateDOM.createRoot(rootNode).render(<StockNews newsData={this.data} setNewsData={setNewsData} />);
+    CreateDOM.createRoot(rootNode).render(
+      <StockNews newsData={this.data} setNewsData={setNewsData} />
+    );
 
     return rootNode;
   }
 
   save() {
     // console.log(this.data)
-    return {
-      data: this.data,
-    }
+    return this.data;
   }
 }
