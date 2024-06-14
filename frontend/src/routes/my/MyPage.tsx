@@ -27,12 +27,6 @@ export default function MyPage() {
 
   const [follow, setFollow] = useState<State>(false);
 
-  //현재 접속한 유저 아이디 가져오기
-  // const userId = useAppSelector((state) => state.user._id);
-  // const userName = useAppSelector((state) => state.user.nickname);
-  // const profileImg = useAppSelector((state) => state.user.profile);
-  // const profileIntro = useAppSelector((state) => state.user.comment);
-
   //현재 접속한 마이 페이지의 유저 아이디
   const { id } = useParams<{ id: string }>(); // useParams의 반환 타입을 명시
   //console.log(id);
@@ -209,10 +203,6 @@ export default function MyPage() {
       });
   };
 
-  // const handleUnfollowClick = () => {
-  //   service.deleteFollowerUser()
-  // }
-
   return (
     <div className="mt-[7rem]">
       <div className="grid grid-cols-3">
@@ -230,7 +220,6 @@ export default function MyPage() {
         <div className="col-span-1">
           <div>
             <img className="size-24 rounded-full" src={userInfo?.profile} />
-            {/* <p className="text-3xl mt-[0.7rem] ">{userInfo?.nickname}</p> */}
             {/* 닉네임 */}
             {isEditing ? (
               <input
@@ -282,9 +271,6 @@ export default function MyPage() {
                 {userInfo?.comment}
               </p>
             )}
-            {/* <p className="flex gap-10 text-[#88898a] mt-[0.7rem]">
-              {userInfo?.comment}
-            </p> */}
 
             {currentUser._id === id && isEditing ? (
               <div className="flex gap-10 mt-[0.7rem]">
@@ -361,15 +347,6 @@ export default function MyPage() {
                 </div>
               </div>
             )}
-
-            {/*보여줄 리스트가 팔로잉인지 팔로워인지 구분해서 api 호출
-            가져온 정보 배열을 map 돌면서 props로 넘겨주기*/}
-            {/* {follow != false && (
-              //클릭 시 해당 사람의 마이페이지로
-              <div className="mt-[1rem]">
-                <FollowList />
-              </div>
-            )} */}
           </div>
         </div>
       </div>
