@@ -125,17 +125,20 @@ export default function MyPage() {
         .then((data) => {
           console.log("마페 팔로우", data);
           setFollowerInfo(data);
+
+          const found = data.followerUsers.some(
+            (user) => user._id === currentUser._id
+          );
+
+          console.log(found);
+
+          if (found) {
+            setIsFollowing(true);
+          }
         })
         .catch((err) => {
           console.error("마페 팔로우", err);
         });
-
-      if (followerInfo?.followerUsers) {
-        const found = followerInfo.followerUsers.some(
-          (user) => user._id === currentUser._id
-        );
-        setIsFollowing(found);
-      }
 
       console.log("아디 잇으면", currentUser);
     } else {
@@ -159,13 +162,14 @@ export default function MyPage() {
     }
   };
 
+  // 팔로잉 핸들러
   const handleFollowClick = () => {
     if (!id) {
       console.error("유효한 사용자 ID가 없습니다.");
       return;
     }
 
-    // 팔로우 요청 보내기
+    // 팔로잉 요청 보내기
     service
       .followingUser(id)
       .then((result) => {
@@ -191,6 +195,8 @@ export default function MyPage() {
               followerUsers: [...followerInfo.followerUsers, newFollower],
               followerCount: followerInfo.followerCount + 1,
             });
+
+            setIsFollowing(true);
           } else {
             console.log("이미 팔로우한 사용자입니다.");
           }
@@ -200,6 +206,49 @@ export default function MyPage() {
       })
       .catch((error) => {
         console.error("팔로우 요청 중 오류 발생:", error);
+      });
+  };
+
+  // 언팔로잉 버튼 핸들러
+  const handleUnfollowClick = () => {
+    if (!id) {
+      console.error("유효한 사용자 ID가 없습니다.(언팔)");
+      return;
+    }
+
+    service
+      .deleteFollowingUser(id)
+      .then((result) => {
+        console.log("followerUser result:", result);
+
+        if (result.response && currentUser && followerInfo) {
+          const isAlreadyFollowing = followerInfo.followerUsers.some(
+            (user) => user._id === currentUser._id
+          );
+
+          // 있으면 제거
+          if (isAlreadyFollowing) {
+            const updatedFollowerUsers = followerInfo.followerUsers.filter(
+              (user) => user._id !== id
+            );
+
+            // followerInfo 업데이트
+            setFollowerInfo({
+              ...followerInfo,
+              followerUsers: updatedFollowerUsers,
+              followerCount: followerInfo.followerCount - 1,
+            });
+
+            setIsFollowing(false);
+          } else {
+            console.log("이미 언팔로우한 사용자입니다.");
+          }
+        } else {
+          console.log("언팔로우 요청이 실패했습니다.");
+        }
+      })
+      .catch((err) => {
+        console.error("언팔 오류지롱: ", err);
       });
   };
 
@@ -288,21 +337,19 @@ export default function MyPage() {
                 </button>
               </div>
             ) : currentUser._id === id ? (
-              isFollowing ? (
-                <button
-                  // onClick={handleUnfollowClick} // unFollowClick 함수로 수정
-                  className="text-xs mt-[0.7rem] border-[1px] bg-red-500 text-white rounded-full border-red-500 text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-red-500 duration-300"
-                >
-                  Unfollow
-                </button>
-              ) : (
-                <button
-                  onClick={handleEditClick}
-                  className="text-xs mt-[0.7rem] border-[1px] bg-black text-white rounded-full border-black text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-black duration-300"
-                >
-                  Edit
-                </button>
-              )
+              <button
+                onClick={handleEditClick}
+                className="text-xs mt-[0.7rem] border-[1px] bg-black text-white rounded-full border-black text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-black duration-300"
+              >
+                Edit
+              </button>
+            ) : isFollowing ? (
+              <button
+                onClick={handleUnfollowClick} // unFollowClick 함수로 수정
+                className="text-xs mt-[0.7rem] border-[1px] bg-red-500 text-white rounded-full border-red-500 text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-red-500 duration-300"
+              >
+                Unfollow
+              </button>
             ) : (
               <button
                 onClick={handleFollowClick}

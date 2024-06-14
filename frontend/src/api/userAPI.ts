@@ -78,7 +78,7 @@ export default class userAPI extends BaseApi {
     }
   }
 
-  // 내가 누군가를 팔로우 하는 api (테스트 필요)
+  // 내가 누군가를 팔로잉 하는 api (테스트 필요)
   async followingUser(_id: string): Promise<FollowResponse> {
     try {
       const result = await this.fetcher.post(`/user/following`, {
