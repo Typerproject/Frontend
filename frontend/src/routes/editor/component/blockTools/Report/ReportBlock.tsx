@@ -7,17 +7,31 @@ interface IState {
   showModal: boolean;
 }
 
+interface ReportBlockData {
+  data: IReportData;
+}
+
+
+
+export interface IReportData {
+  url: string;
+}
+
+
 export class ReportBlock {
 
-  public wrapper: HTMLDivElement | null = null;
-  public div: HTMLDivElement | null = null;
-  public state: IState
+  data: IReportData;
+  wrapper: HTMLDivElement | null ;
+  div: HTMLDivElement | null;
+  state: IState;
 
 
   setWrapper(wrapper: HTMLDivElement) {
     this.wrapper = wrapper;
   }
-  constructor() {
+
+  constructor({data}:ReportBlockData) {
+    this.data=data;
     this.wrapper = null;
     this.div = null;
     this.state = {
@@ -33,12 +47,21 @@ export class ReportBlock {
     };
   }
 
+  static get isReadOnlySupported() {
+    return true;
+  }
+
   render() {
     this.wrapper = document.createElement("div");
 
+    if (this.data.url && Object.keys(this.data.url).length > 0){
+        this.createIframe(this.data.url);
+    }
+    else{
     ReactDOM.createRoot(this.wrapper).render(
       <AnalystReportModal createIframe={this.createIframe}/>
     );
+  }
 
   
     return this.wrapper;
@@ -55,6 +78,7 @@ export class ReportBlock {
         <PdfViewer url={proxyUrl} />
         
       );
+      this.data.url=url;
     } else {
       console.error('Wrapper element is not set.');
     }
@@ -62,10 +86,9 @@ export class ReportBlock {
   };
 
 
-
   save(blockContent:string) {
     return {
-      // data: this.data.name
+      data:this.data
     };
   }
 }
