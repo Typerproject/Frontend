@@ -15,6 +15,8 @@ export default function EditorPage() {
   const [title, setTitle] = useState<string | null>(null);
   const [content, setContent] = useState<OutputData>();
 
+  const navigate=useNavigate();
+
   const changeVisibility = () => {
     setPublic(!isPublic);
   };
@@ -56,7 +58,7 @@ export default function EditorPage() {
           <Editor setContent={setContent} />
         </div>
         <footer className="bg-black h-14 sticky top-[100vh] flex items-center justify-between	px-16">
-          <p className="text-white text-xl">나가기</p>
+          <p className="text-white text-xl" onClick={()=>navigate("/my")}>나가기</p>
 
           <div className="flex items-center w-[10%] justify-between	">
             {isPublic ? (
