@@ -234,7 +234,8 @@ export default function MyPage() {
             {/* 닉네임 */}
             {isEditing ? (
               <input
-                className="text-3xl mt-[0.7rem] bg-gray-100 text-color text-blue-500 border-none rounded-md italic p-2 w-full h-10"
+                className="bg-gray-50 shadow-md rounded px-8 pt-6 pb-8
+                text-base mt-2 text-color text-blue-500 italic p-2  h-10"
                 type="text"
                 value={editedNickname}
                 onChange={(e) => setEditedNickname(e.target.value)}
@@ -243,28 +244,36 @@ export default function MyPage() {
               <p className="text-3xl mt-[0.7rem]">{userInfo?.nickname}</p>
             )}
 
-            <div className={`flex gap-5  mt-[0.5rem] text-[#b1b2b3]`}>
-              <span
-                onClick={handleFollowerBtn}
-                className={`hover:text-[#141414] cursor-pointer  ${
-                  follow === "follower" ? "text-[#141414]" : "text-[#b1b2b3]"
-                }`}
-              >
-                {followerInfo?.followerCount} followers
-              </span>
-              <span
-                onClick={handleFollowingBtn}
-                className={`hover:text-[#141414] cursor-pointer ${
-                  follow === "following" ? "text-[#141414]" : "text-[#b1b2b3]"
-                }`}
-              >
-                {followerInfo?.followingCount} following
-              </span>
-            </div>
+            {/*팔로잉팔로워 수*/}
+            {isEditing ? (
+              <div></div>
+            ) : (
+              <div className={`flex gap-5  mt-[0.5rem] text-[#b1b2b3]`}>
+                <span
+                  onClick={handleFollowerBtn}
+                  className={`hover:text-[#141414] cursor-pointer  ${
+                    follow === "follower" ? "text-[#141414]" : "text-[#b1b2b3]"
+                  }`}
+                >
+                  {followerInfo?.followerCount} followers
+                </span>
+                <span
+                  onClick={handleFollowingBtn}
+                  className={`hover:text-[#141414] cursor-pointer ${
+                    follow === "following" ? "text-[#141414]" : "text-[#b1b2b3]"
+                  }`}
+                >
+                  {followerInfo?.followingCount} following
+                </span>
+              </div>
+            )}
+
             {/* 코멘트 */}
             {isEditing ? (
               <textarea
-                className="flex gap-10 text-[#88898a] mt-[0.7rem] bg-gray-100 text-blue-500 border-none rounded-md italic w-full p-2 h-10"
+                className="flex gap-10 text-[#88898a] text-blue-500 border-none rounded-md italic w-full p-2 h-10
+                shadow-md rounded px-8 pt-6 pb-8 bg-gray-50
+                text-base mt-2 text-color text-blue-500 italic p-2  h-10"
                 value={editedComment}
                 onChange={(e) => setEditedComment(e.target.value)}
               />
