@@ -4,6 +4,7 @@ import Timer from "./component/Timer";
 import { IoMdLock, IoMdUnlock } from "react-icons/io";
 import { OutputData } from "@editorjs/editorjs";
 import postAPI from "../../api/postDetailAPI";
+import { useNavigate } from "react-router-dom";
 
 const service = new postAPI(import.meta.env.VITE_SERVER_POST_API_URI);
 
@@ -11,6 +12,8 @@ export default function EditorPage() {
   const [isPublic, setPublic] = useState(true);
   const [title, setTitle] = useState<string | null>(null);
   const [content, setContent] = useState<OutputData>();
+
+  const navigate=useNavigate();
 
   const changeVisibility = () => {
     setPublic(!isPublic);
@@ -51,7 +54,7 @@ export default function EditorPage() {
           <Editor setContent={setContent} />
         </div>
         <footer className="bg-black h-14 sticky top-[100vh] flex items-center justify-between	px-16">
-          <p className="text-white text-xl">나가기</p>
+          <p className="text-white text-xl" onClick={()=>navigate("/my")}>나가기</p>
 
           <div className="flex items-center w-[10%] justify-between	">
             {isPublic ? (
