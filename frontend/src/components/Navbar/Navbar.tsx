@@ -27,7 +27,7 @@ export default function Navbar() {
           </NavLink>
         </div>
         <div>
-          <NavLink to="/my" className="bg-white">
+          <NavLink to={`/my/${userInfo._id}`} className="bg-white">
             <img
               className="w-[40px] rounded-full"
               src={userInfo.profile || defaultLogo}
