@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Editor from "./component/Editor";
 import Timer from "./component/Timer";
 import { IoMdLock, IoMdUnlock } from "react-icons/io";
@@ -12,6 +12,7 @@ export default function EditorPage() {
   const [isPublic, setPublic] = useState(true);
   const [title, setTitle] = useState<string | null>(null);
   const [content, setContent] = useState<OutputData>();
+  const holder = useRef<HTMLDivElement>(null);
 
   const navigate = useNavigate();
 
@@ -40,48 +41,51 @@ export default function EditorPage() {
 
   return (
     <>
-      <div className="h-dvh">
-        <nav className="bg-black h-4" />
-        <div className="flex flex-col items-center">
-          <input
-            type="text"
-            className="block w-11/12 p-4 text-4xl mb-4"
-            placeholder="제목을 입력해주세요"
-            maxLength={25}
-            onChange={(e) => setTitle(e.target.value)}
-          />
+      <nav className="fixed top-0 bg-black h-4 w-full" />
+      <div className="flex flex-col items-center overflow-y-scroll h-screen">
+        <input
+          type="text"
+          className="block w-[95%] p-4 text-4xl"
+          placeholder="제목을 입력해주세요"
+          maxLength={25}
+          onChange={(e) => setTitle(e.target.value)}
+        />
 
-          <Timer />
+        <Timer />
 
-          <Editor setContent={setContent} />
+        <div
+          className="w-[98%] mt-2 mb-5 min-h-dv min-h-[80%] h-fit"
+          ref={holder}
+        >
+          <Editor setContent={setContent} holder={holder} />
         </div>
-        <footer className="bg-black h-14 sticky top-[100vh] flex items-center justify-between	px-16">
-          <p className="text-white text-xl" onClick={() => navigate("/my")}>
-            나가기
-          </p>
-
-          <div className="flex items-center w-[10%] justify-between	">
-            {isPublic ? (
-              <IoMdUnlock
-                color={"white"}
-                size={30}
-                onClick={changeVisibility}
-                title="공개"
-              />
-            ) : (
-              <IoMdLock
-                color={"white"}
-                size={30}
-                onClick={changeVisibility}
-                title="비공개"
-              />
-            )}
-            <p className="text-white text-xl" onClick={publish}>
-              출간
-            </p>
-          </div>
-        </footer>
       </div>
+      <footer className="fixed bg-black h-14 bottom-[0px] flex items-center justify-between	px-16 w-full">
+        <p className="text-white text-xl" onClick={() => navigate("/my")}>
+          나가기
+        </p>
+
+        <div className="flex items-center w-[10%] justify-between	">
+          {isPublic ? (
+            <IoMdUnlock
+              color={"white"}
+              size={30}
+              onClick={changeVisibility}
+              title="공개"
+            />
+          ) : (
+            <IoMdLock
+              color={"white"}
+              size={30}
+              onClick={changeVisibility}
+              title="비공개"
+            />
+          )}
+          <p className="text-white text-xl" onClick={publish}>
+            출간
+          </p>
+        </div>
+      </footer>
     </>
   );
 }
