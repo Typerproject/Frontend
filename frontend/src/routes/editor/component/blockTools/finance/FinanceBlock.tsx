@@ -47,8 +47,7 @@ export class FinanceBlock {
 
   render() {
     this.wrapper = document.createElement("div");
-
-  
+    
     if (this.data && Object.keys(this.data).length > 0){
 
       this.creatediv(this.data.data,this.data.company);
@@ -80,9 +79,7 @@ export class FinanceBlock {
 
   save(blockContent:string) {
 
-    return {
-      data: this.data
-    };
+    return this.data;
   }
 }
 
