@@ -1,12 +1,12 @@
 // import React from 'react'
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAppSelector } from "../../store";
 import FollowList from "./component/FollowList";
 import Post from "../../components/Post/Post";
 import userAPI, { IFollowerInfo, IUserInfo } from "../../api/userAPI";
-import { setUser } from "../../store/reducers/user";
+import { setUser, logoutUser } from "../../store/reducers/user";
 import { useAppDispatch } from "../../store";
 
 // type Props = {}
@@ -24,7 +24,7 @@ export default function MyPage() {
   // const [followerCount, setFollowerCount] = useState<number>();
   // const [followingCount, setFollowingCount] = useState<number>();
   const [followerInfo, setFollowerInfo] = useState<IFollowerInfo | null>(null);
-
+  const [refreshKey, setRefreshKey] = useState(0); // 상태 변경을 감지하기 위한 키
   const [follow, setFollow] = useState<State>(false);
 
   //현재 접속한 마이 페이지의 유저 아이디
@@ -42,6 +42,8 @@ export default function MyPage() {
   const [editedComment, setEditedComment] = useState(currentUser.comment || ""); // 수정된 코멘트를 관리하는 상태
 
   const [isFollowing, setIsFollowing] = useState(false);
+
+  // const navigate = useNavigate();
 
   // Edit 버튼 클릭 시 수정 모드로 변경
   const handleEditClick = () => {
@@ -108,6 +110,8 @@ export default function MyPage() {
 
   useEffect(() => {
     if (id) {
+      console.log("파라미터 잘 가져와 지나?", id);
+
       // 유저 정보 겟또다제
       service
         .getUserInfo(id)
@@ -134,6 +138,8 @@ export default function MyPage() {
 
           if (found) {
             setIsFollowing(true);
+          } else {
+            setIsFollowing(found);
           }
         })
         .catch((err) => {
@@ -144,7 +150,7 @@ export default function MyPage() {
     } else {
       console.log("아디 없으면", currentUser);
     }
-  }, [currentUser, id]);
+  }, [currentUser, id, isFollowing, refreshKey]);
 
   const handleFollowerBtn = () => {
     if (follow != "follower") {
@@ -161,6 +167,14 @@ export default function MyPage() {
       setFollow(false);
     }
   };
+
+  // const handleLogout = () => {
+  //   service.logout().then((data) => {
+  //     console.log(data);
+  //     dispatch(logoutUser());
+  //     navigate("/");
+  //   });
+  // };
 
   // 팔로잉 핸들러
   const handleFollowClick = () => {
@@ -254,7 +268,7 @@ export default function MyPage() {
 
   return (
     <div className="mt-[7rem]">
-      <div className="grid grid-cols-3">
+      <div className="grid grid-cols-3 ">
         {/*글목록*/}
         <div className="col-span-2 text-5xl flex flex-col items-center gap-[2rem]">
           <p>{userInfo?.nickname}'s Typer</p>
@@ -265,8 +279,15 @@ export default function MyPage() {
           </div>
         </div>
 
+        {/* 바 */}
+        {/* <div
+          className="col-span-1 h-full border-none ml-48 flex flex-col items-center"
+          style={{ width: "2px", backgroundColor: "#BBBBBB" }}
+        /> */}
+
         {/*프로필*/}
         <div className="col-span-1">
+          {/* <button onClick={handleLogout}>로그아웃</button> */}
           <div>
             <img className="size-24 rounded-full" src={userInfo?.profile} />
             {/* 닉네임 */}
@@ -309,9 +330,9 @@ export default function MyPage() {
             {/* 코멘트 */}
             {isEditing ? (
               <textarea
-                className="flex gap-10 text-[#88898a] text-blue-500 border-none italic w-full
+                className="flex gap-10 text-[#88898a] text-blue-500 border-none italic w-54
                 shadow-md rounded px-8 pt-6 pb-8 bg-gray-50
-                text-base mt-2 text-color text-blue-500 italic p-2  h-10"
+                text-base mt-2 text-color text-blue-500 italic p-2 h-10"
                 value={editedComment}
                 onChange={(e) => setEditedComment(e.target.value)}
               />
@@ -325,13 +346,13 @@ export default function MyPage() {
               <div className="flex gap-10 mt-[0.7rem]">
                 <button
                   onClick={handleSaveClick}
-                  className="text-xs border-[1px] bg-black text-white rounded-full border-black text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-black duration-300"
+                  className="text-xs mt-[0.7rem] border-[1px] bg-gray-900 text-gray-50 rounded-full border-black text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-black duration-300"
                 >
                   Save
                 </button>
                 <button
                   onClick={handleCancelClick}
-                  className="text-xs border-[1px] bg-black text-white rounded-full border-black text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-black duration-300"
+                  className="text-xs mt-[0.7rem] border-[1px] bg-gray-900 text-gray-50 rounded-full border-black text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-black duration-300"
                 >
                   Cancel
                 </button>
@@ -339,21 +360,21 @@ export default function MyPage() {
             ) : currentUser._id === id ? (
               <button
                 onClick={handleEditClick}
-                className="text-xs mt-[0.7rem] border-[1px] bg-black text-white rounded-full border-black text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-black duration-300"
+                className="text-xs mt-[0.7rem] border-[1px] bg-gray-900 text-gray-50 rounded-full border-black text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-black duration-300"
               >
                 Edit
               </button>
             ) : isFollowing ? (
               <button
                 onClick={handleUnfollowClick} // unFollowClick 함수로 수정
-                className="text-xs mt-[0.7rem] border-[1px] bg-red-500 text-white rounded-full border-red-500 text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-red-500 duration-300"
+                className="text-xs mt-[0.7rem] border-[1px] bg-red-500 text-gray-50 rounded-full border-red-500 text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-red-500 duration-300"
               >
                 Unfollow
               </button>
             ) : (
               <button
                 onClick={handleFollowClick}
-                className="text-xs mt-[0.7rem] border-[1px] bg-black text-white rounded-full border-black text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-black duration-300"
+                className="text-xs mt-[0.7rem] border-[1px] bg-gray-900 text-gray-50 rounded-full border-black text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-black duration-300"
               >
                 Follow
               </button>
@@ -369,9 +390,11 @@ export default function MyPage() {
                   <ul className="space-y-4">
                     {followerInfo?.followerUsers.map((user) => (
                       <FollowList
-                        userId={user._id}
-                        userName={user.nickname}
-                        profileImg={user.profile}
+                        _id={user._id}
+                        nickname={user.nickname}
+                        profile={user.profile}
+                        which={follow}
+                        setRefreshKey={setRefreshKey}
                       />
                     ))}
                   </ul>
@@ -385,9 +408,11 @@ export default function MyPage() {
                   <ul className="space-y-4">
                     {followerInfo?.followingUsers.map((user) => (
                       <FollowList
-                        userId={user._id}
-                        userName={user.nickname}
-                        profileImg={user.profile}
+                        _id={user._id}
+                        nickname={user.nickname}
+                        profile={user.profile}
+                        which={follow}
+                        setRefreshKey={setRefreshKey}
                       />
                     ))}
                   </ul>
