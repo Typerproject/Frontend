@@ -37,7 +37,7 @@ export default function Editor({ setContent }: Props) {
         },
         charts: ChartBLock,
         news: NewsBlock,
-        Report: ReportBlock,
+        report: ReportBlock,
         finance: FinanceBlock
 
       },

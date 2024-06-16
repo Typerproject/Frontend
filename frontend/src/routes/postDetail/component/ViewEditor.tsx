@@ -6,6 +6,7 @@ import { ChartBLock } from "../../editor/component/blockTools/chart/ChartBlock";
 import { ReportBlock } from "../../editor/component/blockTools/Report/ReportBlock";
 import { FinanceBlock } from "../../editor/component/blockTools/finance/FinanceBlock";
 
+
 type props = {
   outPutData: OutputData;
 };
