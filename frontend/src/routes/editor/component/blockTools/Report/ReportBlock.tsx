@@ -1,4 +1,4 @@
-import React from 'react';
+
 import ReactDOM from 'react-dom/client';
 import AnalystReportModal from './ReportModal';
 import PdfViewer from './Pdfviewer';
@@ -20,7 +20,7 @@ export interface IReportData {
 
 export class ReportBlock {
 
-  data: IReportData;
+  data: IReportData | null;
   wrapper: HTMLDivElement | null ;
   div: HTMLDivElement | null;
   state: IState;
@@ -31,7 +31,7 @@ export class ReportBlock {
   }
 
   constructor({data}:ReportBlockData) {
-    this.data=data;
+    this.data = data || null;
     this.wrapper = null;
     this.div = null;
     this.state = {
@@ -54,7 +54,7 @@ export class ReportBlock {
   render() {
     this.wrapper = document.createElement("div");
 
-    if (this.data.url && Object.keys(this.data.url).length > 0){
+    if (this.data && Object.keys(this.data).length > 0){
         this.createIframe(this.data.url);
     }
     else{
@@ -78,7 +78,7 @@ export class ReportBlock {
         <PdfViewer url={proxyUrl} />
         
       );
-      this.data.url=url;
+      this.data={url};
     } else {
       console.error('Wrapper element is not set.');
     }
@@ -87,8 +87,7 @@ export class ReportBlock {
 
 
   save(blockContent:string) {
-    return {
-      data:this.data
-    };
+    console.log(this.data)
+    return this.data;
   }
 }

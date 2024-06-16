@@ -37,8 +37,9 @@ export default function Editor({ setContent, holder }: Props) {
         },
         charts: ChartBLock,
         news: NewsBlock,
-        Report: ReportBlock,
-        finance: FinanceBlock,
+        report: ReportBlock,
+        finance: FinanceBlock
+
       },
       autofocus: true,
     });

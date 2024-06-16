@@ -59,7 +59,7 @@ const AnalystReportModal: React.FC<AnalystReportModalProps> = ({ createIframe })
   
   return (
     <>
-      <Modal show={show}>
+      <Modal show={show} >
         <Modal.Header>
           <Modal.Title>기업이름 입력해주세요!</Modal.Title>
         </Modal.Header>

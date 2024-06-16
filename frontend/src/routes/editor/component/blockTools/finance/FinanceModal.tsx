@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Modal, Button, Form } from "react-bootstrap";
+import "./style.css";
+
 
 interface FinanceReportModalProps{
   creatediv:any;
@@ -108,11 +110,11 @@ const FinanceModal:React.FC<FinanceReportModalProps> = ({creatediv}) => {
   
     return (
       <>
-        <Modal show={show} onHide={handleClose}>
+        <Modal show={show} onHide={() => setShow(false)} >
           <Modal.Header closeButton>
             <Modal.Title>기업이름 입력해주세요!</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
+          <Modal.Body className="modal-content" style={{height:"1000px"}}>
             <Form>
               <Form.Group controlId="formStockCode">
                 <Form.Label>기업</Form.Label>
@@ -125,8 +127,9 @@ const FinanceModal:React.FC<FinanceReportModalProps> = ({creatediv}) => {
                   required
                 />
               </Form.Group> 
-              <Form.Group controlId="formFinanceElements" style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+              
               <Form.Label>재무재표 요소 선택</Form.Label>
+            <Form.Group controlId="formFinanceElements" style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
 
               {Object.keys(fin).map((key) => (
                 <Button
