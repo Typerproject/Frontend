@@ -113,4 +113,17 @@ export default class userAPI extends BaseApi {
       console.error("팔로워를 제거 api", error);
     }
   }
+
+  // 로그아웃!
+  async logout() {
+    try {
+      const resp = await this.fetcher.get(`/user/logout`);
+
+      console.log("로그아웃: ", resp);
+
+      return resp.data;
+    } catch (error) {
+      console.error("로그아웃 하는 api: ", error);
+    }
+  }
 }
