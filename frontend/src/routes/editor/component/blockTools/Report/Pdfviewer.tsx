@@ -1,15 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as pdfjsLib from 'pdfjs-dist';
 
-import pdfJSWorkerURL from "pdfjs-dist/build/pdf.worker?url";
+import pdfJSWorkerURL from 'pdfjs-dist/build/pdf.worker?url';
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfJSWorkerURL;
 
 interface PdfViewerProps {
   url: string;
   pageNumber?: number;
+  onRenderComplete?: (canvas: HTMLCanvasElement) => void;
 }
 
-const PdfViewer: React.FC<PdfViewerProps> = ({ url, pageNumber = 1 }) => {
+const PdfViewer: React.FC<PdfViewerProps> = ({ url, pageNumber = 1, onRenderComplete }) => {
   const [numPages, setNumPages] = useState<number | null>(null);
   const [pageNum, setPageNumber] = useState<number>(pageNumber);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -47,9 +48,11 @@ const PdfViewer: React.FC<PdfViewerProps> = ({ url, pageNumber = 1 }) => {
             viewport,
           };
 
-          console.log('Rendering page:', pageNumber);
           await page.render(renderContext).promise;
-          console.log('Page rendered');
+
+          if (onRenderComplete) {
+            onRenderComplete(canvas);
+          }
         }
       }
     } catch (error) {
