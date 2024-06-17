@@ -1,6 +1,6 @@
 // import React from 'react'
 import { useAppSelector } from "../../../store";
-// type Props = {}
+import { BsPersonCircle } from "react-icons/bs";
 
 export default function InputComment() {
   const userInfo = useAppSelector((state) => state.user);
@@ -9,7 +9,11 @@ export default function InputComment() {
     <>
       {userInfo._id && (
         <div className="flex gap-[1rem] items-center mt-[2rem]">
-          <img className="w-[40px] h-[40px] rounded-full" src={userInfo.profile} />
+          {userInfo.profile ? (
+            <img className="w-[40px] rounded-full" src={userInfo.profile} />
+          ): (
+            <BsPersonCircle size={40} color="gray" />
+          )}
           <p className="text-sm">{userInfo.nickname}</p>
           <div className="grow relative bg-gray-300 rounded-2xl pl-[1.25rem] pr-[4.25rem] py-[0.75rem] ">
             <textarea className="w-full bg-transparent outline-none	max-h-[50px] h-[20px]" />

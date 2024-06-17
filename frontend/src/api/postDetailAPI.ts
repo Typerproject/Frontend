@@ -23,6 +23,12 @@ export interface IPostBody {
   public: boolean;
 }
 
+export interface IpostScrap {
+  msg: string;
+  postId: string;
+  userId: string;
+}
+
 export default class postAPI extends BaseApi {
   async getPost(_id: string) {
     const resp = await this.fetcher.get("/", {
@@ -33,6 +39,27 @@ export default class postAPI extends BaseApi {
 
   async addPost(body: IPostBody) {
     const resp = await this.fetcher.post("/", body);
+    return resp.data;
+  }
+
+  async scrapPost(postId: string) {
+    const resp = await this.fetcher.patch("/scrap", {
+      postId: postId,
+    });
+
+    return resp.data;
+  }
+
+  async deleteScrapPost(postId: string) {
+    const resp = await this.fetcher.delete(`/scrap/${postId}`);
+
+    return resp.data;
+  }
+
+  async getScrapStatus(postId: string) {
+    const resp = await this.fetcher.get('/scrap/status', {
+      params: { postId: postId },
+    }); 
     return resp.data;
   }
 }

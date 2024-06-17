@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import store from "./store";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
+import LoginModalContainer from "./components/login/LoginModalContainer";
 // import { persistStore } from "redux-persist";
 
 export const persistor = persistStore(store);
@@ -13,6 +14,7 @@ function App() {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <RouterProvider router={MainRouter} />
+        <LoginModalContainer />
       </PersistGate>
     </Provider>
   );

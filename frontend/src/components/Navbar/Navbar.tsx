@@ -56,12 +56,14 @@ export default function Navbar() {
         <div>
           {userInfo._id ? (
             <NavLink to="/editor">
-              <p className="text-[#E5E5E5] text-xl hover:text-white">Write</p>
+              <p className="text-[#E5E5E5] text-xl hover:text-white cursor-pointer">
+                Write
+              </p>
             </NavLink>
           ) : (
             <p
               onClick={handleLoginClick}
-              className="text-[#E5E5E5] text-xl hover:text-white"
+              className="text-[#E5E5E5] text-xl hover:text-white cursor-pointer"
             >
               Login
             </p>
@@ -71,7 +73,7 @@ export default function Navbar() {
           {userInfo.profile ? (
             <img
               onClick={handleToggleMenu}
-              className="w-[40px] rounded-full"
+              className="w-[40px] rounded-full cursor-pointer transition duration-200 ease-in-out transform hover:opacity-80"
               src={userInfo.profile}
             />
           ) : (
@@ -83,7 +85,7 @@ export default function Navbar() {
                 <li className="px-4 py-2 hover:bg-gray-100">
                   <NavLink
                     to={`/my/${userInfo._id}`}
-                    className="text-black no-underline"
+                    className="text-black no-underline cursor-pointer"
                   >
                     My page
                   </NavLink>
