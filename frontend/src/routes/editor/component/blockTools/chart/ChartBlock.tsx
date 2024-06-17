@@ -42,7 +42,6 @@ export class ChartBLock {
   }
 
   render() {
-    console.log(this.data);
     const rootNode = document.createElement("div");
     this.nodes = rootNode;
 
@@ -91,7 +90,6 @@ const ChartModal = ({ setData, injectedData }: ChartModalProps) => {
   const handleSave = async () => {
     try {
       const stockResp = await service.getStockData(formData);
-
 
       setData(stockResp);
       setChartData(stockResp);
