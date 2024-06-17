@@ -57,7 +57,7 @@ export default function Post({ id }: { id: string | undefined }) {
     <div className="w-full p-[2rem]">
       <div className="cursor-pointer ">
         {/* 날짜, 글쓴이 기본 정보 */}
-        <div className="flex gap-[17rem] items-center">
+        <div className="flex gap-[17rem] items-center mb-[1rem]">
           <div
             onClick={() => navigate("/my")}
             className="flex gap-[0.5rem] items-center"
