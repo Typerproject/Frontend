@@ -2,14 +2,16 @@ import { useState } from "react";
 import CreateDOM from "react-dom/client";
 import JsonChartTest from "./Chart";
 import editorAPI from "../../../../../api/editorAPI";
+import { API } from "@editorjs/editorjs/types/index";
 
 const service = new editorAPI(import.meta.env.VITE_SERVER_EDITOR_API_URI);
 
 interface chartBlockProps {
   data: stockResp;
+  api: API;
 }
 
-interface stockResp {
+export interface stockResp {
   stockTitle: string;
   data: stockData[];
 }
@@ -24,10 +26,12 @@ interface stockData {
 export class ChartBLock {
   data: stockResp;
   nodes: HTMLElement | null;
+  api: API;
 
-  constructor({ data }: chartBlockProps) {
+  constructor({ data, api }: chartBlockProps) {
     this.data = data;
     this.nodes = null;
+    this.api = api;
   }
 
   static get toolbox() {
@@ -42,17 +46,36 @@ export class ChartBLock {
   }
 
   render() {
-    console.log(this.data);
     const rootNode = document.createElement("div");
     this.nodes = rootNode;
 
-    const setData = (data: stockResp) => {
-      this.data = data;
-    };
+    const current = this.api.blocks.getCurrentBlockIndex();
 
-    CreateDOM.createRoot(rootNode).render(
-      <ChartModal setData={setData} injectedData={this.data} />
-    );
+    if (Object.keys(this.data).length === 0) {
+      const modal = document.createElement("div");
+
+      const modalRoot = CreateDOM.createRoot(modal);
+      const chartRoot = CreateDOM.createRoot(rootNode);
+
+      modalRoot.render(
+        <ChartModal
+          setData={(data) => {
+            this.data = data;
+            chartRoot.render(<JsonChartTest stockData={data} />);
+            modal.remove();
+          }}
+          onExit={() => {
+            this.api.blocks.delete(current);
+          }}
+        />
+      );
+      document.getElementById("root")?.appendChild(modal);
+    } else {
+      CreateDOM.createRoot(rootNode).render(
+        <JsonChartTest stockData={this.data} />
+      );
+    }
+
     return rootNode;
   }
 
@@ -63,13 +86,11 @@ export class ChartBLock {
 
 interface ChartModalProps {
   setData: (data: stockResp) => void;
-  injectedData: stockResp;
+  onExit: () => void;
 }
 
-const ChartModal = ({ setData, injectedData }: ChartModalProps) => {
-  console.log(injectedData);
+const ChartModal = ({ setData, onExit }: ChartModalProps) => {
   const [show, setShow] = useState(true);
-  const [chartData, setChartData] = useState<stockResp>(injectedData);
   const [formData, setFormData] = useState({
     marketCode: "J",
     stockCode: "",
@@ -79,7 +100,10 @@ const ChartModal = ({ setData, injectedData }: ChartModalProps) => {
     prc: "0",
   });
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    onExit();
+    setShow(false);
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -92,9 +116,7 @@ const ChartModal = ({ setData, injectedData }: ChartModalProps) => {
     try {
       const stockResp = await service.getStockData(formData);
 
-
       setData(stockResp);
-      setChartData(stockResp);
       setShow(false);
     } catch (error) {
       console.error("Failed to fetch stock data", error);
@@ -105,7 +127,7 @@ const ChartModal = ({ setData, injectedData }: ChartModalProps) => {
 
   return (
     <>
-      {show && !chartData?.data && (
+      {show && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
           <div className="fixed inset-0 bg-black opacity-50"></div>
           <div className="bg-white rounded-lg shadow-lg overflow-hidden w-full max-w-md mx-2 z-10">
@@ -221,8 +243,6 @@ const ChartModal = ({ setData, injectedData }: ChartModalProps) => {
           </div>
         </div>
       )}
-
-      {chartData?.data && <JsonChartTest stockData={chartData} />}
     </>
   );
 };
