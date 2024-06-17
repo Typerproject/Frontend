@@ -32,4 +32,15 @@ export default class editorAPI extends BaseApi {
 
     return resp.data;
   }
+
+  async getCorpCode(name: string, page: number) {
+    const resp = await this.fetcher.get("/disclosure/corpCode", {
+      params: {
+        name: name,
+        page: page,
+      },
+    });
+
+    return resp.data;
+  }
 }

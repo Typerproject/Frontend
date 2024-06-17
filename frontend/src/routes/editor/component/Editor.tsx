@@ -7,6 +7,8 @@ import { ChartBLock } from "./blockTools/chart/ChartBlock";
 import { NewsBlock } from "./blockTools/news/NewsBlock";
 import { FinanceBlock } from "./blockTools/finance/FinanceBlock";
 import { ReportBlock } from "./blockTools/Report/ReportBlock";
+import { DisclosureBlock } from "./blockTools/disclosure/DisclosureBlock";
+
 type Props = {
   setContent: (value: OutputData) => void;
 };
@@ -35,7 +37,8 @@ export default function Editor({ setContent }: Props) {
         charts: ChartBLock,
         news: NewsBlock,
         Report: ReportBlock,
-        finance: FinanceBlock
+        finance: FinanceBlock,
+        disclosure: DisclosureBlock,
       },
     });
   };
