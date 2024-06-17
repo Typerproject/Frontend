@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Modal, Button, Form } from "react-bootstrap";
+<<<<<<< Updated upstream
+=======
+// import "./style.css";
+
+>>>>>>> Stashed changes
 
 interface FinanceReportModalProps{
   creatediv:any;
