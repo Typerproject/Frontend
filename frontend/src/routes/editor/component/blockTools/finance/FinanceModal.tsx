@@ -85,7 +85,7 @@ const FinanceModal:React.FC<FinanceReportModalProps> = ({creatediv}) => {
 
     
     const fetchData=async (d:FormData)=>{
-        const data=await axios.get(`http://localhost:3000/api/editor/finance?company=${formData.company}&startdate=${formData.startDate}&enddate=${formData.endDate}`)
+        const data=await axios.get(`${import.meta.env.VITE_SERVER_FINANCE_API_URI}?company=${formData.company}&startdate=${formData.startDate}&enddate=${formData.endDate}`)
 
 
         const selectedKeys = Object.keys(fin).filter(key => fin[key as FinKeys]);

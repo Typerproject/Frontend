@@ -44,7 +44,7 @@ const AnalystReportModal: React.FC<AnalystReportModalProps> = ({ createIframe })
   const handleSave = async () => {
     try {
       setReportshow(true);
-      const response = await axios.get(`http://localhost:3000/api/editor/report`, {
+      const response = await axios.get(import.meta.env.VITE_SERVER_REPORT_API_URI, {
         params: { company: formData.company }
       });
       setReports(response.data);
