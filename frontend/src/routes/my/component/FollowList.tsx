@@ -24,15 +24,15 @@ export default function FollowList({
   const navigate = useNavigate();
   //props로 id, 이름, 프사 받아오기
 
-  const [dropBtn, setDropBtn] = useState(false);
+  // const [dropBtn, setDropBtn] = useState(false);
 
   const currentUser = useAppSelector((state) => state.user);
 
   const { id } = useParams<{ id: string }>();
 
-  function handleDrop() {
-    setDropBtn(!dropBtn);
-  }
+  // function handleDrop() {
+  //   setDropBtn(!dropBtn);
+  // }
 
   function handleDelete() {
     const direction = which === "following" ? true : false;
@@ -45,6 +45,7 @@ export default function FollowList({
         .deleteFollowingUser(_id)
         .then((result) => {
           console.log("in FollowList followingUser result:", result);
+          setRefreshKey((prevKey) => prevKey + 1);
         })
         .catch((err) => {
           console.error("In FollowList unfollowing error", err);
@@ -55,13 +56,12 @@ export default function FollowList({
         .deleteFollowerUser(_id)
         .then((result) => {
           console.log("in FollowList followerUser result:", result);
+          setRefreshKey((prevKey) => prevKey + 1);
         })
         .catch((err) => {
           console.error("In FollowList unfollower error", err);
         });
     }
-
-    setRefreshKey((prevKey) => prevKey + 1);
   }
 
   console.log("이 사람의 id는 ", _id);
@@ -78,32 +78,13 @@ export default function FollowList({
 
       <div style={{ position: "relative", display: "inline-block" }}>
         {currentUser._id === id ? (
-          <div onClick={handleDrop} className="cursor-pointer ml-4">
-            <GoKebabHorizontal />
-            {dropBtn && (
-              /*클릭 시 팔로우,팔로잉 취소 api 호출*/
-              <div
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  backgroundColor: "white",
-                  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-                  borderRadius: "4px",
-                  zIndex: 1000,
-                  width: "35px",
-                }}
-              >
-                <ul style={{ margin: 0, padding: "8px 0", listStyle: "none" }}>
-                  <li
-                    style={{ listStyle: "none", textAlign: "center" }}
-                    className="text-sm cursor-pointer"
-                    onClick={handleDelete}
-                  >
-                    Delete
-                  </li>
-                </ul>
-              </div>
-            )}
+          <div className="cursor-pointer ml-4">
+            <button
+              onClick={handleDelete}
+              className="text-xs mt-[0.7rem] border-[1px] bg-red-500 text-gray-50 rounded-full border-red-500 text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-red-500 duration-300"
+            >
+              Delete
+            </button>
           </div>
         ) : (
           <div></div>
