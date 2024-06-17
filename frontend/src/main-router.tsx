@@ -43,10 +43,10 @@ const routers = [
       },
     ],
   },
-  {
-    path: "/auth",
-    element: <LoginModal isOpen={true} onRequestClose={() => false} />,
-  },
+  // {
+  //   path: "/kakao/auth",
+  //   element: <LoginModal isOpen={true} onRequestClose={() => false} />,
+  // },
   {
     path: "/kakao/login",
     element: <Redirect />,

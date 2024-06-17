@@ -77,14 +77,14 @@ const PdfViewer: React.FC<PdfViewerProps> = ({ url, pageNumber = 1, onRenderComp
           disabled={pageNum <= 1} 
           className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
         >
-          Previous
+          이전
         </button>
         <button 
           onClick={goToNextPage} 
           disabled={numPages !== null && pageNum >= numPages} 
           className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
         >
-          Next
+          다음
         </button>
       </div>
       <p className="mt-2">

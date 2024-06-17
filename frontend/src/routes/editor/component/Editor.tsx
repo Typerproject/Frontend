@@ -47,6 +47,7 @@ export default function Editor({ setContent }: Props) {
           },
         },
       },
+      autofocus: true,
     });
   };
   useEffect(() => {
@@ -61,7 +62,7 @@ export default function Editor({ setContent }: Props) {
   return (
     <div
       id="editorjs"
-      className="w-11/12 mt-2 border-solid border-2 rounded-2xl shadow-md mb-5 overflow-y-auto max-h-[63vh]"
+      className="w-[90%] mt-2 mb-5 overflow-y-auto"
     ></div>
   );
 }
