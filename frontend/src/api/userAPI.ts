@@ -78,7 +78,7 @@ export default class userAPI extends BaseApi {
     }
   }
 
-  // 내가 누군가를 팔로우 하는 api (테스트 필요)
+  // 내가 누군가를 팔로잉 하는 api (테스트 필요)
   async followingUser(_id: string): Promise<FollowResponse> {
     try {
       const result = await this.fetcher.post(`/user/following`, {
@@ -111,6 +111,19 @@ export default class userAPI extends BaseApi {
       return resp.data; // { message: "언팔 성공!", response: true  }
     } catch (error) {
       console.error("팔로워를 제거 api", error);
+    }
+  }
+
+  // 로그아웃!
+  async logout() {
+    try {
+      const resp = await this.fetcher.get(`/user/logout`);
+
+      console.log("로그아웃: ", resp);
+
+      return resp.data;
+    } catch (error) {
+      console.error("로그아웃 하는 api: ", error);
     }
   }
 }

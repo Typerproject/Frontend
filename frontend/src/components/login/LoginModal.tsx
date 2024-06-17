@@ -1,6 +1,7 @@
 import React from "react";
 import Modal from "react-modal";
-import "./login.css";
+import { GoChevronLeft } from "react-icons/go";
+import kakaoButton from "../../assets/loginButton.png";
 
 Modal.setAppElement("#root");
 
@@ -19,27 +20,57 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onRequestClose }) => {
   };
 
   return (
-    <Modal className="modal" isOpen={isOpen} onRequestClose={onRequestClose}>
-      <div className="modal-content">
-        {/* 닫기 버튼 */}
-        <button className="close-button" onClick={onRequestClose} />
+    <Modal
+      className="flex flex-col justify-between items-center text-center mx-auto my-40 w-[380px] h-[500px] relative mb-0 bg-white rounded-lg shadow-2xl"
+      isOpen={isOpen}
+      onRequestClose={onRequestClose}
+    >
+      {/* 닫기 버튼 */}
+      <button
+        className="w-10 h-10 bg-no-repeat bg-center bg-cover bg-opacity-50 cursor-pointer border-none top-0 left-0 z-50 mt-0 mr-80"
+        onClick={onRequestClose}
+      >
+        <GoChevronLeft className="w-8 h-8 text-gray-500 mt-3" />
+      </button>
 
+      <div className="flex flex-col justify-center items-center pt-14">
         {/* 문구 */}
-        <div className="comment">
-          <p>편리하고 쉬운 주식블로그!</p>
-          <p>Typer를 경험해보세요!</p>
+        <div className="flex flex-col justify-center items-center mb-10">
+          <p className="text-white text-[20px] bg-black w-20 h-20 flex justify-center items-center rounded-lg shadow-xl pr-0.5">
+            <span className="text-[35px]">T</span>
+            yper
+          </p>
+          <p className="mt-10 text-base font-abeezee font-semibold">
+            편리하고 쉬운 주식 블로그!
+          </p>
+          <p className="mt-2 text-base font-abeezee font-semibold">
+            Typer를 경험해 보세요!
+          </p>
         </div>
-
-        {/* 일직선 */}
-        <div className="line"></div>
-
-        {/* 로그인 버튼 */}
-        <button onClick={handleLogin} className="login-button" />
       </div>
 
+      {/* 일직선 */}
+      <div className="w-76 h-px bg-gray-300"></div>
+
+      {/* 로그인 버튼 */}
+      <button
+        onClick={handleLogin}
+        className="bg-no-repeat bg-center border-none bg-cover cursor-pointer mb-10"
+        style={{
+          backgroundImage: `url(${kakaoButton})`,
+          width: "320px",
+          height: "58px",
+        }}
+      />
+
       {/* 서비스 미리보기 */}
-      <div className="preview">
-        <a>서비스 미리보기</a>
+      <div className="w-[120px] h-[19px] pb-10">
+        <a
+          className="text-black text-sm underline cursor-pointer"
+          style={{ textUnderlineOffset: "5px" }}
+        >
+          서비스 미리보기
+        </a>
       </div>
     </Modal>
   );

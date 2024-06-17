@@ -7,14 +7,11 @@ import { ChartBLock } from "./blockTools/chart/ChartBlock";
 import { NewsBlock } from "./blockTools/news/NewsBlock";
 import { FinanceBlock } from "./blockTools/finance/FinanceBlock";
 import { ReportBlock } from "./blockTools/Report/ReportBlock";
-
 type Props = {
   setContent: (value: OutputData) => void;
 };
-
 export default function Editor({ setContent }: Props) {
   const ejInstance = useRef<EditorJS | null>(null);
-
   const initEditor = () => {
     const editor = new EditorJS({
       holder: "editorjs",
@@ -39,22 +36,18 @@ export default function Editor({ setContent }: Props) {
         news: NewsBlock,
         Report: ReportBlock,
         finance: FinanceBlock
-
       },
     });
   };
-
   useEffect(() => {
     if (ejInstance.current === null) {
       initEditor();
     }
-
     return () => {
       ejInstance?.current?.destroy();
       ejInstance.current = null;
     };
   }, []);
-
   return (
     <div
       id="editorjs"
