@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from "react";
 import EditorJS from "@editorjs/editorjs";
 import "../../../index.css";
 import Header from "@editorjs/header";
+import Paragraph from "@editorjs/paragraph";
 import { type ToolConstructable, OutputData } from "@editorjs/editorjs";
 import { ChartBLock } from "./blockTools/chart/ChartBlock";
 import { NewsBlock } from "./blockTools/news/NewsBlock";
@@ -39,6 +40,12 @@ export default function Editor({ setContent }: Props) {
         Report: ReportBlock,
         finance: FinanceBlock,
         disclosure: DisclosureBlock,
+        paragraph: {
+          class: Paragraph,
+          config: {
+            preserveBlank: true,
+          },
+        },
       },
       autofocus: true,
     });

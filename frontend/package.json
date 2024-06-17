@@ -12,6 +12,7 @@
   "dependencies": {
     "@editorjs/editorjs": "^2.29.1",
     "@editorjs/header": "^2.8.1",
+    "@editorjs/paragraph": "^2.11.5",
     "@reduxjs/toolkit": "^2.2.5",
     "@types/editorjs__header": "^2.6.3",
     "apexcharts": "^3.49.1",
