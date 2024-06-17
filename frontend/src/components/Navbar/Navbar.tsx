@@ -1,7 +1,13 @@
 // import React from 'react'
 import { NavLink } from "react-router-dom";
 import { IoMdSearch } from "react-icons/io";
+import { useAppSelector } from "../../store";
+// import defaultLogo from "../../assets/default_profile.svg";
+import { BsPersonCircle } from "react-icons/bs";
+
 export default function Navbar() {
+  const userInfo = useAppSelector((state) => state.user);
+  console.log(userInfo);
   return (
     <nav className="bg-black fixed w-full h-fit py-[0.75em] px-[1.5rem] top-0 flex justify-between z-[100]">
       <div className="flex gap-[2rem] items-center">
@@ -10,7 +16,7 @@ export default function Navbar() {
             <span className="text-[35px]">T</span>yper
           </p>
         </NavLink>
-        <div className="relative">
+        <div className="relative hidden md:inline-block">
           <IoMdSearch className="absolute top-[25%] left-[10px]" />
           <input className="h-[30px] rounded-full pl-[30px] pr-[10px] py-[5px] bg-[#E5E5E5]" />
         </div>
@@ -22,11 +28,12 @@ export default function Navbar() {
           </NavLink>
         </div>
         <div>
-          <NavLink to="/my" className="bg-white">
-            <img
-              className="w-[40px] rounded-full"
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTD68cSMsrBiEs6YloK8MVPO1DlJ7LqKt4OxT7ioMJn7xh-1iqPV0FVFjvTA7Cvlv-Y9Yc&usqp=CAU"
-            />
+          <NavLink to={`/my/${userInfo._id}`} className="bg-white">
+            {userInfo.profile ? (
+              <img className="w-[40px] rounded-full" src={userInfo.profile} />
+            ) : (
+              <BsPersonCircle size={40} color="gray"/>
+            )}
           </NavLink>
         </div>
       </div>
