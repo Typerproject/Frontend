@@ -16,7 +16,7 @@ const MyComponent = () => {
   useEffect(() => {
     const hi = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/shinhan");
+        const response = await axios.get(import.meta.env.VITE_SERVER_SHINHAN_API_URI);
         setIssue(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);

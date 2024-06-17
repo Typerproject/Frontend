@@ -112,15 +112,16 @@ const AnalystReportModal: React.FC<AnalystReportModalProps> = ({ createIframe })
       <br />
     </div>
     ))}
-
-   <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
-      <button onClick={handlePrevPage} disabled={currentPage === 1}>Previous</button>
-      <button onClick={handleNextPage} disabled={currentPage === totalpages}>Next</button>
+  <Modal.Footer>
+   <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px',gap:'10px' }}>
+      <Button onClick={handlePrevPage} disabled={currentPage === 1}>이전</Button>
+      <Button onClick={handleNextPage} disabled={currentPage === totalpages}>다음</Button>
       <Button onClick={() => setReportshow(false)}>
         닫기
       </Button>
     </div>
-    </Modal.Body>
+    </Modal.Footer>
+      </Modal.Body>
         
      </Modal>
     </>
