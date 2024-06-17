@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import userAPI, { IFollowerInfo, IUserInfo } from "../../api/userAPI";
+import { useNavigate } from "react-router-dom";
+import userAPI, { IUserInfo } from "../../api/userAPI";
 import { FaHeart } from "react-icons/fa6"; // 채워진 하트
 import { FaRegHeart } from "react-icons/fa6"; // 빈 하트
 import { FaRegComment } from "react-icons/fa";
@@ -37,7 +37,7 @@ export default function Post({ id }: { id: string | undefined }) {
   const userName: string | undefined = userInfo?.nickname;
   const userProfile: string | undefined = userInfo?.profile;
 
-  //마아페이지 아이디를 전달받아서 api호출을 통해 게시글 정보를 받아옴
+  //api호출을 통해 게시글 정보를 받아옴
   const title: string = "테스트 게시글 입니다.";
   const date: string = "2024-06-12 15:24:32";
   const like: number = 231;
@@ -75,7 +75,7 @@ export default function Post({ id }: { id: string | undefined }) {
             <p className="text-base py-[2rem] text-gray-500">{content}</p>
           </div>
           <div className="flex-none">
-            <img className="w-[200px]" src={picture} />
+            <img className="w-[200px] rounded" src={picture} />
           </div>
         </div>
       </div>
