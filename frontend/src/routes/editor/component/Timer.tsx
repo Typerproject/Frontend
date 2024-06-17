@@ -20,7 +20,7 @@ export default function Timer() {
   startTimer();
 
   return (
-    <div className="w-11/12">
+    <div className="w-11/12 p-4">
       <p className="text-lg text-gray-500">{timer}</p>
     </div>
   );
