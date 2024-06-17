@@ -26,7 +26,7 @@ export class DisclosureBlock {
     this.nodes = rootNode;
 
     CreateDOM.createRoot(rootNode).render(<DisclosureModal></DisclosureModal>);
-    document.getElementById("root").appendChild(rootNode);
+    document.getElementById("root")?.appendChild(rootNode);
 
     console.log(rootNode);
 
