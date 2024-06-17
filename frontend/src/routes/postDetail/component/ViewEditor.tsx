@@ -27,7 +27,7 @@ export default function ViewEditor({ outPutData }: props) {
         header: Header,
         news: NewsBlock,
         charts: ChartBLock,
-        report: ReportBlock,
+        Report: ReportBlock,
         finance: FinanceBlock,
       },
     });
