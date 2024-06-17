@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Modal, Button, Form } from "react-bootstrap";
-import "./style.css";
-
+// import "./style.css";
 
 interface FinanceReportModalProps{
   creatediv:any;
