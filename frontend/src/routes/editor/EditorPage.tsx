@@ -37,7 +37,7 @@ export default function EditorPage() {
         <div className="flex flex-col items-center">
           <input
             type="text"
-            className="block w-11/12 p-4 text-4xl mb-4"
+            className="block w-11/12 p-4 text-4xl outline-none"
             placeholder="제목을 입력해주세요"
             maxLength={25}
             onChange={(e) => setTitle(e.target.value)}
@@ -45,7 +45,7 @@ export default function EditorPage() {
           <Timer />
           <Editor setContent={setContent} />
         </div>
-        <footer className="bg-black h-14 sticky top-[100vh] flex items-center justify-between px-16">
+        <footer className="bg-black h-14 fixed bottom-0 right-0 left-0 flex items-center justify-between px-16 z-[100]">
           <p className="text-white text-xl" onClick={() => navigate("/my")}>
             나가기
           </p>
