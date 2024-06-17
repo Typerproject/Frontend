@@ -274,8 +274,7 @@ export default function MyPage() {
           <p>{userInfo?.nickname}'s Typer</p>
           <div>
             {/*가져온 글 목록을 map돌면서 출력*/}
-            <Post />
-            <Post />
+            <Post id={id} />
           </div>
         </div>
 
