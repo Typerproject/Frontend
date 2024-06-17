@@ -2,11 +2,14 @@ import React, { useRef, useEffect } from "react";
 import EditorJS from "@editorjs/editorjs";
 import "../../../index.css";
 import Header from "@editorjs/header";
+import Paragraph from "@editorjs/paragraph";
 import { type ToolConstructable, OutputData } from "@editorjs/editorjs";
 import { ChartBLock } from "./blockTools/chart/ChartBlock";
 import { NewsBlock } from "./blockTools/news/NewsBlock";
 import { FinanceBlock } from "./blockTools/finance/FinanceBlock";
 import { ReportBlock } from "./blockTools/Report/ReportBlock";
+import { DisclosureBlock } from "./blockTools/disclosure/DisclosureBlock";
+
 type Props = {
   setContent: (value: OutputData) => void;
 };
@@ -35,7 +38,14 @@ export default function Editor({ setContent }: Props) {
         charts: ChartBLock,
         news: NewsBlock,
         Report: ReportBlock,
-        finance: FinanceBlock
+        finance: FinanceBlock,
+        disclosure: DisclosureBlock,
+        paragraph: {
+          class: Paragraph,
+          config: {
+            preserveBlank: true,
+          },
+        },
       },
       autofocus: true,
     });

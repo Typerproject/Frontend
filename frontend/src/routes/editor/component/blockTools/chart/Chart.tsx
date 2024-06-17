@@ -1,5 +1,6 @@
 import React from "react";
 import ReactApexChart from "react-apexcharts";
+import { stockResp } from "./ChartBlock";
 
 // 날짜 포맷 변환 함수 (예시)
 function formatDate(dateStr: string) {
@@ -9,13 +10,17 @@ function formatDate(dateStr: string) {
   return `${year}-${month}-${day}`;
 }
 
-function JsonChartTest({ stockData }:any) {
-  if (!stockData) {
+interface chartProps {
+  stockData: stockResp;
+}
+
+function JsonChartTest({ stockData }: chartProps) {
+  if (Object.keys(stockData).length === 0) {
     return <div>No data available</div>;
   }
 
   const formattedDataForCandle = stockData.data
-    .map((item:any) => {
+    .map((item: any) => {
       const open = Number(item.open);
       const high = Number(item.high);
       const low = Number(item.low);
@@ -32,7 +37,7 @@ function JsonChartTest({ stockData }:any) {
         y: [open, high, low, close],
       };
     })
-    .filter((data:any) => data !== null); // 유효하지 않은 데이터를 제거
+    .filter((data: any) => data !== null); // 유효하지 않은 데이터를 제거
 
   const series = [
     {
