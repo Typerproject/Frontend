@@ -1,10 +1,20 @@
 // user 관련된 api 모아주세용
 import BaseApi from "./axiosInstance";
 
+interface Preview {
+  title: string;
+  _id: string;
+  preview: object;
+  createdAt: string;
+  public: boolean;
+  scrapingCount: number;
+}
+
 export interface IUserInfo {
   nickname: string;
   comment: string;
   profile: string;
+  writerdPost: Preview[];
 }
 
 // IFollowerInfo 배열 안의 유저 데이터를 표현한 거임

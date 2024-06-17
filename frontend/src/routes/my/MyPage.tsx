@@ -13,6 +13,15 @@ import { useAppDispatch } from "../../store";
 
 type State = "follower" | "following" | false;
 
+interface Preview {
+  title: string;
+  _id: string;
+  preview: object;
+  createdAt: string;
+  public: boolean;
+  scrapingCount: number;
+}
+
 const service = new userAPI(import.meta.env.VITE_BASE_URI);
 
 export default function MyPage() {
@@ -20,6 +29,25 @@ export default function MyPage() {
   // const [profileImg, setProfileImg] = useState<string>();
   // const [profileIntro, setProfileIntro] = useState<string>();
   const [userInfo, setUserInfo] = useState<IUserInfo | null>(null);
+
+  //게시글 미리보기
+  const [previewPost, setPreviewPost] = useState<Preview[]>([]);
+
+  useEffect(() => {
+    if (userInfo?.writerdPost) {
+      const tempPost: any = userInfo?.writerdPost.map((ele: Preview) => ({
+        title: ele.title,
+        _id: ele._id,
+        preview: ele.preview,
+        createdAt: ele.createdAt,
+        public: ele.public,
+        scrapingCount: ele.scrapingCount,
+      }));
+      setPreviewPost(tempPost);
+    }
+  }, [userInfo]);
+
+  //console.log(tempPost.length);
 
   // const [followerCount, setFollowerCount] = useState<number>();
   // const [followingCount, setFollowingCount] = useState<number>();
@@ -274,7 +302,9 @@ export default function MyPage() {
           <p>{userInfo?.nickname}'s Typer</p>
           <div>
             {/*가져온 글 목록을 map돌면서 출력*/}
-            <Post id={id} />
+            {previewPost.map((post) => (
+              <Post id={id} post={post} />
+            ))}
           </div>
         </div>
 
