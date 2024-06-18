@@ -18,15 +18,13 @@ interface Preview {
   title: string;
   _id: string;
   preview: Pre;
-  text: string;
-  img: string;
   createdAt: string;
   public: boolean;
   scrapingCount: number;
 }
 
 interface User {
-  id: string;
+  id: string | undefined;
   post: Preview;
 }
 
@@ -69,6 +67,7 @@ export default function Post({ id, post }: User) {
   console.log("preview content 어떻게 생겼지? : ", content);
   const comment: number = 10;
   const picture: string = post.preview.img; //미리보기 사진
+  const postId: string = post.preview._id;
 
   const [validHeart, setValidHeart] = useState(false);
 
@@ -79,27 +78,44 @@ export default function Post({ id, post }: User) {
 
   return (
     <div className="w-full p-[2rem]">
-      <div className="cursor-pointer ">
-        {/* 날짜, 글쓴이 기본 정보 */}
-        <div className="flex gap-[17rem] items-center mb-[1rem]">
-          <div
-            onClick={() => navigate("/my")}
-            className="flex gap-[0.5rem] items-center"
-          >
-            <img className="w-[40px] rounded-full" src={userProfile} />
-            <p className="text-sm">{userName}</p>
+      <div>
+        <div className="flex cursor-pointer ">
+          {/* 미리보기 왼쪽*/}
+          <div className="flex-grow-[3] basis-3/4 w-full">
+            <div className="flex flex-col items-start gap-[1rem] mb-[1rem]">
+              {/*글 정보*/}
+              <div className="flex items-center gap-[15rem]">
+                {/*유저 이름과 사진*/}
+                <div
+                  onClick={() => navigate(`/my/{id}`)}
+                  className="flex gap-[0.5rem] items-center"
+                >
+                  <img className="w-[40px] rounded-full" src={userProfile} />
+                  <p className="text-sm">{userName}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-400">{date}</p>
+                </div>
+              </div>
+              <div>
+                <div onClick={() => navigate(`/post/{postId}`)}>
+                  <div className="text-4xl mt-[1rem]">{title}</div>
+                  <div className="text-base py-[2rem] text-gray-500">
+                    {content}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <p className="text-sm text-gray-400">{date}</p>
-        </div>
 
-        {/* 글 내용 */}
-        <div className="flex">
-          <div className="flex-1" onClick={() => navigate("/post")}>
-            <div className="text-4xl mt-[1rem]">{title}</div>
-            <p className="text-base py-[2rem] text-gray-500">{content}</p>
-          </div>
-          <div className="flex-none">
-            <img className="w-[200px] rounded" src={picture} />
+          {/* 미리보기 오른쪽 */}
+          <div className="flex-grow basis-1/4">
+            <div className="flex">
+              {/*게시글 이미지*/}
+              <div className="flex-none">
+                <img className="w-[200px] rounded" src={picture} />
+              </div>
+            </div>
           </div>
         </div>
       </div>

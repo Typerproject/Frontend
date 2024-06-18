@@ -308,13 +308,13 @@ export default function MyPage() {
 
   return (
     <div className="mt-[7rem]">
-      <div className="grid grid-cols-3 ">
+      <div className="grid grid-cols-4">
         {/*글목록*/}
-        <div className="col-span-2 text-5xl flex flex-col items-center gap-[2rem]">
+        <div className="col-span-3 text-5xl flex flex-col items-center gap-[2rem]">
           <p>{userInfo?.nickname}'s Typer</p>
-          <div>
+          <div className="w-3/4">
             {/*가져온 글 목록을 map돌면서 출력*/}
-            {previewPost.map((post) => (
+            {previewPost.map((post: Preview) => (
               <Post id={id} post={post} />
             ))}
           </div>
