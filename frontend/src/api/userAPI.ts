@@ -1,10 +1,11 @@
 // user 관련된 api 모아주세용
 import BaseApi from "./axiosInstance";
+import { Pre } from "../routes/my/MyPage";
 
 interface Preview {
   title: string;
   _id: string;
-  preview: object;
+  preview: Pre;
   createdAt: string;
   public: boolean;
   scrapingCount: number;
@@ -41,6 +42,7 @@ export default class userAPI extends BaseApi {
   async getUserInfo(_id: string): Promise<IUserInfo> {
     try {
       const resp = await this.fetcher.get(`/user/info/${_id}`);
+      console.log(resp);
       return resp.data;
     } catch (err) {
       console.error("유저 정보 api 에러: ", err);

@@ -13,10 +13,16 @@ import { useAppDispatch } from "../../store";
 
 type State = "follower" | "following" | false;
 
+export interface Pre {
+  text: string;
+  img: string;
+  _id: string;
+}
 interface Preview {
   title: string;
   _id: string;
-  preview: object;
+  //preview: object;
+  preview: Pre;
   createdAt: string;
   public: boolean;
   scrapingCount: number;
@@ -35,14 +41,20 @@ export default function MyPage() {
 
   useEffect(() => {
     if (userInfo?.writerdPost) {
-      const tempPost: any = userInfo?.writerdPost.map((ele: Preview) => ({
-        title: ele.title,
-        _id: ele._id,
-        preview: ele.preview,
-        createdAt: ele.createdAt,
-        public: ele.public,
-        scrapingCount: ele.scrapingCount,
-      }));
+      const tempPost: any = userInfo?.writerdPost.map((ele: Preview) => {
+        console.log(ele.preview);
+        return {
+          title: ele.title,
+          _id: ele._id,
+          preview: ele.preview,
+          createdAt: ele.createdAt,
+          public: ele.public,
+          scrapingCount: ele.scrapingCount,
+        };
+        // console.log(ele);
+        // return ele;
+      });
+
       setPreviewPost(tempPost);
     }
   }, [userInfo]);

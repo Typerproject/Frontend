@@ -7,10 +7,18 @@ import { FaRegComment } from "react-icons/fa";
 
 const service = new userAPI(import.meta.env.VITE_BASE_URI);
 
+export interface Pre {
+  text: string;
+  img: string;
+  _id: string;
+}
+
 interface Preview {
   title: string;
   _id: string;
-  preview: object;
+  preview: Pre;
+  text: string;
+  img: string;
   createdAt: string;
   public: boolean;
   scrapingCount: number;
@@ -53,17 +61,13 @@ export default function Post({ id, post }: User) {
   const userProfile: string | undefined = userInfo?.profile;
 
   //api호출을 통해 게시글 정보를 받아옴
-  //const title: string = "테스트 게시글 입니다.";
   const title: string = post.title;
-  //const date: string = "2024-06-12 15:24:32";
   const date: string = post.createdAt;
-  //const like: number = 231;
   const like: number = post.scrapingCount;
-  const content: string = "내용 세 줄 요약해서 출력";
-  //const content: string = post.preview.text;
+  const content: string = post.preview.text;
+  console.log("preview content 어떻게 생겼지? : ", content);
   const comment: number = 10;
-  const picture: string =
-    "https://src.hidoc.co.kr/image/lib/2022/5/12/1652337370806_0.jpg"; //미리보기 사진
+  const picture: string = post.preview.img; //미리보기 사진
 
   const [validHeart, setValidHeart] = useState(false);
 
