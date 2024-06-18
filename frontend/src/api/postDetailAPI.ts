@@ -62,4 +62,10 @@ export default class postAPI extends BaseApi {
     }); 
     return resp.data;
   }
+
+  async getScrapList() {
+    const resp = await this.fetcher.get("/scrap/list");
+
+    return resp.data;
+  }
 }
