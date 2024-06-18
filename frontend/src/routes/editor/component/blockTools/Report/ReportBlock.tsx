@@ -2,6 +2,7 @@
 import ReactDOM from 'react-dom/client';
 import AnalystReportModal from './ReportModal';
 import PdfViewer from './Pdfviewer';
+import { API } from "@editorjs/editorjs/types/index";
 
 interface IState {
   showModal: boolean;
@@ -9,6 +10,7 @@ interface IState {
 
 interface ReportBlockData {
   data: IReportData;
+  api: API;
 }
 
 
@@ -24,19 +26,21 @@ export class ReportBlock {
   wrapper: HTMLDivElement | null ;
   div: HTMLDivElement | null;
   state: IState;
+  api: API;
 
 
   setWrapper(wrapper: HTMLDivElement) {
     this.wrapper = wrapper;
   }
 
-  constructor({data}:ReportBlockData) {
+  constructor({data,api}:ReportBlockData) {
     this.data = data || null;
     this.wrapper = null;
     this.div = null;
     this.state = {
       showModal: false
     };
+    this.api= api;
     
   }
 
@@ -68,6 +72,8 @@ export class ReportBlock {
   }
 
   render() {
+
+    const current = this.api.blocks.getCurrentBlockIndex();
     this.wrapper = document.createElement("div");
 
     if (this.data && Object.keys(this.data).length > 0){
@@ -75,7 +81,10 @@ export class ReportBlock {
     }
     else{
     ReactDOM.createRoot(this.wrapper).render(
-      <AnalystReportModal createIframe={this.createIframe}/>
+      <AnalystReportModal createIframe={this.createIframe}
+      onExit={() => {
+        this.api.blocks.delete(current);
+      }}/>
     );
     
   }
