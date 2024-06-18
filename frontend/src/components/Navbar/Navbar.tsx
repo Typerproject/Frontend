@@ -1,5 +1,5 @@
 // import React from 'react'
-import { NavLink } from "react-router-dom";
+import { NavLink,useNavigate } from "react-router-dom";
 import { IoMdSearch } from "react-icons/io";
 import { useAppSelector, useAppDispatch } from "../../store";
 // import defaultLogo from "../../assets/default_profile.svg";
@@ -14,8 +14,10 @@ const service = new userAPI(import.meta.env.VITE_BASE_URI);
 export default function Navbar() {
   const userInfo = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchtext,setSearchText]=useState('');
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   const handleToggleMenu = () => {
@@ -37,6 +39,17 @@ export default function Navbar() {
       dispatch(logoutUser());
     });
   };
+  const handleSearchClick = () => {
+    navigate(`/search?text=${searchtext}`);
+  };
+
+  const handleKeyDown=(e:any)=>{
+    if (e.key=='Enter'){
+      handleSearchClick();
+    }
+  }
+
+  
 
   console.log(userInfo);
   return (
@@ -48,8 +61,8 @@ export default function Navbar() {
           </p>
         </NavLink>
         <div className="relative hidden md:inline-block">
-          <IoMdSearch className="absolute top-[25%] left-[10px]" />
-          <input className="h-[30px] rounded-full pl-[30px] pr-[10px] py-[5px] bg-[#E5E5E5]" />
+          <IoMdSearch className="absolute top-[25%] left-[10px]" onClick={handleSearchClick} />
+          <input className="h-[30px] rounded-full pl-[30px] pr-[10px] py-[5px] bg-white" onChange={(e)=>setSearchText(e.target.value)} onKeyDown={handleKeyDown}/>
         </div>
       </div>
       <div className="flex gap-[1rem] items-center">
