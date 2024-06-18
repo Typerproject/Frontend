@@ -5,8 +5,9 @@ import MyPage from "./routes/my/MyPage";
 import EditorPage from "./routes/editor/EditorPage";
 
 import Layout from "./components/Layout";
-import LoginModal from "./components/login/LoginModal";
+// import LoginModal from "./components/login/LoginModal";
 import Redirect from "./components/login/Redirect";
+import ScrapPage from "./routes/scrap/ScrapPage";
 
 const routers = [
   {
@@ -41,6 +42,11 @@ const routers = [
         element: <PostDetail />,
         index: true,
       },
+      {
+        path: "scrap",
+        element: <ScrapPage />,
+        index: true,
+      }
     ],
   },
   // {
