@@ -71,7 +71,8 @@ export default function Post({ postInfo }: PostProps) {
   return (
     <div
       onClick={() => navigate(`/post/${postInfo._id}`)}
-      className="w-full p-[2rem] grid gap-[25px] grid-cols-8 cursor-pointer"
+    //   border-bottom: 1px solid #80808059;
+      className="w-full p-[2rem] grid gap-[25px] grid-cols-8 cursor-pointer "
     >
       {/* 글쓴이, 제목, 내용, 스크랩 수, 댓글 수 */}
       <div className="flex justify-between col-span-6 w-full">

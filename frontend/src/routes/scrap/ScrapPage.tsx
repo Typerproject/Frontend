@@ -44,9 +44,12 @@ export default function ScrapPage() {
   }, []);
 
   return (
-    <div className="w-[65%] mx-auto mt-[5rem]">
+    <div className="w-[65%] mx-auto mt-[8rem]">
       {post.map((post) => (
-        <Post key={post._id} postInfo={post} />
+        <>
+          <Post key={post._id} postInfo={post} />
+          <div className="h-[1px] w-full bg-gray-200"></div>
+        </>
       ))}
     </div>
   );
