@@ -96,6 +96,14 @@ export default function Navbar() {
                 >
                   Logout
                 </li>
+                <li className="px-4 py-2 hover:bg-gray-100">
+                  <NavLink
+                    to={`/post/scrap`}
+                    className="text-black no-underline cursor-pointer"
+                  >
+                    Scrap List
+                  </NavLink>
+                </li>
               </ul>
             </div>
           )}
