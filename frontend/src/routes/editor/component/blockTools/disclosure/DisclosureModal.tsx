@@ -10,7 +10,11 @@ export interface corpCode {
 
 const service = new editorAPI(import.meta.env.VITE_SERVER_EDITOR_API_URI);
 
-export default function DisclosureModal() {
+interface DisclosureModalProps {
+  onExitFirst: () => void;
+}
+
+export default function DisclosureModal({ onExitFirst }: DisclosureModalProps) {
   const searchResult = useRef<corpCode[]>([]);
   const [searchName, setSearchName] = useState<string>("");
   const [list, setList] = useState<corpCode[]>([]);
@@ -44,7 +48,10 @@ export default function DisclosureModal() {
     }
   };
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    onExitFirst();
+  };
 
   return (
     <>
@@ -141,7 +148,9 @@ export default function DisclosureModal() {
           </div>
         </div>
       )}
-      {targetCorp && <ChooseReportPage targetCorp={targetCorp} />}
+      {targetCorp && (
+        <ChooseReportPage targetCorp={targetCorp} onExitFirst={onExitFirst} />
+      )}
     </>
   );
 }

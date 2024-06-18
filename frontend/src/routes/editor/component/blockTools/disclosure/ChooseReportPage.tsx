@@ -1,12 +1,15 @@
 import React, { useRef, useState } from "react";
 import { corpCode } from "./DisclosureModal";
 import editorAPI from "../../../../../api/editorAPI";
+import e from "express";
+import ReportSelector from "./ReportSelector";
 
 interface props {
   targetCorp: corpCode;
+  onExitFirst: () => void;
 }
 
-interface reportType {
+export interface reportType {
   rceptNo: string;
   reportNm: string;
   rceptDt: string;
@@ -15,7 +18,7 @@ interface reportType {
 
 const service = new editorAPI(import.meta.env.VITE_SERVER_EDITOR_API_URI);
 
-export default function ChooseReportPage({ targetCorp }: props) {
+export default function ChooseReportPage({ targetCorp, onExitFirst }: props) {
   const [bgn, setBgn] = useState<string>("");
   const [end, setEnd] = useState<string>("");
 
@@ -91,7 +94,10 @@ export default function ChooseReportPage({ targetCorp }: props) {
     }
   };
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    onExitFirst();
+  };
 
   return (
     <>
@@ -180,6 +186,9 @@ export default function ChooseReportPage({ targetCorp }: props) {
                   <div
                     key={idx}
                     className="flex px-2 py-2 mx-3 my-1 border border-solid border-gray-500 hover:bg-gray-300 text-center"
+                    onClick={() => {
+                      setTargetReport(ele);
+                    }}
                   >
                     <p className="w-[20%]">{ele.rceptDt}</p>
                     <p className="w-[20%]">{ele.flrNm}</p>
@@ -200,7 +209,7 @@ export default function ChooseReportPage({ targetCorp }: props) {
           </div>
         </div>
       )}
-      {targetReport && <div>test</div>}
+      {targetReport && <ReportSelector targetReport={targetReport} />}
     </>
   );
 }

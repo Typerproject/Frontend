@@ -66,6 +66,7 @@ export class ChartBLock {
           }}
           onExit={() => {
             this.api.blocks.delete(current);
+            modal.remove();
           }}
         />
       );

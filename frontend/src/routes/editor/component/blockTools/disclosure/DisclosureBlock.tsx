@@ -1,13 +1,21 @@
 import CreateDOM from "react-dom/client";
 import DisclosureModal from "./DisclosureModal";
+import { API } from "@editorjs/editorjs/types/index";
+
+interface DisclosureBlockProps {
+  data: any;
+  api: API;
+}
 
 export class DisclosureBlock {
   nodes: HTMLElement | null;
   data: any;
+  api: API;
 
-  constructor({ data }: any) {
+  constructor({ data, api }: DisclosureBlockProps) {
     this.data = data;
     this.nodes = null;
+    this.api = api;
   }
 
   static get toolbox() {
@@ -25,10 +33,22 @@ export class DisclosureBlock {
     const rootNode = document.createElement("div");
     this.nodes = rootNode;
 
-    CreateDOM.createRoot(rootNode).render(<DisclosureModal></DisclosureModal>);
-    document.getElementById("root")?.appendChild(rootNode);
+    const current = this.api.blocks.getCurrentBlockIndex();
 
-    console.log(rootNode);
+    if (Object.keys(this.data).length === 0) {
+      const corpModal = document.createElement("div");
+      const corpRoot = CreateDOM.createRoot(corpModal);
+
+      corpRoot.render(
+        <DisclosureModal
+          onExitFirst={() => {
+            this.api.blocks.delete(current);
+            corpModal.remove();
+          }}
+        />
+      );
+      document.getElementById("root")?.appendChild(corpModal);
+    }
 
     return document.createElement("div");
   }
