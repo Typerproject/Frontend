@@ -3,6 +3,7 @@ import MainPage from "./routes/main/MainPage";
 import PostDetail from "./routes/postDetail/PostDetailPage";
 import MyPage from "./routes/my/MyPage";
 import EditorPage from "./routes/editor/EditorPage";
+import Search from "./components/search/Search"
 
 import Layout from "./components/Layout";
 // import LoginModal from "./components/login/LoginModal";
@@ -57,6 +58,10 @@ const routers = [
     path: "/kakao/login",
     element: <Redirect />,
   },
+  {
+    path:"/search",
+    element: <Search />,
+  }
 ];
 
 const router = createBrowserRouter(routers);
