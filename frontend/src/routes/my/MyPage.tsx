@@ -31,9 +31,6 @@ interface Preview {
 const service = new userAPI(import.meta.env.VITE_BASE_URI);
 
 export default function MyPage() {
-  // const [userName, setUserName] = useState<string>();
-  // const [profileImg, setProfileImg] = useState<string>();
-  // const [profileIntro, setProfileIntro] = useState<string>();
   const [userInfo, setUserInfo] = useState<IUserInfo | null>(null);
 
   //게시글 미리보기
@@ -42,7 +39,6 @@ export default function MyPage() {
   useEffect(() => {
     if (userInfo?.writerdPost) {
       const tempPost: any = userInfo?.writerdPost.map((ele: Preview) => {
-        console.log(ele.preview);
         return {
           title: ele.title,
           _id: ele._id,
@@ -51,25 +47,18 @@ export default function MyPage() {
           public: ele.public,
           scrapingCount: ele.scrapingCount,
         };
-        // console.log(ele);
-        // return ele;
       });
 
       setPreviewPost(tempPost);
     }
   }, [userInfo]);
 
-  //console.log(tempPost.length);
-
-  // const [followerCount, setFollowerCount] = useState<number>();
-  // const [followingCount, setFollowingCount] = useState<number>();
   const [followerInfo, setFollowerInfo] = useState<IFollowerInfo | null>(null);
   const [refreshKey, setRefreshKey] = useState(0); // 상태 변경을 감지하기 위한 키
   const [follow, setFollow] = useState<State>(false);
 
   //현재 접속한 마이 페이지의 유저 아이디
   const { id } = useParams<{ id: string }>(); // useParams의 반환 타입을 명시
-  //console.log(id);
 
   const currentUser = useAppSelector((state) => state.user);
 
@@ -137,9 +126,6 @@ export default function MyPage() {
       });
 
     console.log("저장 버튼 클릭:", editedNickname, editedComment);
-    // 상태를 업데이트하고 수정 모드를 종료
-    // setEditedNickname(editedNickname); // 필요 시 서버와 통신 후 업데이트
-    // setEditedComment(editedComment);   // 필요 시 서버와 통신 후 업데이트
     setIsEditing(false);
   };
 
@@ -207,14 +193,6 @@ export default function MyPage() {
       setFollow(false);
     }
   };
-
-  // const handleLogout = () => {
-  //   service.logout().then((data) => {
-  //     console.log(data);
-  //     dispatch(logoutUser());
-  //     navigate("/");
-  //   });
-  // };
 
   // 팔로잉 핸들러
   const handleFollowClick = () => {
@@ -319,12 +297,6 @@ export default function MyPage() {
             ))}
           </div>
         </div>
-
-        {/* 바 */}
-        {/* <div
-          className="col-span-1 h-full border-none ml-48 flex flex-col items-center"
-          style={{ width: "2px", backgroundColor: "#BBBBBB" }}
-        /> */}
 
         {/*프로필*/}
         <div className="col-span-1">

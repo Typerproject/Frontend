@@ -64,7 +64,6 @@ export default function Post({ id, post }: User) {
   const date: string = post.createdAt;
   const like: number = post.scrapingCount;
   const content: string = post.preview.text;
-  console.log("preview content 어떻게 생겼지? : ", content);
   const comment: number = 10;
   const picture: string = post.preview.img; //미리보기 사진
   const postId: string = post.preview._id;
