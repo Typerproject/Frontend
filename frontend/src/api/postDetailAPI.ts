@@ -31,9 +31,7 @@ export interface IpostScrap {
 
 export default class postAPI extends BaseApi {
   async getPost(_id: string) {
-    const resp = await this.fetcher.get("/", {
-      params: { postId: _id },
-    });
+    const resp = await this.fetcher.get(`/${_id}`);
     return resp.data;
   }
 
