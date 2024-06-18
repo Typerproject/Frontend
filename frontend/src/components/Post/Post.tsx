@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import userAPI, { IUserInfo } from "../../api/userAPI";
-import { FaHeart } from "react-icons/fa6"; // 채워진 하트
-import { FaRegHeart } from "react-icons/fa6"; // 빈 하트
+// import { FaHeart } from "react-icons/fa6"; // 채워진 하트
+// import { FaRegHeart } from "react-icons/fa6"; // 빈 하트
+import { IoBookmarkOutline, IoBookmark } from "react-icons/io5";
 import { FaRegComment } from "react-icons/fa";
 
 const service = new userAPI(import.meta.env.VITE_BASE_URI);
@@ -106,7 +107,11 @@ export default function Post({ id, post }: User) {
       <div className="text-base flex items-center gap-[1.5rem]">
         <div className="flex items-center gap-[0.5rem] ">
           <div onClick={() => handleLike()} className="cursor-pointer">
-            {validHeart ? <FaHeart size={20} /> : <FaRegHeart size={20} />}
+            {validHeart ? (
+              <IoBookmark size={20} />
+            ) : (
+              <IoBookmarkOutline size={20} />
+            )}
           </div>
           <p>{like}</p>
         </div>
