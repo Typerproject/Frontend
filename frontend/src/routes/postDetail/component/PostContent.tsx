@@ -12,6 +12,7 @@ export default function PostContent() {
   const [writer, setWriter] = useState<IPostWriter>();
   const [outputData, setOutputData] = useState<OutputData>();
   const [writedAt, setWritedAt] = useState<string>();
+  const [scrap, setScrap] = useState<boolean>(false);
 
   const { id } = useParams<{ id: string }>() as { id: string };
   useEffect(() => {
@@ -20,6 +21,8 @@ export default function PostContent() {
       setTitle(res.title);
       setWriter(res.writer);
       setOutputData(res.content);
+      setScrap(res.isScrapped);
+
 
       const date = new Date(res.writedAt);
       const formattedDate = date.toLocaleDateString("ko-KR", {
@@ -36,7 +39,6 @@ export default function PostContent() {
     });
   }, [id]);
 
-  const [scrap, setScrap] = useState<boolean>(false);
 
   async function handleLike () {
     // setScrap((prev) => !prev);
