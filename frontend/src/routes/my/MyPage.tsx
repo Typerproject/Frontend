@@ -1,15 +1,11 @@
-// import React from 'react'
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useAppSelector } from "../../store";
 import FollowList from "./component/FollowList";
 import Post from "../../components/Post/Post";
 import userAPI, { IFollowerInfo, IUserInfo } from "../../api/userAPI";
-import { setUser, logoutUser } from "../../store/reducers/user";
+import { setUser } from "../../store/reducers/user";
 import { useAppDispatch } from "../../store";
-
-// type Props = {}
 
 type State = "follower" | "following" | false;
 
@@ -31,9 +27,6 @@ interface Preview {
 const service = new userAPI(import.meta.env.VITE_BASE_URI);
 
 export default function MyPage() {
-  // const [userName, setUserName] = useState<string>();
-  // const [profileImg, setProfileImg] = useState<string>();
-  // const [profileIntro, setProfileIntro] = useState<string>();
   const [userInfo, setUserInfo] = useState<IUserInfo | null>(null);
 
   //게시글 미리보기
@@ -61,15 +54,12 @@ export default function MyPage() {
 
   //console.log(tempPost.length);
 
-  // const [followerCount, setFollowerCount] = useState<number>();
-  // const [followingCount, setFollowingCount] = useState<number>();
   const [followerInfo, setFollowerInfo] = useState<IFollowerInfo | null>(null);
   const [refreshKey, setRefreshKey] = useState(0); // 상태 변경을 감지하기 위한 키
   const [follow, setFollow] = useState<State>(false);
 
   //현재 접속한 마이 페이지의 유저 아이디
   const { id } = useParams<{ id: string }>(); // useParams의 반환 타입을 명시
-  //console.log(id);
 
   const currentUser = useAppSelector((state) => state.user);
 
@@ -82,8 +72,6 @@ export default function MyPage() {
   const [editedComment, setEditedComment] = useState(currentUser.comment || ""); // 수정된 코멘트를 관리하는 상태
 
   const [isFollowing, setIsFollowing] = useState(false);
-
-  // const navigate = useNavigate();
 
   // Edit 버튼 클릭 시 수정 모드로 변경
   const handleEditClick = () => {
@@ -138,8 +126,6 @@ export default function MyPage() {
 
     console.log("저장 버튼 클릭:", editedNickname, editedComment);
     // 상태를 업데이트하고 수정 모드를 종료
-    // setEditedNickname(editedNickname); // 필요 시 서버와 통신 후 업데이트
-    // setEditedComment(editedComment);   // 필요 시 서버와 통신 후 업데이트
     setIsEditing(false);
   };
 
@@ -152,22 +138,22 @@ export default function MyPage() {
     if (id) {
       console.log("파라미터 잘 가져와 지나?", id);
 
-      // 유저 정보 겟또다제
+      // 유저 정보 획득
       service
         .getUserInfo(id)
         .then((data) => {
-          console.log("마페 유저", data);
+          console.log("마이페이지 유저", data);
           setUserInfo(data);
         })
         .catch((err) => {
-          console.error("마페 유저", err);
+          console.error("마이페이지 유저", err);
         });
 
-      // 유저 팔로우 정보 겟또다제
+      // 유저 팔로우 정보 획득
       service
         .getFollowingAndFollowerData(id)
         .then((data) => {
-          console.log("마페 팔로우", data);
+          console.log("마이페이지 팔로우", data);
           setFollowerInfo(data);
 
           const found = data.followerUsers.some(
@@ -183,12 +169,12 @@ export default function MyPage() {
           }
         })
         .catch((err) => {
-          console.error("마페 팔로우", err);
+          console.error("마이페이지 팔로우", err);
         });
 
-      console.log("아디 잇으면", currentUser);
+      console.log("ID 有", currentUser);
     } else {
-      console.log("아디 없으면", currentUser);
+      console.log("ID 無", currentUser);
     }
   }, [currentUser, id, isFollowing, refreshKey]);
 
@@ -207,14 +193,6 @@ export default function MyPage() {
       setFollow(false);
     }
   };
-
-  // const handleLogout = () => {
-  //   service.logout().then((data) => {
-  //     console.log(data);
-  //     dispatch(logoutUser());
-  //     navigate("/");
-  //   });
-  // };
 
   // 팔로잉 핸들러
   const handleFollowClick = () => {
@@ -320,12 +298,6 @@ export default function MyPage() {
           </div>
         </div>
 
-        {/* 바 */}
-        {/* <div
-          className="col-span-1 h-full border-none ml-48 flex flex-col items-center"
-          style={{ width: "2px", backgroundColor: "#BBBBBB" }}
-        /> */}
-
         {/*프로필*/}
         <div className="col-span-1">
           {/* <button onClick={handleLogout}>로그아웃</button> */}
@@ -378,7 +350,20 @@ export default function MyPage() {
                 onChange={(e) => setEditedComment(e.target.value)}
               />
             ) : (
-              <p className="flex gap-10 text-[#88898a] mt-[0.7rem]">
+              <p
+                style={{ fontFamily: "Ownglyph_Dailyokja-Rg, sans-serif" }}
+                className="flex gap-10 text-[#88898a] mt-[0.7rem]"
+              >
+                <style>
+                  {`
+          @font-face {
+            font-family: 'Ownglyph_Dailyokja-Rg';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2403@1.0/Ownglyph_Dailyokja-Rg.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+          }
+        `}
+                </style>
                 {userInfo?.comment}
               </p>
             )}
