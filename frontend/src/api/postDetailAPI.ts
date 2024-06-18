@@ -56,13 +56,6 @@ export default class postAPI extends BaseApi {
     return resp.data;
   }
 
-  async getScrapStatus(postId: string) {
-    const resp = await this.fetcher.get('/scrap/status', {
-      params: { postId: postId },
-    }); 
-    return resp.data;
-  }
-
   async getScrapList() {
     const resp = await this.fetcher.get("/scrap/list");
 
