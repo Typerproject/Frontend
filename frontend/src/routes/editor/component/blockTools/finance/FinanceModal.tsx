@@ -4,6 +4,7 @@ import { Modal, Button, Form } from "react-bootstrap";
 
 interface FinanceReportModalProps{
   creatediv:any;
+  onExit: () => void;
 }
 interface FormData {
   company: string;
@@ -28,7 +29,7 @@ interface Fin {
 
 type FinKeys = keyof Fin;
 
-const FinanceModal:React.FC<FinanceReportModalProps> = ({creatediv}) => {
+const FinanceModal:React.FC<FinanceReportModalProps> = ({creatediv,onExit}) => {
     const [show, setShow] = useState<boolean>(true);
     const [formData, setFormData] = useState<FormData>({
       company: "",
@@ -61,26 +62,33 @@ const FinanceModal:React.FC<FinanceReportModalProps> = ({creatediv}) => {
     };
 
     const handleSave = async () => {
+      
+      
       // 입력 검증
-      if (!formData.company|| !formData.startDate || !formData.endDate) {
-        setError("기업과 날짜는 필수 입력 항목입니다.");
-        return;
+      if (!formData.company) {
+        return alert("기업이름이 잘못되었습니다!")
+        
+      }
+      if( !formData.startDate || !formData.endDate){
+        return alert("시작기간하고 종료기간이 잘못되었습니다.")
       }
 
       if (formData.startDate<2015 && formData.endDate>2023){
-        setError("시작 년도는 2015년부터 끝년도는 2023년도 입니다.")
-        return
+        return alert("시작 년도는 2015년부터 끝년도는 2023년도 입니다.")
       }
   
       try {
         const data = await fetchData(formData);
+        if (data.length === 0) {
+          return alert("검색 결과가 없습니다!");
+        }
         creatediv(data,formData.company);
         setShow(false);
-      } catch (error) {
-        console.error("Failed to fetch stock data", error);
-      } finally {
-        setShow(false);
-      }
+        
+      } catch (error){
+        alert("입력 형식이 잘못되었습니다!")
+      } 
+      
     };
 
     
@@ -169,7 +177,7 @@ const FinanceModal:React.FC<FinanceReportModalProps> = ({creatediv}) => {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
+            <Button variant="secondary" onClick={()=>{handleClose(),onExit()}}>
               닫기
             </Button>
             <Button variant="primary" onClick={handleSave}>
