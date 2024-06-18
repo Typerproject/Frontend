@@ -2,6 +2,7 @@
 import ReactDOM from 'react-dom/client';
 import AnalystReportModal from './ReportModal';
 import PdfViewer from './Pdfviewer';
+import { API } from "@editorjs/editorjs/types/index";
 
 interface IState {
   showModal: boolean;
@@ -9,6 +10,7 @@ interface IState {
 
 interface ReportBlockData {
   data: IReportData;
+  api: API;
 }
 
 
@@ -24,26 +26,44 @@ export class ReportBlock {
   wrapper: HTMLDivElement | null ;
   div: HTMLDivElement | null;
   state: IState;
+  api: API;
 
 
   setWrapper(wrapper: HTMLDivElement) {
     this.wrapper = wrapper;
   }
 
-  constructor({data}:ReportBlockData) {
+  constructor({data,api}:ReportBlockData) {
     this.data = data || null;
     this.wrapper = null;
     this.div = null;
     this.state = {
       showModal: false
     };
+    this.api= api;
     
   }
 
   static get toolbox() {
     return {
-      title: "AnalystReport",
-      icon: '<svg width="17" height="15" viewBox="0 0 336 276" xmlns="http://www.w3.org/2000/svg"><path d="M291 150V79c0-19-15-34-34-34H79c-19 0-34 15-34 34v42l67-44 81 72 56-29 42 30zm0 52l-43-30-56 30-81-67-66 39v23c0 19 15 34 34 34h178c17 0 31-13 34-29zM79 0h178c44 0 79 35 79 79v118c0 44-35 79-79 79H79c-44 0-79-35-79-79V79C0 35 35 0 79 0z"/></svg>',
+      title: "애널리스트 리포트",
+      icon: `
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="1em"
+      height="1em"
+      viewBox="0 0 24 24"
+    >
+      <path
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        d="M17 19h4m-7 1H6a3 3 0 0 1 0-6h11a3 3 0 0 0-3 3m7-3V6a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v8m12 3v4"
+      />
+    </svg>`
+
     };
   }
 
@@ -52,6 +72,8 @@ export class ReportBlock {
   }
 
   render() {
+
+    const current = this.api.blocks.getCurrentBlockIndex();
     this.wrapper = document.createElement("div");
 
     if (this.data && Object.keys(this.data).length > 0){
@@ -59,8 +81,12 @@ export class ReportBlock {
     }
     else{
     ReactDOM.createRoot(this.wrapper).render(
-      <AnalystReportModal createIframe={this.createIframe}/>
+      <AnalystReportModal createIframe={this.createIframe}
+      onExit={() => {
+        this.api.blocks.delete(current);
+      }}/>
     );
+    
   }
 
   

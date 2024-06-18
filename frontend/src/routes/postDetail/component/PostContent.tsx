@@ -1,9 +1,8 @@
 import WriterInfo from "./WriterInfo";
-import { FaHeart } from "react-icons/fa6"; // 채워진 하트
-import { FaRegHeart } from "react-icons/fa6"; // 빈 하트
+import { IoBookmarkOutline, IoBookmark } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import ViewEditor from "./ViewEditor";
-import postAPI, { IPostWriter, IPostDetail } from "../../../api/postDetailAPI";
+import postAPI, { IPostWriter, IPostDetail, IpostScrap } from "../../../api/postDetailAPI";
 import { useParams } from "react-router-dom";
 import { OutputData } from "@editorjs/editorjs";
 
@@ -37,12 +36,42 @@ export default function PostContent() {
     });
   }, [id]);
 
-  const [validHeart, setValidHeart] = useState(false);
+  const [scrap, setScrap] = useState<boolean>(false);
 
-  function handleLike() {
-    setValidHeart((prev) => !prev);
-    // 좋아요 보내는 로직
+  async function handleLike () {
+    // setScrap((prev) => !prev);
+    // 스크랩하는 로직
+    if (scrap) {
+      service.deleteScrapPost(id)
+      .then((res:IpostScrap) => {
+        console.log(res);
+        setScrap(false);
+      })
+      .catch((e) => {
+        console.log(e);
+        alert("스크랩 삭제에 실패하였습니다.");
+      })
+    } else {
+      service.scrapPost(id)
+      .then((res:IpostScrap) => {
+        console.log(res);
+        setScrap(true);
+      })
+      .catch((e) => {
+        console.log(e);
+        alert("스크랩에 실패하였습니다.");
+      })
+    }
   }
+
+  useEffect(()=>{
+    const fetchStatus = async ():Promise<void> => {
+      const data = await service.getScrapStatus(id);
+      // console.log(data);
+      setScrap(data.isScrapped);
+    }
+    fetchStatus();
+  }, []);
 
   return (
     <div className="w-full h-full min-h-70 rounded-[10px] shadow-[0_0_8px_5px] shadow-gray-200 p-[2rem]">
@@ -60,7 +89,7 @@ export default function PostContent() {
       <div className="flex flex-row-reverse items-center gap-[1rem]">
         <p>123</p>
         <div onClick={() => handleLike()} className="cursor-pointer">
-          {validHeart ? <FaHeart size={20} /> : <FaRegHeart size={20} />}
+          {scrap ? <IoBookmark size={20} /> : <IoBookmarkOutline size={20} />}
         </div>
       </div>
     </div>

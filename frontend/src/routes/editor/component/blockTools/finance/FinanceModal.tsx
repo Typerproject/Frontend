@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Modal, Button, Form } from "react-bootstrap";
-// import "./style.css";
 
 interface FinanceReportModalProps{
   creatediv:any;
+  onExit: () => void;
 }
 interface FormData {
   company: string;
@@ -29,7 +29,7 @@ interface Fin {
 
 type FinKeys = keyof Fin;
 
-const FinanceModal:React.FC<FinanceReportModalProps> = ({creatediv}) => {
+const FinanceModal:React.FC<FinanceReportModalProps> = ({creatediv,onExit}) => {
     const [show, setShow] = useState<boolean>(true);
     const [formData, setFormData] = useState<FormData>({
       company: "",
@@ -62,31 +62,38 @@ const FinanceModal:React.FC<FinanceReportModalProps> = ({creatediv}) => {
     };
 
     const handleSave = async () => {
+      
+      
       // 입력 검증
-      if (!formData.company|| !formData.startDate || !formData.endDate) {
-        setError("기업과 날짜는 필수 입력 항목입니다.");
-        return;
+      if (!formData.company) {
+        return alert("기업이름이 잘못되었습니다!")
+        
+      }
+      if( !formData.startDate || !formData.endDate){
+        return alert("시작기간하고 종료기간이 잘못되었습니다.")
       }
 
       if (formData.startDate<2015 && formData.endDate>2023){
-        setError("시작 년도는 2015년부터 끝년도는 2023년도 입니다.")
-        return
+        return alert("시작 년도는 2015년부터 끝년도는 2023년도 입니다.")
       }
   
       try {
         const data = await fetchData(formData);
+        if (data.length === 0) {
+          return alert("검색 결과가 없습니다!");
+        }
         creatediv(data,formData.company);
         setShow(false);
-      } catch (error) {
-        console.error("Failed to fetch stock data", error);
-      } finally {
-        setShow(false);
-      }
+        
+      } catch (error){
+        alert("입력 형식이 잘못되었습니다!")
+      } 
+      
     };
 
     
     const fetchData=async (d:FormData)=>{
-        const data=await axios.get(`http://localhost:3000/api/editor/finance?company=${formData.company}&startdate=${formData.startDate}&enddate=${formData.endDate}`)
+        const data=await axios.get(`${import.meta.env.VITE_SERVER_FINANCE_API_URI}?company=${formData.company}&startdate=${formData.startDate}&enddate=${formData.endDate}`)
 
 
         const selectedKeys = Object.keys(fin).filter(key => fin[key as FinKeys]);
@@ -113,7 +120,7 @@ const FinanceModal:React.FC<FinanceReportModalProps> = ({creatediv}) => {
           <Modal.Header closeButton>
             <Modal.Title>기업이름 입력해주세요!</Modal.Title>
           </Modal.Header>
-          <Modal.Body className="modal-content" style={{height:"1000px"}}>
+          <Modal.Body className="modal-content" style={{height:"500px"}}>
             <Form>
               <Form.Group controlId="formStockCode">
                 <Form.Label>기업</Form.Label>
@@ -170,7 +177,7 @@ const FinanceModal:React.FC<FinanceReportModalProps> = ({creatediv}) => {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
+            <Button variant="secondary" onClick={()=>{handleClose(),onExit()}}>
               닫기
             </Button>
             <Button variant="primary" onClick={handleSave}>

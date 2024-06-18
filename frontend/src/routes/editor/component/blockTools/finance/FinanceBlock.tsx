@@ -2,10 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import FinanceModal from './FinanceModal';
 import Creatediv from './Creatediv';
+import { API } from "@editorjs/editorjs/types/index";
 
 
 interface FinanceBlockData {
   data: IFinanceData;
+  api: API;
 }
 
 
@@ -28,12 +30,14 @@ export class FinanceBlock {
   data: IFinanceData | null;
   wrapper: HTMLDivElement | null = null;
   div: HTMLDivElement | null = null;
+  api: API;
 
-  constructor({data}:FinanceBlockData) {
+  constructor({data,api}:FinanceBlockData) {
   
     this.data = data || null;
     this.wrapper = null;
     this.div = null;
+    this.api=api;
 
     this.creatediv = this.creatediv.bind(this);
   }
@@ -41,11 +45,25 @@ export class FinanceBlock {
   static get toolbox() {
     return {
       title: "재무재표",
-      icon: '<svg width="17" height="15" viewBox="0 0 336 276" xmlns="http://www.w3.org/2000/svg"><path d="M291 150V79c0-19-15-34-34-34H79c-19 0-34 15-34 34v42l67-44 81 72 56-29 42 30zm0 52l-43-30-56 30-81-67-66 39v23c0 19 15 34 34 34h178c17 0 31-13 34-29zM79 0h178c44 0 79 35 79 79v118c0 44-35 79-79 79H79c-44 0-79-35-79-79V79C0 35 35 0 79 0z"/></svg>',
+      icon: `
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="1em"
+          height="1em"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="currentColor"
+            d="M21 13.1c-.1 0-.3.1-.4.2l-1 1l2.1 2.1l1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8l-6.1 6V23h2.1l6.1-6.1l-2.1-2M21 9h-8V3h8v6m-8 9.06V11h8v.1c-.76 0-1.43.4-1.81.79L13 18.06M11 13H3V3h8v10m0 8H3v-6h8v6Z"
+          />
+        </svg>
+      `,
     };
   }
 
   render() {
+
+    const current = this.api.blocks.getCurrentBlockIndex();
     this.wrapper = document.createElement("div");
     
     if (this.data && Object.keys(this.data).length > 0){
@@ -53,7 +71,8 @@ export class FinanceBlock {
       this.creatediv(this.data.data,this.data.company);
     }
     else{
-    ReactDOM.createRoot(this.wrapper).render(<FinanceModal creatediv={this.creatediv}/>);
+    ReactDOM.createRoot(this.wrapper).render(<FinanceModal creatediv={this.creatediv} onExit={() => {
+      this.api.blocks.delete(current);}}/>);
     }
     
 

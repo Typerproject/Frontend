@@ -1,5 +1,6 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import userReducer from "./reducers/user";
+import loginModalReducer from "./reducers/auth";
 import {
   persistReducer,
   // persistStore
@@ -9,6 +10,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 const reducers = combineReducers({
   user: userReducer,
+  loginModal: loginModalReducer,
 });
 
 const persistConfig = {
