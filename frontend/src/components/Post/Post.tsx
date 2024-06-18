@@ -99,7 +99,9 @@ export default function Post({ id, post }: User) {
               </div>
               <div>
                 <div onClick={() => navigate(`/post/{postId}`)}>
-                  <div className="text-4xl mt-[1rem]">{title}</div>
+                  <div className="text-4xl mt-[1rem] max-w-[300px] overflow-hidden text-ellipsis whitespace-nowrap">
+                    {title}
+                  </div>
                   <div className="text-base py-[2rem] text-gray-500">
                     {content}
                   </div>
