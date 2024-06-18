@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaRegComment } from "react-icons/fa";
 import { IoBookmarkOutline, IoBookmark } from "react-icons/io5";
 // import { useNavigate } from "react-router-dom";
@@ -20,6 +20,7 @@ export default function Post({ postInfo }: PostProps) {
   const navigate = useNavigate();
 
   const [scrap, setScrap] = useState<boolean>(true);
+  const [updatedAt, setUpdatedAt] = useState<string>("");
 
   const handleMarkClick = async (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -50,6 +51,22 @@ export default function Post({ postInfo }: PostProps) {
         });
     }
   };
+
+  useEffect(()=> {
+    const date = new Date(postInfo.updatedAt);
+    const formattedDate = date.toLocaleDateString("ko-KR", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+      const formattedTime = date.toLocaleTimeString("ko-KR", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false, // 24시간 형식
+    });
+
+    setUpdatedAt(`${formattedDate} ${formattedTime}`);
+  },[]);
 
   return (
     <div
@@ -98,7 +115,7 @@ export default function Post({ postInfo }: PostProps) {
           </div>
           {/* 날짜 */}
           <div className="absolute top-0 right-0">
-            <p className="text-sm text-gray-400">{postInfo.updatedAt}</p>
+            <p className="text-sm text-gray-400">{updatedAt}</p>
           </div>
         </div>
       </div>

@@ -22,7 +22,7 @@ export interface IPostInfo {
   id: string;
   preview: Preview;
   title: string;
-  updatedAt: string;
+  updatedAt: Date;
   writer: UserInfo;
   _id: string;
 }
