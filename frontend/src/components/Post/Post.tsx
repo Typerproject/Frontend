@@ -66,7 +66,7 @@ export default function Post({ id, post }: User) {
   const content: string = post.preview.text;
   const comment: number = 10;
   const picture: string = post.preview.img; //미리보기 사진
-  const postId: string = post.preview._id;
+  const postId: string = post._id;
 
   const [validHeart, setValidHeart] = useState(false);
 
@@ -86,7 +86,7 @@ export default function Post({ id, post }: User) {
               <div className="flex items-center gap-[15rem]">
                 {/*유저 이름과 사진*/}
                 <div
-                  onClick={() => navigate(`/my/{id}`)}
+                  onClick={() => navigate(`/my/${id}`)}
                   className="flex gap-[0.5rem] items-center"
                 >
                   <img className="w-[40px] rounded-full" src={userProfile} />
@@ -97,7 +97,7 @@ export default function Post({ id, post }: User) {
                 </div>
               </div>
               <div>
-                <div onClick={() => navigate(`/post/{postId}`)}>
+                <div onClick={() => navigate(`/post/${postId}`)}>
                   <div className="text-4xl mt-[1rem] max-w-[300px] overflow-hidden text-ellipsis whitespace-nowrap">
                     {title}
                   </div>
