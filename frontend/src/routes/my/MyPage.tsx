@@ -13,6 +13,21 @@ import { useAppDispatch } from "../../store";
 
 type State = "follower" | "following" | false;
 
+export interface Pre {
+  text: string;
+  img: string;
+  _id: string;
+}
+interface Preview {
+  title: string;
+  _id: string;
+  //preview: object;
+  preview: Pre;
+  createdAt: string;
+  public: boolean;
+  scrapingCount: number;
+}
+
 const service = new userAPI(import.meta.env.VITE_BASE_URI);
 
 export default function MyPage() {
@@ -20,6 +35,31 @@ export default function MyPage() {
   // const [profileImg, setProfileImg] = useState<string>();
   // const [profileIntro, setProfileIntro] = useState<string>();
   const [userInfo, setUserInfo] = useState<IUserInfo | null>(null);
+
+  //게시글 미리보기
+  const [previewPost, setPreviewPost] = useState<Preview[]>([]);
+
+  useEffect(() => {
+    if (userInfo?.writerdPost) {
+      const tempPost: any = userInfo?.writerdPost.map((ele: Preview) => {
+        console.log(ele.preview);
+        return {
+          title: ele.title,
+          _id: ele._id,
+          preview: ele.preview,
+          createdAt: ele.createdAt,
+          public: ele.public,
+          scrapingCount: ele.scrapingCount,
+        };
+        // console.log(ele);
+        // return ele;
+      });
+
+      setPreviewPost(tempPost);
+    }
+  }, [userInfo]);
+
+  //console.log(tempPost.length);
 
   // const [followerCount, setFollowerCount] = useState<number>();
   // const [followingCount, setFollowingCount] = useState<number>();
@@ -268,13 +308,15 @@ export default function MyPage() {
 
   return (
     <div className="mt-[7rem]">
-      <div className="grid grid-cols-3 ">
+      <div className="grid grid-cols-4">
         {/*글목록*/}
-        <div className="col-span-2 text-5xl flex flex-col items-center gap-[2rem]">
+        <div className="col-span-3 text-5xl flex flex-col items-center gap-[2rem]">
           <p>{userInfo?.nickname}'s Typer</p>
-          <div>
+          <div className="w-3/4">
             {/*가져온 글 목록을 map돌면서 출력*/}
-            <Post id={id} />
+            {previewPost.map((post: Preview) => (
+              <Post id={id} post={post} />
+            ))}
           </div>
         </div>
 
