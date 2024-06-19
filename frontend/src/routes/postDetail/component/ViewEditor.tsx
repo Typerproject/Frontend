@@ -30,6 +30,7 @@ export default function ViewEditor({ outPutData }: props) {
         Report: ReportBlock,
         finance: FinanceBlock,
       },
+      minHeight: 10
     });
   };
 
