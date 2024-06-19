@@ -116,9 +116,11 @@ export default function MyPage() {
           profile: currentUser.profile || null,
         };
 
+        console.log("--------", user);
+
         dispatch(setUser({ user }));
-        setEditedComment("");
-        setEditedNickname("");
+        // setEditedComment("");
+        // setEditedNickname("");
       })
       .catch((err) => {
         console.error("comment 에러: ", err);
@@ -176,7 +178,7 @@ export default function MyPage() {
     } else {
       console.log("ID 無", currentUser);
     }
-  }, [currentUser, id, isFollowing, refreshKey]);
+  }, [currentUser, id, isFollowing, refreshKey, isEditing]);
 
   const handleFollowerBtn = () => {
     if (follow != "follower") {
@@ -352,9 +354,9 @@ export default function MyPage() {
             ) : (
               <p
                 style={{ fontFamily: "Ownglyph_Dailyokja-Rg, sans-serif" }}
-                className="flex gap-10 text-[#88898a] mt-[0.7rem]"
+                className="flex gap-10 text-[#88898a] mt-[0.7rem] w-[270px]"
               >
-                <style>
+                {/* <style>
                   {`
           @font-face {
             font-family: 'Ownglyph_Dailyokja-Rg';
@@ -363,7 +365,7 @@ export default function MyPage() {
             font-style: normal;
           }
         `}
-                </style>
+                </style> */}
                 {userInfo?.comment}
               </p>
             )}
