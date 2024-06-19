@@ -10,9 +10,10 @@ interface PdfViewerProps {
   pageNumber?: number;
   onRenderComplete?: (canvas: HTMLCanvasElement) => void;
   onCapture?: (imageDataUrl: string) => void;
+  onExit: () => void;
 }
 
-const PdfViewer: React.FC<PdfViewerProps> = ({ url, pageNumber = 1, onRenderComplete, onCapture }) => {
+const PdfViewer: React.FC<PdfViewerProps> = ({ url, pageNumber = 1, onRenderComplete, onCapture,onExit }) => {
   const [show, setShow] = useState<boolean>(true);
   const [numPages, setNumPages] = useState<number | null>(null);
   const [pageNum, setPageNumber] = useState<number>(pageNumber);
@@ -104,7 +105,7 @@ const PdfViewer: React.FC<PdfViewerProps> = ({ url, pageNumber = 1, onRenderComp
         const { x, y, width, height } = selection;
         const imageData = context.getImageData(x * 1.83, y * 1.83, width * 3, height * 3);
         const tempCanvas = document.createElement('canvas');
-        tempCanvas.width = width * 1.9;
+        tempCanvas.width = width * 1.85;
         tempCanvas.height = height * 1.9;
         const tempContext = tempCanvas.getContext('2d');
         if (tempContext) {
@@ -112,6 +113,7 @@ const PdfViewer: React.FC<PdfViewerProps> = ({ url, pageNumber = 1, onRenderComp
           const imageDataUrl = tempCanvas.toDataURL('image/png');
           onCapture(imageDataUrl);
           setShow(false);
+          
         }
       }
     }
@@ -125,7 +127,7 @@ const PdfViewer: React.FC<PdfViewerProps> = ({ url, pageNumber = 1, onRenderComp
     setPageNumber((prevPage) => (numPages ? Math.min(prevPage + 1, numPages) : prevPage + 1));
   };
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {setShow(false); onExit()};
 
   return (
     <div className="relative flex flex-col items-center justify-center mx-auto">
@@ -167,10 +169,7 @@ const PdfViewer: React.FC<PdfViewerProps> = ({ url, pageNumber = 1, onRenderComp
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleCapture} disabled={!selection}>
+          <Button variant="primary" onClick={handleCapture} disabled={!selection} >
             Capture
           </Button>
         </Modal.Footer>
