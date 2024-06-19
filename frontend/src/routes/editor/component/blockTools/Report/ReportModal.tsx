@@ -12,7 +12,7 @@ const AnalystReportModal: React.FC<AnalystReportModalProps> = ({ createIframe, o
   const [show,setShow]=useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [reportshow,setReportshow]=useState<boolean>(false);
-  const [isLoading,setIsLoding]=useState<boolean>(false);
+
   const [formData, setFormData] = useState({ company: "" });
   const [reports, setReports] = useState([]);
   const [error, setError] = useState("");
