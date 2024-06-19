@@ -138,4 +138,17 @@ export default class userAPI extends BaseApi {
       console.error("로그아웃 하는 api: ", error);
     }
   }
+
+  // 쿠키 테스트
+  async checkCookie() {
+    try {
+      const resp = await this.fetcher.get(`/auth/cookie`);
+
+      console.log("쿠키 체크 데이터 ", resp.data);
+
+      return resp.data;
+    } catch (error) {
+      console.error("쿠키 체크 에러: ", error);
+    }
+  }
 }

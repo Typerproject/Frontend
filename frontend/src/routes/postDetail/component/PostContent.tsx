@@ -63,16 +63,7 @@ export default function PostContent() {
       })
     }
   }
-
-  useEffect(()=>{
-    const fetchStatus = async ():Promise<void> => {
-      const data = await service.getScrapStatus(id);
-      // console.log(data);
-      setScrap(data.isScrapped);
-    }
-    fetchStatus();
-  }, []);
-
+  
   return (
     <div className="w-full h-full min-h-70 rounded-[10px] shadow-[0_0_8px_5px] shadow-gray-200 p-[2rem]">
       {/* 글 제목, 날짜, 글쓴이 기본 정보 */}

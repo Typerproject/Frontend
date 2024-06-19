@@ -31,9 +31,7 @@ export interface IpostScrap {
 
 export default class postAPI extends BaseApi {
   async getPost(_id: string) {
-    const resp = await this.fetcher.get("/", {
-      params: { postId: _id },
-    });
+    const resp = await this.fetcher.get(`/${_id}`);
     return resp.data;
   }
 
@@ -53,13 +51,6 @@ export default class postAPI extends BaseApi {
   async deleteScrapPost(postId: string) {
     const resp = await this.fetcher.delete(`/scrap/${postId}`);
 
-    return resp.data;
-  }
-
-  async getScrapStatus(postId: string) {
-    const resp = await this.fetcher.get('/scrap/status', {
-      params: { postId: postId },
-    }); 
     return resp.data;
   }
 
