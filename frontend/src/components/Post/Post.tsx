@@ -126,22 +126,16 @@ export default function Post({ id, post }: User) {
           {/* 미리보기 오른쪽 */}
           <div className="flex-grow basis-1/4">
             <div className="flex w-full h-full">
-              {/*게시글 이미지*/}
-              {/* <div className="flex-none">
-                <img className="w-[200px] rounded" src={picture} />
-              </div> */}
               <div
                 // bg-center bg-cover
-                className="w-full h-full "
+                className="w-full h-full rounded"
                 style={{
                   backgroundImage: `url(${picture})`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                   height: "100%",
                 }}
-              >
-                {/* <div className="container mx-auto h-full flex justify-center items-center"></div> */}
-              </div>
+              ></div>
             </div>
           </div>
         </div>
@@ -154,7 +148,6 @@ export default function Post({ id, post }: User) {
               <FaBookmark size={20} />
             ) : (
               <FaRegBookmark size={20} />
-              // <IoBookmarkOutline size={20} />
             )}
           </div>
           <p>{like}</p>
