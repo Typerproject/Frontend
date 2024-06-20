@@ -78,7 +78,7 @@ export default function Post({ id, post }: User) {
   return (
     <div className="w-full p-[2rem]">
       <div>
-        <div className="flex cursor-pointer ">
+        <div className="flex cursor-pointer">
           {/* 미리보기 왼쪽*/}
           <div className="flex-grow-[3] basis-3/4 w-full">
             <div className="flex flex-col items-start gap-[1rem] mb-[1rem]">
@@ -90,7 +90,7 @@ export default function Post({ id, post }: User) {
                   className="flex gap-[0.5rem] items-center"
                 >
                   <img className="w-[40px] rounded-full" src={userProfile} />
-                  <p className="text-sm">{userName}</p>
+                  <div className="text-sm min-w-full">{userName}</div>
                 </div>
                 <div>
                   <p className="text-sm text-gray-400">{date}</p>

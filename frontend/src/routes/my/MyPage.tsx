@@ -286,10 +286,10 @@ export default function MyPage() {
 
   return (
     <div className="mt-[7rem]">
-      <div className="grid grid-cols-4">
+      <div className="mmd:grid mmd:grid-cols-4 flex flex-col">
         {/*글목록*/}
-        <div className="col-span-3 text-5xl flex flex-col items-center gap-[2rem]">
-          <p>{userInfo?.nickname}'s Typer</p>
+        <div className="order-last mmd:col-span-3 text-5xl flex flex-col items-center gap-[2rem]">
+          <p className="mmd:text-md">{userInfo?.nickname}'s Typer</p>
           <div className="w-3/4">
             {/*가져온 글 목록을 map돌면서 출력*/}
             {previewPost.map((post: Preview) => (
@@ -299,99 +299,113 @@ export default function MyPage() {
         </div>
 
         {/*프로필*/}
-        <div className="col-span-1">
-          {/* <button onClick={handleLogout}>로그아웃</button> */}
-          <div>
-            <img className="size-24 rounded-full" src={userInfo?.profile} />
-            {/* 닉네임 */}
-            {isEditing ? (
-              <input
-                className="bg-gray-50 shadow-md rounded px-8 pt-6 pb-8
-                text-base mt-2 text-color text-blue-500 italic p-2  h-10"
-                type="text"
-                value={editedNickname}
-                onChange={(e) => setEditedNickname(e.target.value)}
+        <div className="grid place-items-center mmd:order-last mmd:col-span-1 mmd:place-items-start">
+          {/* place-items-center */}
+          <div className="mmd:flex-col">
+            <div className="flex pt-[2rem] pb-[5rem] mmd:py-[1rem] gap-[2rem] mmd:flex-col mmd:gap-[1rem]">
+              <img
+                className="size-32 mmd:size-24 rounded-full"
+                src={userInfo?.profile}
               />
-            ) : (
-              <p className="text-3xl mt-[0.7rem]">{userInfo?.nickname}</p>
-            )}
+              <div className="content-center">
+                <div className="flex gap-[1rem] items-center">
+                  {/* 닉네임 */}
+                  {isEditing ? (
+                    <input
+                      className="bg-gray-50 shadow-md rounded px-8 pt-6 pb-8 text-base mt-2 text-color text-blue-500 italic p-2  h-10"
+                      type="text"
+                      value={editedNickname}
+                      onChange={(e) => setEditedNickname(e.target.value)}
+                    />
+                  ) : (
+                    <p className="text-3xl ">{userInfo?.nickname}</p>
+                  )}
 
-            {/*팔로잉팔로워 수*/}
-            {isEditing ? (
-              <div></div>
-            ) : (
-              <div className={`flex gap-5  mt-[0.5rem] text-[#b1b2b3]`}>
-                <span
-                  onClick={handleFollowerBtn}
-                  className={`hover:text-[#141414] cursor-pointer  ${
-                    follow === "follower" ? "text-[#141414]" : "text-[#b1b2b3]"
-                  }`}
-                >
-                  {followerInfo?.followerCount} followers
-                </span>
-                <span
-                  onClick={handleFollowingBtn}
-                  className={`hover:text-[#141414] cursor-pointer ${
-                    follow === "following" ? "text-[#141414]" : "text-[#b1b2b3]"
-                  }`}
-                >
-                  {followerInfo?.followingCount} following
-                </span>
-              </div>
-            )}
+                  {/*버튼*/}
+                  <div className="grid place-items-start">
+                    {currentUser._id === id && isEditing ? (
+                      <div className="flex gap-10 ">
+                        <button
+                          onClick={handleSaveClick}
+                          className="text-xs border-[1px] bg-gray-900 text-gray-50 rounded-full border-black text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-black duration-300"
+                        >
+                          Save
+                        </button>
+                        <button
+                          onClick={handleCancelClick}
+                          className="text-xs border-[1px] bg-gray-900 text-gray-50 rounded-full border-black text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-black duration-300"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    ) : currentUser._id === id ? (
+                      <button
+                        onClick={handleEditClick}
+                        className="text-xs border-[1px] bg-gray-900 text-gray-50 rounded-full border-black text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-black duration-300"
+                      >
+                        Edit
+                      </button>
+                    ) : isFollowing ? (
+                      <button
+                        onClick={handleUnfollowClick} // unFollowClick 함수로 수정
+                        className="text-xs mt-[0.5rem] border-[1px] bg-red-500 text-gray-50 rounded-full border-red-500 text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-red-500 duration-300"
+                      >
+                        Unfollow
+                      </button>
+                    ) : (
+                      <button
+                        onClick={handleFollowClick}
+                        className="text-xs mt-[0.5rem] border-[1px] bg-gray-900 text-gray-50 rounded-full border-black text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-black duration-300"
+                      >
+                        Follow
+                      </button>
+                    )}
+                  </div>
+                </div>
 
-            {/* 코멘트 */}
-            {isEditing ? (
-              <textarea
-                className="flex gap-10 text-[#88898a] text-blue-500 border-none italic w-54
+                {/*팔로잉팔로워 수*/}
+                {isEditing ? (
+                  <div></div>
+                ) : (
+                  <div className={`flex gap-5  mt-[0.5rem] text-[#b1b2b3]`}>
+                    <span
+                      onClick={handleFollowerBtn}
+                      className={`hover:text-[#141414] cursor-pointer  ${
+                        follow === "follower"
+                          ? "text-[#141414]"
+                          : "text-[#b1b2b3]"
+                      }`}
+                    >
+                      {followerInfo?.followerCount} followers
+                    </span>
+                    <span
+                      onClick={handleFollowingBtn}
+                      className={`hover:text-[#141414] cursor-pointer ${
+                        follow === "following"
+                          ? "text-[#141414]"
+                          : "text-[#b1b2b3]"
+                      }`}
+                    >
+                      {followerInfo?.followingCount} following
+                    </span>
+                  </div>
+                )}
+                {/* 코멘트 */}
+                {isEditing ? (
+                  <textarea
+                    className="flex gap-10 text-[#88898a] text-blue-500 border-none italic w-54
                 shadow-md rounded px-8 pt-6 pb-8 bg-gray-50
                 text-base mt-2 text-color text-blue-500 italic p-2 h-10"
-                value={editedComment}
-                onChange={(e) => setEditedComment(e.target.value)}
-              />
-            ) : (
-              <p className="flex gap-10 text-[#88898a] mt-[0.7rem]">
-                {userInfo?.comment}
-              </p>
-            )}
-
-            {currentUser._id === id && isEditing ? (
-              <div className="flex gap-10 mt-[0.7rem]">
-                <button
-                  onClick={handleSaveClick}
-                  className="text-xs mt-[0.7rem] border-[1px] bg-gray-900 text-gray-50 rounded-full border-black text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-black duration-300"
-                >
-                  Save
-                </button>
-                <button
-                  onClick={handleCancelClick}
-                  className="text-xs mt-[0.7rem] border-[1px] bg-gray-900 text-gray-50 rounded-full border-black text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-black duration-300"
-                >
-                  Cancel
-                </button>
+                    value={editedComment}
+                    onChange={(e) => setEditedComment(e.target.value)}
+                  />
+                ) : (
+                  <p className="flex gap-10 text-[#88898a] mt-[0.7rem]">
+                    {userInfo?.comment}
+                  </p>
+                )}
               </div>
-            ) : currentUser._id === id ? (
-              <button
-                onClick={handleEditClick}
-                className="text-xs mt-[0.7rem] border-[1px] bg-gray-900 text-gray-50 rounded-full border-black text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-black duration-300"
-              >
-                Edit
-              </button>
-            ) : isFollowing ? (
-              <button
-                onClick={handleUnfollowClick} // unFollowClick 함수로 수정
-                className="text-xs mt-[0.7rem] border-[1px] bg-red-500 text-gray-50 rounded-full border-red-500 text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-red-500 duration-300"
-              >
-                Unfollow
-              </button>
-            ) : (
-              <button
-                onClick={handleFollowClick}
-                className="text-xs mt-[0.7rem] border-[1px] bg-gray-900 text-gray-50 rounded-full border-black text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-black duration-300"
-              >
-                Follow
-              </button>
-            )}
+            </div>
           </div>
 
           {/*팔로잉팔로우*/}
