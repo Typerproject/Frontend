@@ -6,7 +6,8 @@ import ReportSelector from "./ReportSelector";
 
 interface props {
   targetCorp: corpCode;
-  onExitFirst: () => void;
+  onExit: () => void;
+  setData: (data: any) => void;
 }
 
 export interface reportType {
@@ -18,7 +19,11 @@ export interface reportType {
 
 const service = new editorAPI(import.meta.env.VITE_SERVER_EDITOR_API_URI);
 
-export default function ChooseReportPage({ targetCorp, onExitFirst }: props) {
+export default function ChooseReportPage({
+  targetCorp,
+  onExit,
+  setData,
+}: props) {
   const [bgn, setBgn] = useState<string>("");
   const [end, setEnd] = useState<string>("");
 
@@ -29,6 +34,15 @@ export default function ChooseReportPage({ targetCorp, onExitFirst }: props) {
   const [show, setShow] = useState<boolean>(true);
 
   const [targetReport, setTargetReport] = useState<reportType | null>(null);
+
+  const getToday = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0"); // 월은 0부터 시작하므로 +1 필요
+    const day = String(today.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  };
 
   const search = async () => {
     setPage(2);
@@ -48,8 +62,6 @@ export default function ChooseReportPage({ targetCorp, onExitFirst }: props) {
       alert("해당하는 날짜에 등록된 공시가 없습니다.");
       return;
     }
-
-    console.log(result.list);
 
     result.list.map((ele: any) => {
       reportList.current.push({
@@ -75,8 +87,6 @@ export default function ChooseReportPage({ targetCorp, onExitFirst }: props) {
       page
     );
 
-    console.log(res.list);
-
     res.list.map((ele: any) => {
       reportList.current.push({
         rceptNo: ele.rcept_no,
@@ -95,8 +105,7 @@ export default function ChooseReportPage({ targetCorp, onExitFirst }: props) {
   };
 
   const handleClose = () => {
-    setShow(false);
-    onExitFirst();
+    onExit();
   };
 
   return (
@@ -136,6 +145,7 @@ export default function ChooseReportPage({ targetCorp, onExitFirst }: props) {
                 <label className="block text-gray-700">검색 시작 일자</label>
                 <input
                   type="date"
+                  max={getToday()}
                   placeholder="조회 시작일자 (ex. 20220501)"
                   className="mt-1 block border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                   onChange={(e) => {
@@ -144,6 +154,7 @@ export default function ChooseReportPage({ targetCorp, onExitFirst }: props) {
                       .reduce((acc, cur) => {
                         return acc + cur;
                       }, "");
+
                     setBgn(format);
                   }}
                 />
@@ -152,6 +163,7 @@ export default function ChooseReportPage({ targetCorp, onExitFirst }: props) {
                 <label className="block text-gray-700">검색 종료 일자</label>
                 <input
                   type="date"
+                  max={getToday()}
                   placeholder="조회 종료일자 (ex. 20220530)"
                   className="mt-1 block border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                   onChange={(e) => {
@@ -174,7 +186,7 @@ export default function ChooseReportPage({ targetCorp, onExitFirst }: props) {
                 검색
               </button>
             </div>
-            <div className="min-h-[51vh] max-h-[51vh] overflow-y-scroll m-3">
+            <div className="min-h-[51vh] max-h-[51vh] overflow-y-scroll mx-3 mt-3">
               <div className="flex mx-3 font-bold text-center">
                 <p className="w-[20%]">등록일자</p>
                 <p className="w-[20%]">작성자</p>
@@ -202,14 +214,21 @@ export default function ChooseReportPage({ targetCorp, onExitFirst }: props) {
                 onClick={() => {
                   searchMore();
                 }}
+                className="flex py-2 justify-center hover:bg-gray-300"
               >
-                데이터가 더 있음
+                <p>더 불러오기</p>
               </div>
             )}
           </div>
         </div>
       )}
-      {targetReport && <ReportSelector targetReport={targetReport} />}
+      {targetReport && (
+        <ReportSelector
+          setData={setData}
+          targetReport={targetReport}
+          onExit={onExit}
+        />
+      )}
     </>
   );
 }

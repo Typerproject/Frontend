@@ -12,9 +12,13 @@ const service = new editorAPI(import.meta.env.VITE_SERVER_EDITOR_API_URI);
 
 interface DisclosureModalProps {
   onExitFirst: () => void;
+  setData: (data: any) => void;
 }
 
-export default function DisclosureModal({ onExitFirst }: DisclosureModalProps) {
+export default function DisclosureModal({
+  onExitFirst,
+  setData,
+}: DisclosureModalProps) {
   const searchResult = useRef<corpCode[]>([]);
   const [searchName, setSearchName] = useState<string>("");
   const [list, setList] = useState<corpCode[]>([]);
@@ -27,6 +31,13 @@ export default function DisclosureModal({ onExitFirst }: DisclosureModalProps) {
     searchResult.current.length = 0;
     setPage(2);
     const res = await service.getCorpCode(searchName, 1);
+
+    if (res.result.length === 0) {
+      alert("검색된 기업이 없습니다.");
+      setList([]);
+      return;
+    }
+
     searchResult.current.push(...res.result);
     setList([...searchResult.current]);
     if (page < res.totalPages) {
@@ -141,15 +152,20 @@ export default function DisclosureModal({ onExitFirst }: DisclosureModalProps) {
                 onClick={() => {
                   searchMore();
                 }}
+                className="flex py-2 justify-center hover:bg-gray-300"
               >
-                데이터가 더 있음
+                <p>더 불러오기</p>
               </div>
             )}
           </div>
         </div>
       )}
       {targetCorp && (
-        <ChooseReportPage targetCorp={targetCorp} onExitFirst={onExitFirst} />
+        <ChooseReportPage
+          targetCorp={targetCorp}
+          onExit={onExitFirst}
+          setData={setData}
+        />
       )}
     </>
   );

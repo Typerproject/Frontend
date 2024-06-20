@@ -1,6 +1,9 @@
+import { createElement } from "react";
 import CreateDOM from "react-dom/client";
 import DisclosureModal from "./DisclosureModal";
 import { API } from "@editorjs/editorjs/types/index";
+import "./css/Dart.css";
+import "./css/HTML.css";
 
 interface DisclosureBlockProps {
   data: any;
@@ -30,27 +33,95 @@ export class DisclosureBlock {
   }
 
   render() {
+    const createElementFromJson = (element) => {
+      if (typeof element === "string") {
+        return element;
+      }
+
+      const { type, props } = element;
+      let children = element.props?.children;
+
+      if (children === undefined) {
+        return createElement(type, props);
+      }
+
+      if (typeof children === "string") {
+        return createElement(type, props, children);
+      } else {
+        if (Array.isArray(children)) {
+          children = children.map((ele) => {
+            return createElementFromJson(ele);
+          });
+        } else {
+          children = createElementFromJson(children);
+        }
+      }
+
+      return createElement(type, props, children);
+    };
+
     const rootNode = document.createElement("div");
     this.nodes = rootNode;
 
+    const disclosureRoot = CreateDOM.createRoot(rootNode);
+
+    const corpModal = document.createElement("div");
+    const corpRoot = CreateDOM.createRoot(corpModal);
+
     const current = this.api.blocks.getCurrentBlockIndex();
 
-    if (Object.keys(this.data).length === 0) {
-      const corpModal = document.createElement("div");
-      const corpRoot = CreateDOM.createRoot(corpModal);
+    disclosureRoot.render(<h1>레포트 작성중</h1>);
 
+    const setData = (data: any) => {
+      this.data = data;
+
+      const marginStyle = this.data.type === "Dart" ? " gap-y-3" : " ";
+
+      disclosureRoot.render(
+        <div className="flex flex-col items-center">
+          <div className={`flex flex-col ${marginStyle}`}>{this.data.body}</div>
+        </div>
+      );
+
+      corpModal.remove();
+    };
+
+    if (Object.keys(this.data).length === 0) {
       corpRoot.render(
         <DisclosureModal
           onExitFirst={() => {
             this.api.blocks.delete(current);
             corpModal.remove();
           }}
+          setData={setData}
         />
       );
       document.getElementById("root")?.appendChild(corpModal);
+    } else {
+      const compo = this.data.body.map((ele) => createElementFromJson(ele));
+
+      const marginStyle = this.data.type === "Dart" ? " gap-y-3" : " ";
+
+      disclosureRoot.render(
+        <div className="flex flex-col items-center">
+          <div
+            className={`flex flex-col w-full overflow-x-scroll hover:bg-gray-300 ${marginStyle}`}
+            onClick={() => {
+              window.open(
+                `https://dart.fss.or.kr/dsaf001/main.do?rcpNo=${this.data.reportCode}`,
+                "_blank"
+              );
+            }}
+            title="dart.fss.or.kr로 이동해서 원문 보기"
+          >
+            {compo}
+          </div>
+        </div>
+      );
+      corpModal.remove();
     }
 
-    return document.createElement("div");
+    return rootNode;
   }
 
   save() {
