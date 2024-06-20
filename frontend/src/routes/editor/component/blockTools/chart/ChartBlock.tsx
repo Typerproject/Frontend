@@ -36,7 +36,7 @@ export class ChartBLock {
 
   static get toolbox() {
     return {
-      title: "chart",
+      title: "주가차트",
       icon: '<svg xmlns="http://www.w3.org/2000/svg" id="Isolation_Mode" data-name="Isolation Mode" viewBox="0 0 24 24" width="512" height="512"><path d="M3,21V0H0V21a3,3,0,0,0,3,3H24V21Z"/><rect x="18" y="9" width="3" height="9"/><rect x="6" y="9" width="3" height="9"/><rect x="12" y="4" width="3" height="14"/></svg>',
     };
   }
@@ -66,6 +66,7 @@ export class ChartBLock {
           }}
           onExit={() => {
             this.api.blocks.delete(current);
+            modal.remove();
           }}
         />
       );
