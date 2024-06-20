@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -10,25 +10,26 @@ interface AnalystReportModalProps{
 
 const AnalystReportModal: React.FC<AnalystReportModalProps> = ({ createIframe, onExit })=> {
   const [show,setShow]=useState<boolean>(true);
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  
   const [reportshow,setReportshow]=useState<boolean>(false);
-
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPage,settotalPage]=useState<number>(0);
   const [formData, setFormData] = useState({ company: "" });
   const [reports, setReports] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [mainloading, setmainLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const reportspage=3;
+  const limit=3;
 
   
 
-  const totalpages=Math.ceil(reports.length/reportspage);
+  
 
   
-  const currentReports = reports.slice((currentPage - 1) * reportspage, currentPage * reportspage);
-  console.log(currentReports)
 
   const handleNextPage = () => {
-    setCurrentPage((prevPage:number) => Math.min(prevPage + 1, totalpages));
+    setCurrentPage((prevPage:number) => Math.min(prevPage + 1, totalPage));
   };
 
   const handlePrevPage = () => {
@@ -42,22 +43,46 @@ const AnalystReportModal: React.FC<AnalystReportModalProps> = ({ createIframe, o
     }));
   };
 
+  useEffect(() => {
+    const fetchReports = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(import.meta.env.VITE_SERVER_REPORT_API_URI, {
+          params: { company: formData.company, page: currentPage, limit: 3 }
+        });
+        setLoading(false);
+        setReports(response.data.currentReports);
+        settotalPage(response.data.totalpages); // Assuming totalPages is returned from the server
+        
+      } catch (error) {
+        console.error("Error fetching reports:", error);
+      }
+    };
+
+    fetchReports();
+  }, [currentPage]);
+
   const handleSave = async () => {
 
     try {
-      setReportshow(true);
+      setShow(false);
+      setmainLoading(true)
       const response = await axios.get(import.meta.env.VITE_SERVER_REPORT_API_URI, {
-        params: { company: formData.company }
+        params: { company: formData.company ,page:currentPage,limit:3}
       });
-
-      if (response.data.length === 0) {
+      
+      if (response.data.currentReports.length === 0) {
         alert('검색결과가 없네요!');
         setReportshow(false);
         return;
       }
-      setReports(response.data);
+      setReportshow(true);
+      setmainLoading(false);
+      setReports(response.data.currentReports);
+
+      settotalPage(response.data.totalpages)
       setError("");
-      setShow(false);
+      
     } catch (err) {
       onExit();
     }
@@ -97,36 +122,42 @@ const AnalystReportModal: React.FC<AnalystReportModalProps> = ({ createIframe, o
         </Modal.Footer>
       </Modal>
 
-      {error && <div>{error}</div>}
+      <Modal show={mainloading}>
+      <Modal.Body>
+        로딩중입니다!
+      </Modal.Body>
+      </Modal>
 
       <Modal show={reportshow}>
         <Modal.Header>
           <Modal.Title>기업리포트는 다음과 같으며, 클릭시 해당 기업 리포트로 이동합니다.</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        {currentReports.map((report:any, index:number) => (
+        {loading ? (
+      <p>리포트 불러오는 중입니다..</p> // Display loading message
+    ) : (
+      reports.map((report: any, index: number) => (
         <div key={index} onClick={() => { createIframe(report.url); setReportshow(false); }}>
-          
-            <div>
-              {index + 1}번 리포트
-              <br />
-              Company: {report.company}
-              <br />
-              Date: {report.date.split("T")[0]}
-              <br />
-              Title: {report.title}
-              <br />
-              Analyst: {report.analyst}
-              <br />
-            </div>
-          
+          <div>
+            {index + 1}번 리포트
+            <br />
+            Company: {report.company}
+            <br />
+            Date: {report.date.split("T")[0]}
+            <br />
+            Title: {report.title}
+            <br />
+            Analyst: {report.analyst}
+            <br />
+          </div>
           <br />
         </div>
-      ))}
+      ))
+    )}
   <Modal.Footer>
    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px',gap:'10px' }}>
       <Button onClick={handlePrevPage} disabled={currentPage === 1}>이전</Button>
-      <Button onClick={handleNextPage} disabled={currentPage === totalpages}>다음</Button>
+      <Button onClick={handleNextPage} disabled={currentPage === totalPage}>다음</Button>
       <Button onClick={() => {setReportshow(false),onExit()}}>
         닫기
       </Button>
