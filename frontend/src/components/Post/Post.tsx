@@ -83,14 +83,16 @@ export default function Post({ id, post }: User) {
           <div className="flex-grow-[3] basis-3/4 w-full">
             <div className="flex flex-col items-start gap-[1rem] mb-[1rem]">
               {/*글 정보*/}
-              <div className="flex items-center gap-[15rem]">
+              <div className="flex flex-col mmd:flex-row mmd:gap-[15rem] gap-[1rem]">
                 {/*유저 이름과 사진*/}
-                <div
-                  onClick={() => navigate(`/my/${id}`)}
-                  className="flex gap-[0.5rem] items-center"
-                >
-                  <img className="w-[40px] rounded-full" src={userProfile} />
-                  <div className="text-sm min-w-full">{userName}</div>
+                <div className="">
+                  <div
+                    onClick={() => navigate(`/my/${id}`)}
+                    className="flex gap-[0.5rem] items-center"
+                  >
+                    <img className="w-[40px] rounded-full" src={userProfile} />
+                    <div className="text-sm min-w-full">{userName}</div>
+                  </div>
                 </div>
                 <div>
                   <p className="text-sm text-gray-400">{date}</p>
@@ -111,10 +113,22 @@ export default function Post({ id, post }: User) {
 
           {/* 미리보기 오른쪽 */}
           <div className="flex-grow basis-1/4">
-            <div className="flex">
+            <div className="flex w-full h-full">
               {/*게시글 이미지*/}
-              <div className="flex-none">
+              {/* <div className="flex-none">
                 <img className="w-[200px] rounded" src={picture} />
+              </div> */}
+              <div
+                // bg-center bg-cover
+                className="w-full h-full "
+                style={{
+                  backgroundImage: `url(${picture})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  height: "100%",
+                }}
+              >
+                {/* <div className="container mx-auto h-full flex justify-center items-center"></div> */}
               </div>
             </div>
           </div>

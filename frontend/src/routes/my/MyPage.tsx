@@ -289,17 +289,36 @@ export default function MyPage() {
       <div className="mmd:grid mmd:grid-cols-4 flex flex-col">
         {/*글목록*/}
         <div className="order-last mmd:col-span-3 text-5xl flex flex-col items-center gap-[2rem]">
-          <p className="mmd:text-md">{userInfo?.nickname}'s Typer</p>
+          <p className="hidden mmd:block mmd:py-[2rem]">
+            {userInfo?.nickname}'s Typer
+          </p>
+          <hr
+            style={{ width: "82%", borderWidth: "2px", color: "#404040" }}
+          ></hr>
           <div className="w-3/4">
             {/*가져온 글 목록을 map돌면서 출력*/}
             {previewPost.map((post: Preview) => (
-              <Post id={id} post={post} />
+              <div>
+                <Post id={id} post={post} />
+                <hr
+                  style={{
+                    width: "105%",
+                    borderWidth: "2px",
+                    color: "#ababab",
+                  }}
+                ></hr>
+              </div>
             ))}
           </div>
         </div>
 
         {/*프로필*/}
-        <div className="grid place-items-center mmd:order-last mmd:col-span-1 mmd:place-items-start">
+        <div
+          style={{
+            right: "10%",
+          }}
+          className="mmd:fixed grid place-items-center mmd:order-last mmd:col-span-1 mmd:place-items-start"
+        >
           {/* place-items-center */}
           <div className="mmd:flex-col">
             <div className="flex pt-[2rem] pb-[5rem] mmd:py-[1rem] gap-[2rem] mmd:flex-col mmd:gap-[1rem]">
@@ -412,7 +431,7 @@ export default function MyPage() {
           <div>
             {follow === "follower" && (
               <div>
-                <div className="mt-[3rem]">
+                <div className="mt-[1rem]">
                   <p className="text-lg">Follower</p>
                   <ul className="space-y-4">
                     {followerInfo?.followerUsers.map((user) => (
@@ -430,7 +449,7 @@ export default function MyPage() {
             )}
             {follow === "following" && (
               <div>
-                <div className="mt-[3rem]">
+                <div className="mt-[1rem]">
                   <p className="text-lg">Following</p>
                   <ul className="space-y-4">
                     {followerInfo?.followingUsers.map((user) => (
