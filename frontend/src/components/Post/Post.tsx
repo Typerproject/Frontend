@@ -61,12 +61,23 @@ export default function Post({ id, post }: User) {
 
   //api호출을 통해 게시글 정보를 받아옴
   const title: string = post.title;
-  const date: string = post.createdAt;
   const like: number = post.scrapingCount;
   const content: string = post.preview.text;
   const comment: number = 10;
   const picture: string = post.preview.img; //미리보기 사진
   const postId: string = post._id;
+
+  const utcDate = new Date(post.createdAt);
+  const koreaDate = new Date(utcDate.getTime() + 9 * 60 * 60 * 1000);
+
+  const date = koreaDate.toLocaleString("ko-KR", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
 
   const [validHeart, setValidHeart] = useState(false);
 
