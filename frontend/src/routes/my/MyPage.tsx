@@ -363,14 +363,14 @@ export default function MyPage() {
                     ) : isFollowing ? (
                       <button
                         onClick={handleUnfollowClick} // unFollowClick 함수로 수정
-                        className="text-xs mt-[0.5rem] border-[1px] bg-red-500 text-gray-50 rounded-full border-red-500 text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-red-500 duration-300"
+                        className="text-xs border-[1px] bg-red-500 text-gray-50 rounded-full border-red-500 text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-red-500 duration-300"
                       >
                         Unfollow
                       </button>
                     ) : (
                       <button
                         onClick={handleFollowClick}
-                        className="text-xs mt-[0.5rem] border-[1px] bg-gray-900 text-gray-50 rounded-full border-black text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-black duration-300"
+                        className="text-xs border-[1px] bg-gray-900 text-gray-50 rounded-full border-black text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-black duration-300"
                       >
                         Follow
                       </button>
