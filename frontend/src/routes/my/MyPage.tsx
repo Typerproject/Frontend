@@ -285,7 +285,7 @@ export default function MyPage() {
       <div className="mmd:grid mmd:grid-cols-4 flex flex-col">
         {/*글목록*/}
         <div className="order-last mmd:col-span-3 text-5xl flex flex-col items-center gap-[2rem]">
-          <p className="hidden mmd:block mmd:py-[2rem]">
+          <p className="tracking-wide font-medium hidden mmd:block mmd:py-[2rem]">
             {userInfo?.nickname}'s Typer
           </p>
           <hr
@@ -317,7 +317,7 @@ export default function MyPage() {
         >
           {/* place-items-center */}
           <div className="mmd:flex-col">
-            <div className="flex pt-[2rem] pb-[5rem] mmd:py-[1rem] gap-[2rem] mmd:flex-col mmd:gap-[1rem]">
+            <div className="flex pt-[2rem] pb-[3rem] mmd:py-[1rem] gap-[2rem] mmd:flex-col mmd:gap-[1rem]">
               <img
                 className="size-32 mmd:size-24 rounded-full"
                 src={userInfo?.profile}

@@ -103,7 +103,7 @@ export default function Post({ id, post }: User) {
                     className="flex gap-[0.5rem] items-center"
                   >
                     <img className="w-[40px] rounded-full" src={userProfile} />
-                    <div className="text-sm min-w-full">{userName}</div>
+                    <div className="text-base min-w-full">{userName}</div>
                   </div>
                 </div>
                 <div>
@@ -112,7 +112,7 @@ export default function Post({ id, post }: User) {
               </div>
               <div>
                 <div onClick={() => navigate(`/post/${postId}`)}>
-                  <div className="text-3xl mt-[1.2rem] max-w-[400px] overflow-hidden text-ellipsis whitespace-nowrap">
+                  <div className="text-3xl font-semibold mt-[1.2rem] max-w-[400px] overflow-hidden text-ellipsis whitespace-nowrap">
                     {title}
                   </div>
                   <div className="text-base mt-[0.7rem] text-gray-500">
@@ -141,11 +141,11 @@ export default function Post({ id, post }: User) {
         </div>
       </div>
 
-      <div className="text-base flex items-center gap-[1.5rem] mt-[1rem]">
+      <div className="text-base text-gray-500 flex items-center gap-[1.5rem] mt-[1rem]">
         <div className="flex items-center gap-[0.5rem] ">
           <div onClick={() => handleLike()} className="cursor-pointer">
             {validHeart ? (
-              <FaBookmark size={20} />
+              <FaBookmark size={20} color="black" />
             ) : (
               <FaRegBookmark size={20} />
             )}
