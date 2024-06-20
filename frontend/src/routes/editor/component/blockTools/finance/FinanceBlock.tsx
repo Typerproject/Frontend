@@ -2,10 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import FinanceModal from './FinanceModal';
 import Creatediv from './Creatediv';
+import { API } from "@editorjs/editorjs/types/index";
 
 
 interface FinanceBlockData {
   data: IFinanceData;
+  api: API;
 }
 
 
@@ -28,12 +30,14 @@ export class FinanceBlock {
   data: IFinanceData | null;
   wrapper: HTMLDivElement | null = null;
   div: HTMLDivElement | null = null;
+  api: API;
 
-  constructor({data}:FinanceBlockData) {
+  constructor({data,api}:FinanceBlockData) {
   
     this.data = data || null;
     this.wrapper = null;
     this.div = null;
+    this.api=api;
 
     this.creatediv = this.creatediv.bind(this);
   }
@@ -58,6 +62,8 @@ export class FinanceBlock {
   }
 
   render() {
+
+    const current = this.api.blocks.getCurrentBlockIndex();
     this.wrapper = document.createElement("div");
     
     if (this.data && Object.keys(this.data).length > 0){
@@ -65,7 +71,8 @@ export class FinanceBlock {
       this.creatediv(this.data.data,this.data.company);
     }
     else{
-    ReactDOM.createRoot(this.wrapper).render(<FinanceModal creatediv={this.creatediv}/>);
+    ReactDOM.createRoot(this.wrapper).render(<FinanceModal creatediv={this.creatediv} onExit={() => {
+      this.api.blocks.delete(current);}}/>);
     }
     
 

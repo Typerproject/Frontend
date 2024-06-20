@@ -1,19 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Editor from "./component/Editor";
 import Timer from "./component/Timer";
 import { IoMdLock, IoMdUnlock } from "react-icons/io";
 import { OutputData } from "@editorjs/editorjs";
 import postAPI from "../../api/postDetailAPI";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../../store";
 const service = new postAPI(import.meta.env.VITE_SERVER_POST_API_URI);
 export default function EditorPage() {
   const [isPublic, setPublic] = useState(true);
   const [title, setTitle] = useState<string | null>(null);
   const [content, setContent] = useState<OutputData>();
+  const currentUser = useAppSelector((state) => state.user);
   const navigate = useNavigate();
   const changeVisibility = () => {
     setPublic(!isPublic);
   };
+
+  useEffect(() => {
+    if (!currentUser || currentUser._id === null) {
+      alert("로그인을 해주세요!");
+      navigate("/");
+      return;
+    }
+  }, []);
+
   const publish = async () => {
     if (!content?.blocks) {
       alert("내용이 없습니다. 내용을 작성해주세요");

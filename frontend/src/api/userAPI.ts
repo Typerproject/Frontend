@@ -1,10 +1,21 @@
 // user 관련된 api 모아주세용
 import BaseApi from "./axiosInstance";
+import { Pre } from "../routes/my/MyPage";
+
+interface Preview {
+  title: string;
+  _id: string;
+  preview: Pre;
+  createdAt: string;
+  public: boolean;
+  scrapingCount: number;
+}
 
 export interface IUserInfo {
   nickname: string;
   comment: string;
   profile: string;
+  writerdPost: Preview[];
 }
 
 // IFollowerInfo 배열 안의 유저 데이터를 표현한 거임
@@ -31,6 +42,7 @@ export default class userAPI extends BaseApi {
   async getUserInfo(_id: string): Promise<IUserInfo> {
     try {
       const resp = await this.fetcher.get(`/user/info/${_id}`);
+      console.log(resp);
       return resp.data;
     } catch (err) {
       console.error("유저 정보 api 에러: ", err);
@@ -124,6 +136,19 @@ export default class userAPI extends BaseApi {
       return resp.data;
     } catch (error) {
       console.error("로그아웃 하는 api: ", error);
+    }
+  }
+
+  // 쿠키 테스트
+  async checkCookie() {
+    try {
+      const resp = await this.fetcher.get(`/auth/cookie`);
+
+      console.log("쿠키 체크 데이터 ", resp.data);
+
+      return resp.data;
+    } catch (error) {
+      console.error("쿠키 체크 에러: ", error);
     }
   }
 }

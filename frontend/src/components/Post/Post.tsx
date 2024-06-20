@@ -1,13 +1,35 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import userAPI, { IFollowerInfo, IUserInfo } from "../../api/userAPI";
-import { FaHeart } from "react-icons/fa6"; // 채워진 하트
-import { FaRegHeart } from "react-icons/fa6"; // 빈 하트
+import { useNavigate } from "react-router-dom";
+import userAPI, { IUserInfo } from "../../api/userAPI";
+// import { FaHeart } from "react-icons/fa6"; // 채워진 하트
+// import { FaRegHeart } from "react-icons/fa6"; // 빈 하트
+import { IoBookmarkOutline, IoBookmark } from "react-icons/io5";
 import { FaRegComment } from "react-icons/fa";
 
 const service = new userAPI(import.meta.env.VITE_BASE_URI);
 
-export default function Post({ id }: { id: string | undefined }) {
+export interface Pre {
+  text: string;
+  img: string;
+  _id: string;
+}
+
+interface Preview {
+  title: string;
+  _id: string;
+  preview: Pre;
+  createdAt: string;
+  public: boolean;
+  scrapingCount: number;
+}
+
+interface User {
+  id: string | undefined;
+  post: Preview;
+}
+
+//게시글을 작성한 유저의 id와 user/info/:_id에서 가져온 게시글 정보 필요
+export default function Post({ id, post }: User) {
   const navigate = useNavigate();
 
   const [userInfo, setUserInfo] = useState<IUserInfo | null>(null);
@@ -37,14 +59,15 @@ export default function Post({ id }: { id: string | undefined }) {
   const userName: string | undefined = userInfo?.nickname;
   const userProfile: string | undefined = userInfo?.profile;
 
-  //마아페이지 아이디를 전달받아서 api호출을 통해 게시글 정보를 받아옴
-  const title: string = "테스트 게시글 입니다.";
-  const date: string = "2024-06-12 15:24:32";
-  const like: number = 231;
-  const content: string = "내용 세 줄 요약해서 출력";
+  //api호출을 통해 게시글 정보를 받아옴
+  const title: string = post.title;
+  const date: string = post.createdAt;
+  const like: number = post.scrapingCount;
+  const content: string = post.preview.text;
+  console.log("preview content 어떻게 생겼지? : ", content);
   const comment: number = 10;
-  const picture: string =
-    "https://src.hidoc.co.kr/image/lib/2022/5/12/1652337370806_0.jpg"; //미리보기 사진
+  const picture: string = post.preview.img; //미리보기 사진
+  const postId: string = post.preview._id;
 
   const [validHeart, setValidHeart] = useState(false);
 
@@ -55,27 +78,46 @@ export default function Post({ id }: { id: string | undefined }) {
 
   return (
     <div className="w-full p-[2rem]">
-      <div className="cursor-pointer ">
-        {/* 날짜, 글쓴이 기본 정보 */}
-        <div className="flex gap-[17rem] items-center mb-[1rem]">
-          <div
-            onClick={() => navigate("/my")}
-            className="flex gap-[0.5rem] items-center"
-          >
-            <img className="w-[40px] rounded-full" src={userProfile} />
-            <p className="text-sm">{userName}</p>
+      <div>
+        <div className="flex cursor-pointer ">
+          {/* 미리보기 왼쪽*/}
+          <div className="flex-grow-[3] basis-3/4 w-full">
+            <div className="flex flex-col items-start gap-[1rem] mb-[1rem]">
+              {/*글 정보*/}
+              <div className="flex items-center gap-[15rem]">
+                {/*유저 이름과 사진*/}
+                <div
+                  onClick={() => navigate(`/my/{id}`)}
+                  className="flex gap-[0.5rem] items-center"
+                >
+                  <img className="w-[40px] rounded-full" src={userProfile} />
+                  <p className="text-sm">{userName}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-400">{date}</p>
+                </div>
+              </div>
+              <div>
+                <div onClick={() => navigate(`/post/{postId}`)}>
+                  <div className="text-4xl mt-[1rem] max-w-[300px] overflow-hidden text-ellipsis whitespace-nowrap">
+                    {title}
+                  </div>
+                  <div className="text-base py-[2rem] text-gray-500">
+                    {content}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <p className="text-sm text-gray-400">{date}</p>
-        </div>
 
-        {/* 글 내용 */}
-        <div className="flex">
-          <div className="flex-1" onClick={() => navigate("/post")}>
-            <div className="text-4xl mt-[1rem]">{title}</div>
-            <p className="text-base py-[2rem] text-gray-500">{content}</p>
-          </div>
-          <div className="flex-none">
-            <img className="w-[200px]" src={picture} />
+          {/* 미리보기 오른쪽 */}
+          <div className="flex-grow basis-1/4">
+            <div className="flex">
+              {/*게시글 이미지*/}
+              <div className="flex-none">
+                <img className="w-[200px] rounded" src={picture} />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -83,7 +125,11 @@ export default function Post({ id }: { id: string | undefined }) {
       <div className="text-base flex items-center gap-[1.5rem]">
         <div className="flex items-center gap-[0.5rem] ">
           <div onClick={() => handleLike()} className="cursor-pointer">
-            {validHeart ? <FaHeart size={20} /> : <FaRegHeart size={20} />}
+            {validHeart ? (
+              <IoBookmark size={20} />
+            ) : (
+              <IoBookmarkOutline size={20} />
+            )}
           </div>
           <p>{like}</p>
         </div>
