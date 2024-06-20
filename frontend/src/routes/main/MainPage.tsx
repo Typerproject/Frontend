@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Navigator from "../../components/Navbar/Navbar";
+import postAPI, { IPostListForMain, IPost } from "../../api/postDetailAPI";
+import MainPost from "./component/Post";
+
+const postService = new postAPI(import.meta.env.VITE_SERVER_POST_API_URI);
 
 const MyComponent = () => {
   const [issue, setIssue] = useState<Array<Array<string>>>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [activeButton, setActiveButton] = useState("HOT");
-  const [post, setPost] = useState([]);
+  const [page, setPage] = useState(1);
+  const [postList, setPostList] = useState<IPostListForMain | null>(null);
 
   const handleClick = (buttonName: any) => {
     setActiveButton(buttonName);
+    setPage(1);
   };
 
   useEffect(() => {
@@ -36,6 +42,18 @@ const MyComponent = () => {
     }
   }, [issue]);
 
+  useEffect(() => {
+    postService
+      .getPostListForMain(page, activeButton.toLowerCase())
+      .then((data) => {
+        console.log("메인 페이지 포스트 데이터 잘 가져와 지나??", data);
+        setPostList(data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [page, activeButton]);
+
   return (
     <div>
       <Navigator />
@@ -53,8 +71,11 @@ const MyComponent = () => {
               <div className="text-center">{issue[currentIndex][2]}</div>
             </div>
           )}
-          <div className="absolute bottom-2 right-2 text-xs font-bold">
-            POWER BY SHINHAN SECURITIS API
+          <div
+            className="absolute bottom-2 right-2 text-xs font-bold"
+            style={{ position: "fixed", bottom: "1rem", right: "1rem" }}
+          >
+            ◎ POWER BY SHINHAN SECURITIS API
           </div>
         </div>
       </div>
@@ -90,6 +111,14 @@ const MyComponent = () => {
         >
           ❤️FOLLOW
         </button>
+      </div>
+
+      <div className="mt-10">
+        {!postList || postList.posts.length === 0 ? (
+          <div>no content</div>
+        ) : (
+          postList.posts.map((post: IPost) => <MainPost post={post} />)
+        )}
       </div>
     </div>
   );
