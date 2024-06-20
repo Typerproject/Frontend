@@ -67,11 +67,15 @@ export class ReportBlock {
     const current = this.api.blocks.getCurrentBlockIndex();
     this.wrapper = document.createElement("div");
 
+
     if (this.data && Object.keys(this.data).length > 0) {
       const img = document.createElement('img');
       img.src = this.data.imageDataUrl;
       img.alt = 'Captured Image';
       img.style.width = '500px';
+      img.style.display = 'block';
+      img.style.margin = '0 auto';
+      this.wrapper.style.textAlign = 'center'
       this.wrapper.appendChild(img);
     } else {
       ReactDOM.createRoot(this.wrapper).render(
@@ -93,8 +97,12 @@ export class ReportBlock {
       img.src = imageDataUrl;
       img.alt = 'Captured Image';
       img.style.width = '500px';
+      img.style.textAlign='center';
+      img.style.display = 'block';
+      img.style.margin = '0 auto';
       this.data = { imageDataUrl};
       if (this.wrapper) {
+        this.wrapper.style.textAlign = 'center'
         this.wrapper.appendChild(img);
       }
     };
