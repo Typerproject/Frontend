@@ -92,12 +92,12 @@ export default function Post({ id, post }: User) {
       <div>
         <div className="flex cursor-pointer">
           {/* 미리보기 왼쪽*/}
-          <div className="flex-grow-[3] basis-3/4 w-full">
+          <div className="flex-grow-[3] basis-3/4 w-full mr-10">
             <div className="flex flex-col items-start gap-[1rem] mb-[1rem]">
               {/*글 정보*/}
-              <div className="flex flex-col mmd:flex-row mmd:gap-[15rem] gap-[1rem]">
+              <div className="flex flex-col mmd:flex-row mmd:justify-between gap-[1rem] w-full">
                 {/*유저 이름과 사진*/}
-                <div className="">
+                <div>
                   <div
                     onClick={() => navigate(`/my/${id}`)}
                     className="flex gap-[0.5rem] items-center"
@@ -112,10 +112,10 @@ export default function Post({ id, post }: User) {
               </div>
               <div>
                 <div onClick={() => navigate(`/post/${postId}`)}>
-                  <div className="text-4xl mt-[1rem] max-w-[400px] overflow-hidden text-ellipsis whitespace-nowrap">
+                  <div className="text-3xl mt-[1.2rem] max-w-[400px] overflow-hidden text-ellipsis whitespace-nowrap">
                     {title}
                   </div>
-                  <div className="text-base py-[2rem] text-gray-500">
+                  <div className="text-base mt-[0.7rem] text-gray-500">
                     {content}
                   </div>
                 </div>
@@ -141,7 +141,7 @@ export default function Post({ id, post }: User) {
         </div>
       </div>
 
-      <div className="text-base flex items-center gap-[1.5rem]">
+      <div className="text-base flex items-center gap-[1.5rem] mt-[1rem]">
         <div className="flex items-center gap-[0.5rem] ">
           <div onClick={() => handleLike()} className="cursor-pointer">
             {validHeart ? (
