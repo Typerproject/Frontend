@@ -79,13 +79,23 @@ const FinanceModal:React.FC<FinanceReportModalProps> = ({creatediv,onExit}) => {
   
       try {
         const data = await fetchData(formData);
+
+        
+
+       
         if (data.length === 0) {
           return alert("검색 결과가 없습니다!");
         }
+        
         creatediv(data,formData.company);
         setShow(false);
         
-      } catch (error){
+      } catch (error:any){
+        if (error.response && error.response.status === 403) {
+          return alert("회사 이름이 잘못되었습니다!");
+        }
+      
+        
         alert("입력 형식이 잘못되었습니다!")
       } 
       
@@ -94,6 +104,8 @@ const FinanceModal:React.FC<FinanceReportModalProps> = ({creatediv,onExit}) => {
     
     const fetchData=async (d:FormData)=>{
         const data=await axios.get(`${import.meta.env.VITE_SERVER_FINANCE_API_URI}?company=${formData.company}&startdate=${formData.startDate}&enddate=${formData.endDate}`)
+
+        
 
 
         const selectedKeys = Object.keys(fin).filter(key => fin[key as FinKeys]);

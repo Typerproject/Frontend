@@ -1,4 +1,3 @@
-
 import ReactDOM from 'react-dom/client';
 import AnalystReportModal from './ReportModal';
 import PdfViewer from './Pdfviewer';
@@ -13,35 +12,29 @@ interface ReportBlockData {
   api: API;
 }
 
-
-
 export interface IReportData {
-  url: string;
+  imageDataUrl: string;
 }
 
-
 export class ReportBlock {
-
   data: IReportData | null;
-  wrapper: HTMLDivElement | null ;
+  wrapper: HTMLDivElement | null;
   div: HTMLDivElement | null;
   state: IState;
   api: API;
-
 
   setWrapper(wrapper: HTMLDivElement) {
     this.wrapper = wrapper;
   }
 
-  constructor({data,api}:ReportBlockData) {
+  constructor({ data, api }: ReportBlockData) {
     this.data = data || null;
     this.wrapper = null;
     this.div = null;
     this.state = {
       showModal: false
     };
-    this.api= api;
-    
+    this.api = api;
   }
 
   static get toolbox() {
@@ -63,7 +56,6 @@ export class ReportBlock {
         d="M17 19h4m-7 1H6a3 3 0 0 1 0-6h11a3 3 0 0 0-3 3m7-3V6a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v8m12 3v4"
       />
     </svg>`
-
     };
   }
 
@@ -72,48 +64,63 @@ export class ReportBlock {
   }
 
   render() {
-
     const current = this.api.blocks.getCurrentBlockIndex();
     this.wrapper = document.createElement("div");
 
-    if (this.data && Object.keys(this.data).length > 0){
-        this.createIframe(this.data.url);
-    }
-    else{
-    ReactDOM.createRoot(this.wrapper).render(
-      <AnalystReportModal createIframe={this.createIframe}
-      onExit={() => {
-        this.api.blocks.delete(current);
-      }}/>
-    );
-    
-  }
 
-  
-    return this.wrapper;
-
-    
-  }
-
-  createIframe = (url:string) => {
-    const proxyUrl = `/analyst${url.split('https://consensus.hankyung.com')[1]}`;
-    
-  
-    if (this.wrapper) {
+    if (this.data && Object.keys(this.data).length > 0) {
+      const img = document.createElement('img');
+      img.src = this.data.imageDataUrl;
+      img.alt = 'Captured Image';
+      img.style.width = '500px';
+      img.style.display = 'block';
+      img.style.margin = '0 auto';
+      this.wrapper.style.textAlign = 'center'
+      this.wrapper.appendChild(img);
+    } else {
       ReactDOM.createRoot(this.wrapper).render(
-        <PdfViewer url={proxyUrl} />
-        
+        <AnalystReportModal createIframe={this.createIframe}
+          onExit={() => {
+            this.api.blocks.delete(current);
+          }} />
       );
-      this.data={url};
+    }
+
+    return this.wrapper;
+  }
+
+  createIframe = (url: string) => {
+    const proxyUrl = `/analyst${url.split('https://consensus.hankyung.com')[1]}`;
+
+    const handleCapture = (imageDataUrl: string) => {
+      const img = document.createElement('img');
+      img.src = imageDataUrl;
+      img.alt = 'Captured Image';
+      img.style.width = '500px';
+      img.style.textAlign='center';
+      img.style.display = 'block';
+      img.style.margin = '0 auto';
+      this.data = { imageDataUrl};
+      if (this.wrapper) {
+        this.wrapper.style.textAlign = 'center'
+        this.wrapper.appendChild(img);
+      }
+    };
+
+    if (this.wrapper) {
+      const current = this.api.blocks.getCurrentBlockIndex();
+      ReactDOM.createRoot(this.wrapper).render(
+        <PdfViewer url={proxyUrl} onCapture={handleCapture} onExit={() => {
+          this.api.blocks.delete(current);
+        }} />
+      );
+       
     } else {
       console.error('Wrapper element is not set.');
     }
-
   };
 
-
-  save(blockContent:string) {
-    console.log(this.data)
+  save(blockContent: string) {
     return this.data;
   }
 }

@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../store";
 import { setUser } from "../../store/reducers/user";
+import Loading from "./Loading";
 
 const Redirect: React.FC = () => {
   const location = useLocation();
@@ -32,7 +33,11 @@ const Redirect: React.FC = () => {
     }
   }, [location]);
 
-  return <div>로그인 중!</div>;
+  return (
+    <div>
+      <Loading />
+    </div>
+  );
 };
 
 export default Redirect;

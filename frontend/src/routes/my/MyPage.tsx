@@ -1,15 +1,11 @@
-// import React from 'react'
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useAppSelector } from "../../store";
 import FollowList from "./component/FollowList";
 import Post from "../../components/Post/Post";
 import userAPI, { IFollowerInfo, IUserInfo } from "../../api/userAPI";
-import { setUser, logoutUser } from "../../store/reducers/user";
+import { setUser } from "../../store/reducers/user";
 import { useAppDispatch } from "../../store";
-
-// type Props = {}
 
 type State = "follower" | "following" | false;
 
@@ -72,8 +68,6 @@ export default function MyPage() {
 
   const [isFollowing, setIsFollowing] = useState(false);
 
-  // const navigate = useNavigate();
-
   // Edit 버튼 클릭 시 수정 모드로 변경
   const handleEditClick = () => {
     setIsEditing(true);
@@ -117,9 +111,11 @@ export default function MyPage() {
           profile: currentUser.profile || null,
         };
 
+        console.log("--------", user);
+
         dispatch(setUser({ user }));
-        setEditedComment("");
-        setEditedNickname("");
+        // setEditedComment("");
+        // setEditedNickname("");
       })
       .catch((err) => {
         console.error("comment 에러: ", err);
@@ -138,22 +134,22 @@ export default function MyPage() {
     if (id) {
       console.log("파라미터 잘 가져와 지나?", id);
 
-      // 유저 정보 겟또다제
+      // 유저 정보 획득
       service
         .getUserInfo(id)
         .then((data) => {
-          console.log("마페 유저", data);
+          console.log("마이페이지 유저", data);
           setUserInfo(data);
         })
         .catch((err) => {
-          console.error("마페 유저", err);
+          console.error("마이페이지 유저", err);
         });
 
-      // 유저 팔로우 정보 겟또다제
+      // 유저 팔로우 정보 획득
       service
         .getFollowingAndFollowerData(id)
         .then((data) => {
-          console.log("마페 팔로우", data);
+          console.log("마이페이지 팔로우", data);
           setFollowerInfo(data);
 
           const found = data.followerUsers.some(
@@ -169,14 +165,14 @@ export default function MyPage() {
           }
         })
         .catch((err) => {
-          console.error("마페 팔로우", err);
+          console.error("마이페이지 팔로우", err);
         });
 
-      console.log("아디 잇으면", currentUser);
+      console.log("ID 有", currentUser);
     } else {
-      console.log("아디 없으면", currentUser);
+      console.log("ID 無", currentUser);
     }
-  }, [currentUser, id, isFollowing, refreshKey]);
+  }, [currentUser, id, isFollowing, refreshKey, isEditing]);
 
   const handleFollowerBtn = () => {
     if (follow != "follower") {
@@ -419,7 +415,10 @@ export default function MyPage() {
                     onChange={(e) => setEditedComment(e.target.value)}
                   />
                 ) : (
-                  <p className="flex gap-10 text-[#88898a] mt-[0.7rem]">
+                  <p
+                    style={{ fontFamily: "Ownglyph_Dailyokja-Rg, sans-serif" }}
+                    className="flex gap-10 text-[#88898a] mt-[0.7rem] w-[270px]"
+                  >
                     {userInfo?.comment}
                   </p>
                 )}
