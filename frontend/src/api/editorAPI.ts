@@ -43,4 +43,28 @@ export default class editorAPI extends BaseApi {
 
     return resp.data;
   }
+
+  async getReportList(
+    corpCode: string,
+    bgn: string,
+    end: string,
+    page: number
+  ) {
+    const resp = await this.fetcher.get("/disclosure/list", {
+      params: {
+        corpCode: corpCode,
+        bgn: bgn,
+        end: end,
+        page: page,
+      },
+    });
+
+    return resp.data;
+  }
+
+  async getReport(reportNum: string) {
+    const res = await this.fetcher.get(`/disclosure/report/${reportNum}`);
+
+    return res.data;
+  }
 }

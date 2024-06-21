@@ -1,5 +1,4 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { response } from "express";
 import store from "../store";
 import { openLoginModal } from "../store/reducers/auth";
 

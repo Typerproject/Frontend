@@ -6,7 +6,7 @@ import { NewsBlock } from "../../editor/component/blockTools/news/NewsBlock";
 import { ChartBLock } from "../../editor/component/blockTools/chart/ChartBlock";
 import { ReportBlock } from "../../editor/component/blockTools/Report/ReportBlock";
 import { FinanceBlock } from "../../editor/component/blockTools/finance/FinanceBlock";
-
+import { DisclosureBlock } from "../../editor/component/blockTools/disclosure/DisclosureBlock";
 
 type props = {
   outPutData: OutputData;
@@ -29,6 +29,7 @@ export default function ViewEditor({ outPutData }: props) {
         charts: ChartBLock,
         Report: ReportBlock,
         finance: FinanceBlock,
+        disclosure: DisclosureBlock,
       },
       minHeight: 10
     });
