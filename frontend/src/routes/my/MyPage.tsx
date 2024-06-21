@@ -190,6 +190,10 @@ export default function MyPage() {
     }
   };
 
+  useEffect(() => {
+    setFollow(false);
+  }, [id]);
+
   // 팔로잉 핸들러
   const handleFollowClick = () => {
     if (!id) {
@@ -383,26 +387,63 @@ export default function MyPage() {
                   <div></div>
                 ) : (
                   <div className={`flex gap-5  mt-[0.5rem] text-[#b1b2b3]`}>
-                    <span
-                      onClick={handleFollowerBtn}
-                      className={`hover:text-[#141414] cursor-pointer  ${
-                        follow === "follower"
-                          ? "text-[#141414]"
-                          : "text-[#b1b2b3]"
-                      }`}
-                    >
-                      {followerInfo?.followerCount} followers
-                    </span>
-                    <span
-                      onClick={handleFollowingBtn}
-                      className={`hover:text-[#141414] cursor-pointer ${
-                        follow === "following"
-                          ? "text-[#141414]"
-                          : "text-[#b1b2b3]"
-                      }`}
-                    >
-                      {followerInfo?.followingCount} following
-                    </span>
+                    <div className="relative">
+                      <span
+                        onClick={handleFollowerBtn}
+                        className={`hover:text-[#141414] cursor-pointer  ${
+                          follow === "follower"
+                            ? "text-[#141414]"
+                            : "text-[#b1b2b3]"
+                        }`}
+                      >
+                        {followerInfo?.followerCount} followers
+                      </span>
+
+                      {follow === "follower" && (
+                        <div className="mmd:hidden absolute top-full px-2 py-2 w-48 bg-white border border-gray-300 rounded shadow-lg">
+                          <ul className="space-y-4">
+                            {followerInfo?.followerUsers.map((user) => (
+                              <FollowList
+                                _id={user._id}
+                                nickname={user.nickname}
+                                profile={user.profile}
+                                which={follow}
+                                setRefreshKey={setRefreshKey}
+                              />
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="relative">
+                      <span
+                        onClick={handleFollowingBtn}
+                        className={`hover:text-[#141414] cursor-pointer ${
+                          follow === "following"
+                            ? "text-[#141414]"
+                            : "text-[#b1b2b3]"
+                        }`}
+                      >
+                        {followerInfo?.followingCount} following
+                      </span>
+
+                      {follow === "following" && (
+                        <div className="mmd:hidden absolute top-full px-2 py-2 w-48 bg-white border border-gray-300 rounded shadow-lg">
+                          <ul className="space-y-4">
+                            {followerInfo?.followingUsers.map((user) => (
+                              <FollowList
+                                _id={user._id}
+                                nickname={user.nickname}
+                                profile={user.profile}
+                                which={follow}
+                                setRefreshKey={setRefreshKey}
+                              />
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
                 {/* 코멘트 */}
@@ -430,7 +471,7 @@ export default function MyPage() {
           <div>
             {follow === "follower" && (
               <div>
-                <div className="mt-[1rem]">
+                <div className="mt-[1rem] hidden mmd:block">
                   <p className="text-lg">Follower</p>
                   <ul className="space-y-4">
                     {followerInfo?.followerUsers.map((user) => (
@@ -448,7 +489,7 @@ export default function MyPage() {
             )}
             {follow === "following" && (
               <div>
-                <div className="mt-[1rem]">
+                <div className="mt-[1rem] hidden mmd:block">
                   <p className="text-lg">Following</p>
                   <ul className="space-y-4">
                     {followerInfo?.followingUsers.map((user) => (
