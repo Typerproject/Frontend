@@ -29,9 +29,47 @@ const service = new userAPI(import.meta.env.VITE_BASE_URI);
 
 export default function MyPage() {
   const [userInfo, setUserInfo] = useState<IUserInfo | null>(null);
+  const [cuserInfo, setCuserInfo] = useState<IUserInfo | null>(null);
+  const currentUser = useAppSelector((state) => state.user);
+  const currentUserId = useAppSelector((state) => state.user._id);
+
+  useEffect(() => {
+    if (currentUserId) {
+      console.log("파라미터 잘 가져와 지나?", currentUserId);
+
+      // 유저 정보 획득
+      service
+        .getUserInfo(currentUserId)
+        .then((data) => {
+          console.log("마이페이지 접근 유저", data);
+          setCuserInfo(data);
+        })
+        .catch((err) => {
+          console.error("마이페이지 접근 유저", err);
+        });
+
+      console.log("ID 有", currentUserId);
+    } else {
+      console.log("ID 無", currentUserId);
+    }
+  }, [currentUser]);
 
   //게시글 미리보기
   const [previewPost, setPreviewPost] = useState<Preview[]>([]);
+  const [scrappedPost, setScrappedPost] = useState<string[]>([]);
+
+  useEffect(() => {
+    let getScrapped: string[] | undefined;
+    if (id != currentUserId) {
+      getScrapped = cuserInfo?.scrappedPost;
+    } else {
+      getScrapped = userInfo?.scrappedPost;
+    }
+
+    if (getScrapped) {
+      setScrappedPost([...getScrapped]);
+    }
+  }, [userInfo?.scrappedPost, cuserInfo?.scrappedPost]);
 
   useEffect(() => {
     if (userInfo?.writerdPost) {
@@ -56,8 +94,6 @@ export default function MyPage() {
 
   //현재 접속한 마이 페이지의 유저 아이디
   const { id } = useParams<{ id: string }>(); // useParams의 반환 타입을 명시
-
-  const currentUser = useAppSelector((state) => state.user);
 
   const dispatch = useAppDispatch();
 
@@ -314,18 +350,22 @@ export default function MyPage() {
 
           <div className="w-3/4">
             {/*가져온 글 목록을 map돌면서 출력*/}
-            {previewPost.map((post: Preview) => (
-              <div>
-                <Post id={id} post={post} />
-                <hr
-                  style={{
-                    width: "100%",
-                    borderWidth: "2px",
-                    color: "#ababab",
-                  }}
-                ></hr>
-              </div>
-            ))}
+            {previewPost.map((post: Preview) => {
+              const scrapped: boolean =
+                scrappedPost?.includes(post._id) || false;
+              return (
+                <div>
+                  <Post id={id} post={post} scrapped={scrapped} />
+                  <hr
+                    style={{
+                      width: "100%",
+                      borderWidth: "2px",
+                      color: "#ababab",
+                    }}
+                  ></hr>
+                </div>
+              );
+            })}
           </div>
         </div>
 

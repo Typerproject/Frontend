@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import userAPI, { IUserInfo } from "../../api/userAPI";
-// import { FaHeart } from "react-icons/fa6"; // 채워진 하트
-// import { FaRegHeart } from "react-icons/fa6"; // 빈 하트
+import postAPI from "../../api/postDetailAPI";
 import { FaRegComment } from "react-icons/fa";
 import { FaRegBookmark } from "react-icons/fa";
 import { FaBookmark } from "react-icons/fa6";
 
 const service = new userAPI(import.meta.env.VITE_BASE_URI);
+const postService = new postAPI(import.meta.env.VITE_SERVER_POST_API_URI);
 
 export interface Pre {
   text: string;
@@ -27,10 +27,11 @@ interface Preview {
 interface User {
   id: string | undefined;
   post: Preview;
+  scrapped: boolean;
 }
 
 //게시글을 작성한 유저의 id와 user/info/:_id에서 가져온 게시글 정보 필요
-export default function Post({ id, post }: User) {
+export default function Post({ id, post, scrapped }: User) {
   const navigate = useNavigate();
 
   const [userInfo, setUserInfo] = useState<IUserInfo | null>(null);
@@ -59,16 +60,17 @@ export default function Post({ id, post }: User) {
   //유저의 정보
   const userName: string | undefined = userInfo?.nickname;
   const userProfile: string | undefined = userInfo?.profile;
+  //const currentUser = useAppSelector((state) => state.user);
 
   //api호출을 통해 게시글 정보를 받아옴
   const title: string = post.title;
-  const like: number = post.scrapingCount;
+  const [like, setLike] = useState(post.scrapingCount);
+  const [validLike, setValidLike] = useState(scrapped);
   const content: string = post.preview.text;
   const comment: number = 10;
   const picture: string = post.preview.img; //미리보기 사진
   const postId: string = post._id;
 
-  const utcDate = new Date(post.createdAt);
   const koreaDate = new Date(post.createdAt);
 
   const date = koreaDate.toLocaleString("ko-KR", {
@@ -80,12 +82,37 @@ export default function Post({ id, post }: User) {
     second: "2-digit",
   });
 
-  const [validHeart, setValidHeart] = useState(false);
+  useEffect(() => {
+    setValidLike(scrapped);
+  }, [scrapped]);
 
-  function handleLike() {
-    setValidHeart(() => !validHeart);
-    // 좋아요 보내는 로직
-  }
+  // 스크랩 하기 핸들러
+  const handleLike = () => {
+    postService
+      .scrapPost(postId)
+      .then((result) => {
+        console.log("스크랩 하기", result);
+        setValidLike(true);
+        setLike(like + 1);
+      })
+      .catch((err) => {
+        console.log("스크랩 하기 error: ", err);
+      });
+  };
+
+  // 스크랩 취소 핸들러
+  const handleDeleteLike = () => {
+    postService
+      .deleteScrapPost(postId)
+      .then((result) => {
+        console.log("스크랩 취소", result);
+        setValidLike(false);
+        setLike(like - 1);
+      })
+      .catch((err) => {
+        console.error("스크랩 취소 error: ", err);
+      });
+  };
 
   return (
     <div className="w-full p-[2rem] hover:bg-gray-100 hover:rounded-lg">
@@ -143,11 +170,15 @@ export default function Post({ id, post }: User) {
 
       <div className="text-base text-gray-500 flex items-center gap-[1.5rem] mt-[1rem]">
         <div className="flex items-center gap-[0.5rem] ">
-          <div onClick={() => handleLike()} className="cursor-pointer">
-            {validHeart ? (
-              <FaBookmark size={20} color="black" />
+          <div>
+            {validLike ? (
+              <div onClick={handleDeleteLike} className="cursor-pointer">
+                <FaBookmark size={20} color="black" />{" "}
+              </div>
             ) : (
-              <FaRegBookmark size={20} />
+              <div onClick={handleLike} className="cursor-pointer">
+                <FaRegBookmark size={20} />
+              </div>
             )}
           </div>
           <p>{like}</p>
