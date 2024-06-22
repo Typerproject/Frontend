@@ -6,6 +6,7 @@ import Post from "../../components/Post/Post";
 import userAPI, { IFollowerInfo, IUserInfo } from "../../api/userAPI";
 import { setUser } from "../../store/reducers/user";
 import { useAppDispatch } from "../../store";
+import Modal from "./component/Modal";
 
 type State = "follower" | "following" | false;
 
@@ -295,6 +296,7 @@ export default function MyPage() {
           <hr
             style={{ width: "82%", borderWidth: "2px", color: "#404040" }}
           ></hr>
+
           <div className="w-3/4">
             {/*가져온 글 목록을 map돌면서 출력*/}
             {previewPost.map((post: Preview) => (
@@ -398,22 +400,6 @@ export default function MyPage() {
                       >
                         {followerInfo?.followerCount} followers
                       </span>
-
-                      {follow === "follower" && (
-                        <div className="mmd:hidden absolute top-full px-2 py-2 w-48 bg-white border border-gray-300 rounded shadow-lg">
-                          <ul className="space-y-4">
-                            {followerInfo?.followerUsers.map((user) => (
-                              <FollowList
-                                _id={user._id}
-                                nickname={user.nickname}
-                                profile={user.profile}
-                                which={follow}
-                                setRefreshKey={setRefreshKey}
-                              />
-                            ))}
-                          </ul>
-                        </div>
-                      )}
                     </div>
 
                     <div className="relative">
@@ -427,22 +413,6 @@ export default function MyPage() {
                       >
                         {followerInfo?.followingCount} following
                       </span>
-
-                      {follow === "following" && (
-                        <div className="mmd:hidden absolute top-full px-2 py-2 w-48 bg-white border border-gray-300 rounded shadow-lg">
-                          <ul className="space-y-4">
-                            {followerInfo?.followingUsers.map((user) => (
-                              <FollowList
-                                _id={user._id}
-                                nickname={user.nickname}
-                                profile={user.profile}
-                                which={follow}
-                                setRefreshKey={setRefreshKey}
-                              />
-                            ))}
-                          </ul>
-                        </div>
-                      )}
                     </div>
                   </div>
                 )}
@@ -485,6 +455,14 @@ export default function MyPage() {
                     ))}
                   </ul>
                 </div>
+                <div>
+                  <Modal
+                    followList={followerInfo?.followerUsers}
+                    which={follow}
+                    setRefreshKey={setRefreshKey}
+                    handleClose={handleFollowerBtn}
+                  />
+                </div>
               </div>
             )}
             {follow === "following" && (
@@ -502,6 +480,14 @@ export default function MyPage() {
                       />
                     ))}
                   </ul>
+                </div>
+                <div>
+                  <Modal
+                    followList={followerInfo?.followingUsers}
+                    which={follow}
+                    setRefreshKey={setRefreshKey}
+                    handleClose={handleFollowingBtn}
+                  />
                 </div>
               </div>
             )}
