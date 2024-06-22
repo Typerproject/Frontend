@@ -88,8 +88,8 @@ export default function Post({ id, post }: User) {
   }
 
   return (
-    <div className="w-full p-[2rem]">
-      <div>
+    <div className="w-full p-[2rem] hover:bg-gray-100 hover:rounded-lg">
+      <div onClick={() => navigate(`/post/${postId}`)}>
         <div className="flex cursor-pointer">
           {/* 미리보기 왼쪽*/}
           <div className="flex-grow-[3] basis-3/4 w-full mr-10">
@@ -111,7 +111,7 @@ export default function Post({ id, post }: User) {
                 </div>
               </div>
               <div>
-                <div onClick={() => navigate(`/post/${postId}`)}>
+                <div>
                   <div className="text-3xl font-semibold mt-[1.2rem] max-w-[400px] overflow-hidden text-ellipsis whitespace-nowrap">
                     {title}
                   </div>

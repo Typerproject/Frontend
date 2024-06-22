@@ -304,7 +304,7 @@ export default function MyPage() {
                 <Post id={id} post={post} />
                 <hr
                   style={{
-                    width: "105%",
+                    width: "100%",
                     borderWidth: "2px",
                     color: "#ababab",
                   }}
