@@ -294,7 +294,7 @@ export default function MyPage() {
             {userInfo?.nickname}'s Typer
           </p>
           <hr
-            style={{ width: "82%", borderWidth: "2px", color: "#404040" }}
+            style={{ width: "82%", borderWidth: "2px", color: "#080808" }}
           ></hr>
 
           <div className="w-3/4">
@@ -323,7 +323,7 @@ export default function MyPage() {
         >
           {/* place-items-center */}
           <div className="mmd:flex-col">
-            <div className="flex pt-[2rem] pb-[3rem] mmd:py-[1rem] gap-[2rem] mmd:flex-col mmd:gap-[1rem]">
+            <div className="flex pt-[2rem] pb-[3rem] mmd:py-[1rem] gap-[3.5rem] mmd:flex-col mmd:gap-[1rem]">
               <img
                 className="size-32 mmd:size-24 rounded-full"
                 src={userInfo?.profile}

@@ -30,10 +30,13 @@ export default function MyModal({
     <Modal
       isOpen={open}
       onRequestClose={() => (setOpen(false), handleClose())}
-      className="md:hidden fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75"
-      overlayClassName="mmd:hidden fixed inset-0 bg-black bg-opacity-50"
+      className="absolute top-1/2 left-1/2 w-90 h-45 z-150 transform -translate-x-1/2 -translate-y-1/2 
+      bg-white rounded-xl shadow-md flex justify-center overflow-auto
+      py-[1rem] px-[1.5rem]"
+      overlayClassName="mmd:hidden bg-black bg-opacity-50 fixed w-full h-screen top-0 left-0 z-10 inset-0"
     >
       <div>
+        <div>{which}</div>
         <ul className="space-y-4">
           {followList.map((user) => (
             <FollowList
@@ -47,7 +50,7 @@ export default function MyModal({
         </ul>
         <button
           onClick={() => (setOpen(false), handleClose())}
-          className="mt-4 p-2 bg-black text-white rounded"
+          className="mt-4 text-xs border-[1px] bg-gray-900 text-gray-50 rounded-full border-black text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-black duration-300"
         >
           Close
         </button>
