@@ -1,7 +1,8 @@
 import { useRef, useState } from "react";
 import editorAPI from "../../../../../api/editorAPI";
+import ChooseReportPage from "./ChooseReportPage";
 
-interface corpCode {
+export interface corpCode {
   _id: string;
   corpName: string;
   corpCode: string;
@@ -9,18 +10,34 @@ interface corpCode {
 
 const service = new editorAPI(import.meta.env.VITE_SERVER_EDITOR_API_URI);
 
-export default function DisclosureModal() {
+interface DisclosureModalProps {
+  onExitFirst: () => void;
+  setData: (data: any) => void;
+}
+
+export default function DisclosureModal({
+  onExitFirst,
+  setData,
+}: DisclosureModalProps) {
   const searchResult = useRef<corpCode[]>([]);
   const [searchName, setSearchName] = useState<string>("");
   const [list, setList] = useState<corpCode[]>([]);
   const [page, setPage] = useState<number>(2);
   const [isMore, setMore] = useState<boolean>(false);
   const [show, setShow] = useState<boolean>(true);
+  const [targetCorp, setTargetCorp] = useState<corpCode | null>(null);
 
   const nameChange = async () => {
     searchResult.current.length = 0;
     setPage(2);
     const res = await service.getCorpCode(searchName, 1);
+
+    if (res.result.length === 0) {
+      alert("검색된 기업이 없습니다.");
+      setList([]);
+      return;
+    }
+
     searchResult.current.push(...res.result);
     setList([...searchResult.current]);
     if (page < res.totalPages) {
@@ -41,13 +58,20 @@ export default function DisclosureModal() {
       setMore(false);
     }
   };
-  const handleClose = () => setShow(false);
+
+  const handleClose = () => {
+    setShow(false);
+    onExitFirst();
+  };
 
   return (
     <>
-      {show && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 min-h-[1vh]">
-          <div className="fixed inset-0 bg-black opacity-50"></div>
+      {show && !targetCorp && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 min-h-[70vh]">
+          <div
+            className="fixed inset-0 bg-black opacity-50"
+            onClick={() => handleClose()}
+          ></div>
           <div className="bg-white rounded-lg shadow-lg overflow-hidden w-full max-w-md mx-2 z-10">
             <div className="flex justify-between items-center p-4 border-b border-gray-200">
               <h2 className="text-lg font-medium">공시를 조회할 기업 선택</h2>
@@ -102,9 +126,25 @@ export default function DisclosureModal() {
               </div>
             </div>
 
-            <div className="min-h-[50vw] max-h-[40vw] overflow-y-scroll m-3">
+            <div className="min-h-[51vh] max-h-[51vh] overflow-y-scroll m-3">
+              <div className="flex justify-between px-2 mx-3 font-bold">
+                <p>종목명</p>
+                <p>종목코드</p>
+              </div>
+
               {list.map((ele, idx) => {
-                return <div key={idx}>{ele.corpName + " " + ele.corpCode}</div>;
+                return (
+                  <div
+                    key={idx}
+                    className="flex justify-between px-2 py-2 mx-3 my-1 border border-solid border-gray-500 hover:bg-gray-300"
+                    onClick={() => {
+                      setTargetCorp(ele);
+                    }}
+                  >
+                    <p>{ele.corpName}</p>
+                    <p>{ele.corpCode}</p>
+                  </div>
+                );
               })}
             </div>
             {isMore && (
@@ -112,21 +152,20 @@ export default function DisclosureModal() {
                 onClick={() => {
                   searchMore();
                 }}
+                className="flex py-2 justify-center hover:bg-gray-300"
               >
-                데이터가 더 있음
+                <p>더 불러오기</p>
               </div>
             )}
-
-            {/* <div className="flex justify-end p-4 border-t border-gray-200">
-            <button className="bg-gray-500 text-white px-4 py-2 rounded mr-2">
-              닫기
-            </button>
-            <button className="bg-blue-500 text-white px-4 py-2 rounded">
-              차트 그리기
-            </button>
-          </div> */}
           </div>
         </div>
+      )}
+      {targetCorp && (
+        <ChooseReportPage
+          targetCorp={targetCorp}
+          onExit={onExitFirst}
+          setData={setData}
+        />
       )}
     </>
   );

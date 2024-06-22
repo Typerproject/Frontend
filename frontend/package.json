@@ -20,6 +20,7 @@
     "axios": "^1.7.2",
     "bootstrap": "^5.3.3",
     "express": "^4.19.2",
+    "html-react-parser": "^5.1.10",
     "http-proxy": "^1.18.1",
     "http-proxy-middleware": "^3.0.0",
     "pdfjs": "^2.5.3",

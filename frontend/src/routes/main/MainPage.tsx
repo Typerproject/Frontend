@@ -1,124 +1,163 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { useState, useEffect, useRef } from "react";
 import Navigator from "../../components/Navbar/Navbar";
 import postAPI, { IPostListForMain, IPost } from "../../api/postDetailAPI";
 import MainPost from "./component/Post";
+import { useAppSelector } from "../../store";
+import PostLoading from "./component/PostLoading";
+import { IoMdArrowDropup } from "react-icons/io";
 
 const postService = new postAPI(import.meta.env.VITE_SERVER_POST_API_URI);
 
 const MyComponent = () => {
-  const [issue, setIssue] = useState<Array<Array<string>>>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [activeButton, setActiveButton] = useState("HOT");
+  const [activeButton, setActiveButton] = useState("Hot");
   const [page, setPage] = useState(1);
-  const [postList, setPostList] = useState<IPostListForMain | null>(null);
+  const [postList, setPostList] = useState<IPostListForMain>({ posts: [] });
 
-  const handleClick = (buttonName: any) => {
-    setActiveButton(buttonName);
-    setPage(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isEndOfPage, setIsEndOfPage] = useState(false);
+
+  const currentUser = useAppSelector((state) => state.user);
+
+  const mainPostContainerRef = useRef<HTMLDivElement | null>(null);
+  const prevScrollY = useRef(0);
+
+  const handleClick = (buttonName: string) => {
+    if (activeButton !== buttonName) {
+      // 현재 버튼이 클릭된 버튼과 같지 않을 때만 페이지 초기화
+      setActiveButton(buttonName);
+      setPage(1);
+      setIsEndOfPage(false);
+      setIsLoading(true);
+    }
+  };
+
+  const handleScroll = () => {
+    const { current } = mainPostContainerRef;
+    if (
+      current &&
+      current.scrollTop + current.clientHeight >= current.scrollHeight - 50 &&
+      !isLoading &&
+      !isEndOfPage // 스크롤이 맨 밑으로 내렸을 때만 처리
+      // current.scrollTop > prevScrollY.current // 스크롤이 맨 밑으로 내렸을 때만 처리
+    ) {
+      setIsLoading(true);
+      setPage((prevPage) => prevPage + 1);
+    }
+    prevScrollY.current = current ? current.scrollTop : 0; // 현재 스크롤 위치
   };
 
   useEffect(() => {
-    const hi = async () => {
-      try {
-        const response = await axios.get(
-          import.meta.env.VITE_SERVER_SHINHAN_API_URI
-        );
-        setIssue(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    hi();
+    const { current } = mainPostContainerRef;
+    if (current) {
+      current.addEventListener("scroll", handleScroll);
+      return () => {
+        current.removeEventListener("scroll", handleScroll);
+      };
+    }
   }, []);
 
   useEffect(() => {
-    if (issue.length > 0) {
-      const interval = setInterval(() => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % issue.length);
-      }, 5000); // 3초 간격
-
-      return () => clearInterval(interval); // 컴포넌트 언마운트 시 인터벌 정리
+    if (page === 1) {
+      // 첫 페이지 로드 시 초기화
+      setPostList({ posts: [] });
+      setIsEndOfPage(false);
     }
-  }, [issue]);
 
-  useEffect(() => {
     postService
       .getPostListForMain(page, activeButton.toLowerCase())
       .then((data) => {
         console.log("메인 페이지 포스트 데이터 잘 가져와 지나??", data);
-        setPostList(data);
+        setPostList((prevPostList) => ({
+          ...prevPostList,
+          posts:
+            page === 1 ? data.posts : [...prevPostList.posts, ...data.posts],
+        }));
+
+        setIsLoading(false);
+
+        if (data.posts.length === 0) {
+          setIsEndOfPage(true);
+        }
       })
       .catch((err) => {
         console.error(err);
       });
   }, [page, activeButton]);
 
+  // 스크롤 맨 위로 올리는 함수
+  const scrollToTop = () => {
+    if (mainPostContainerRef.current) {
+      mainPostContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    window.scrollTo({ top: 0, behavior: "smooth" }); // 페이지의 스크롤도 맨 위로 이동
+  };
+
   return (
-    <div>
+    <div className="bg-gray-100">
       <Navigator />
-      <div className="flex justify-center items-center mt-20">
-        <div className="flex border rounded-md p-4">
-          {issue.length > 0 && (
-            <div
-              key={currentIndex}
-              className="flex flex-col justify-center w-120 h-12"
-            >
-              <div className="text-center font-bold">
-                {issue[currentIndex][0]}
-              </div>
-              <div className="text-center">{issue[currentIndex][1]}</div>
-              <div className="text-center">{issue[currentIndex][2]}</div>
-            </div>
-          )}
-          <div
-            className="absolute bottom-2 right-2 text-xs font-bold"
-            style={{ position: "fixed", bottom: "1rem", right: "1rem" }}
+
+      <div className="mt-[45px] flex flex-col">
+        <div className="flex flex-row x-[276px] h-[55px] mt-14 pl-[88px] ">
+          <button
+            onClick={() => handleClick("Hot")}
+            className={`w-[72px] text-[23px] border-b-4 ${
+              activeButton === "Hot" ? `border-gray-900` : `text-gray-400`
+            }`}
           >
-            ◎ POWER BY SHINHAN SECURITIS API
-          </div>
+            Hot
+          </button>
+          <button
+            onClick={() => handleClick("New")}
+            className={`w-[80px] text-[23px] border-b-4 ${
+              activeButton === "New" ? `border-gray-900` : `text-gray-400`
+            }`}
+          >
+            New
+          </button>
+          <button
+            onClick={() => handleClick("Follow")}
+            className={`w-[102px] text-[23px] border-b-4 ${
+              activeButton === "Follow" ? `border-gray-900` : `text-gray-400`
+            }`}
+          >
+            Follow
+          </button>
         </div>
-      </div>
 
-      <div className="flex ml-10 gap-5">
-        <button
-          className={`relative px-3 py-2 ${
-            activeButton === "HOT"
-              ? 'font-bold after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-full after:h-1 after:bg-black'
-              : ""
-          }`}
-          onClick={() => handleClick("HOT")}
-        >
-          🔥HOT
-        </button>
-        <button
-          className={`relative px-3 py-2 ${
-            activeButton === "NEW"
-              ? 'font-bold after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-full after:h-1 after:bg-black'
-              : ""
-          }`}
-          onClick={() => handleClick("NEW")}
-        >
-          🎉NEW
-        </button>
-        <button
-          className={`relative px-3 py-2 ${
-            activeButton === "FOllOW"
-              ? 'font-bold after:content-[""] after:absolute after:left-0 after:bottom-0 after:w-full after:h-1 after:bg-black'
-              : ""
-          }`}
-          onClick={() => handleClick("FOllOW")}
-        >
-          ❤️FOLLOW
-        </button>
-      </div>
+        <div className="px-[100px] my-10">
+          <div
+            className="min-h-[500px] max-h-[800px] overflow-y-auto"
+            ref={mainPostContainerRef}
+            style={{
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+            }}
+          >
+            {!postList || (postList.posts.length === 0 && isLoading) ? (
+              <div>
+                <PostLoading />
+                <PostLoading />
+                <PostLoading />
+              </div>
+            ) : postList.posts.length === 0 ? (
+              <div>No content</div>
+            ) : (
+              postList.posts.map((post: IPost) => <MainPost post={post} />)
+            )}
+          </div>
+          {/* 스크롤 맨 위로 올려주는 버튼 */}
+          <div className="flex justify-end w-full">
+            <button
+              onClick={scrollToTop}
+              className="flex mt-4 bg-gray-900 text-gray-100 rounded-md hover:bg-gray-100 hover:text-gray-900 border-[1px] border-black duration-100"
+            >
+              <IoMdArrowDropup size={30} />
+            </button>
+          </div>
 
-      <div className="mt-10">
-        {!postList || postList.posts.length === 0 ? (
-          <div>no content</div>
-        ) : (
-          postList.posts.map((post: IPost) => <MainPost post={post} />)
-        )}
+          {/* 로딩 화면을 보여 주기 */}
+          {isEndOfPage ? <p>다 보여줬으니까 그만 내려;;</p> : <p>어쭈?</p>}
+        </div>
       </div>
     </div>
   );
