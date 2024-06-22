@@ -285,6 +285,21 @@ export default function MyPage() {
       });
   };
 
+  //프로필 효과
+  const [flipped, setFlipped] = useState(false);
+
+  const handleFlipped = () => {
+    setFlipped(false);
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setFlipped(true);
+    }, 1000); // 페이지가 로드된 후 1초 뒤에 애니메이션 시작
+
+    return () => clearTimeout(timer);
+  }, [flipped]);
+
   return (
     <div className="mt-[7rem]">
       <div className="mmd:grid mmd:grid-cols-4 flex flex-col">
@@ -321,13 +336,22 @@ export default function MyPage() {
           }}
           className="mmd:fixed grid place-items-center mmd:order-last mmd:col-span-1 mmd:place-items-start"
         >
-          {/* place-items-center */}
           <div className="mmd:flex-col">
             <div className="flex pt-[2rem] pb-[3rem] mmd:py-[1rem] gap-[3.5rem] mmd:flex-col mmd:gap-[1rem]">
-              <img
-                className="size-32 mmd:size-24 rounded-full"
-                src={userInfo?.profile}
-              />
+              <div
+                onMouseOver={handleFlipped}
+                className={`mmd:w-[96px] ${
+                  flipped
+                    ? "animate-flip-back-front"
+                    : "animate-flip-front-back"
+                }`}
+              >
+                <img
+                  className="size-32 mmd:size-24 rounded-full"
+                  src={userInfo?.profile}
+                />
+              </div>
+
               <div className="content-center">
                 <div className="flex gap-[1rem] items-center">
                   {/* 닉네임 */}
