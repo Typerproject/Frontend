@@ -26,17 +26,17 @@ export default function MainPost({ post }: MainPostProps) {
       ? post.preview.text.slice(0, 100) + "..."
       : post.preview.text;
 
-  //   const utcDate = new Date(post.createdAt);
+  const koreaDate = new Date(post.createdAt);
   //   const koreaDate = new Date(utcDate.getTime() + 9 * 60 * 60 * 1000);
 
-  //   const formattedTime = koreaDate.toLocaleString("ko-KR", {
-  //     year: "numeric",
-  //     month: "2-digit",
-  //     day: "2-digit",
-  //     hour: "2-digit",
-  //     minute: "2-digit",
-  //     second: "2-digit",
-  //   });
+  const formattedTime = koreaDate.toLocaleString("ko-KR", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
 
   // 스크랩 하기 핸들러
   const handleScraping = () => {
@@ -86,9 +86,7 @@ export default function MainPost({ post }: MainPostProps) {
                 {post.writer.name}
               </p>
 
-              <p className="text-[13px] mr-20 text-gray-400">
-                {post.createdAt}
-              </p>
+              <p className="text-[13px] mr-20 text-gray-400">{formattedTime}</p>
             </div>
           </div>
           <p

@@ -69,7 +69,7 @@ export default function Post({ id, post }: User) {
   const postId: string = post._id;
 
   const utcDate = new Date(post.createdAt);
-  const koreaDate = new Date(utcDate.getTime() + 9 * 60 * 60 * 1000);
+  const koreaDate = new Date(post.createdAt);
 
   const date = koreaDate.toLocaleString("ko-KR", {
     year: "numeric",
