@@ -19,16 +19,21 @@ export default function PostDetail() {
 
   //post정보 fetch
   const [postDetail, setPostDetail] = useState<IPostDetail>({} as IPostDetail);
+  const [scrap, setScrap] = useState<boolean>(false);
+  const [isWriter, setIsWriter] = useState<boolean>(false);
+  const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const { id } = useParams<{ id: string }>() as { id: string };
   useEffect(() => {
     const fetchPostData = async (): Promise<void> => {
-      const postDetailData = await service.getPost(id)
-      .then((res: IPostDetail) => {
-        console.log(res);
-        setPostDetail(res);
-        setIsWriter(userId === res.writer.writerId);
-        return res;
-      });
+      const postDetailData = await service
+        .getPost(id)
+        .then((res: IPostDetail) => {
+          console.log(res);
+          setPostDetail(res);
+          setIsWriter(userId === res.writer.writerId);
+          setScrap(res.isScrapped);
+          return res;
+        });
 
       // writer가 팔로우 리스트에 있는지 확인
       if (userId) {
@@ -40,17 +45,15 @@ export default function PostDetail() {
         followingList.forEach((user: IDifferentUser) => {
           if (user._id === postDetailData.writer.writerId) flag = true;
         });
+        //follow 여부 state에 저장
 
         setIsFollowing(flag);
       }
     };
     fetchPostData();
-  }, [id]);
+  }, [id, userId]);
 
   // 팔로우 로직
-  const [isWriter, setIsWriter] = useState<boolean>(false);
-  const [isFollowing, setIsFollowing] = useState<boolean>(false);
-
   async function handleFollowClick() {
     const result = await userService.followingUser(postDetail.writer.writerId);
 
@@ -73,26 +76,6 @@ export default function PostDetail() {
     }
     console.log("unfollow..", result);
   }
-
-  useEffect(() => {
-    //follow 여부 state에 저장
-    const checkFollow = async (): Promise<void> => {
-      if (userId) {
-        const followingList = await userService
-          .getFollowingAndFollowerData(userId)
-          .then((data: IFollowerInfo) => data.followingUsers);
-
-        let flag = false;
-        followingList.forEach((user: IDifferentUser) => {
-          if (user._id === postDetail.writer.writerId) flag = true;
-        });
-        console.log("flag", flag);
-
-        setIsFollowing(flag);
-      }
-    };
-    checkFollow();
-  }, []);
 
   //progress, opacity 등 동적으로 바뀌는 스타일
   const [opacity, setOpacity] = useState<number>(1);
@@ -179,7 +162,11 @@ export default function PostDetail() {
         id="mainPost"
         className="bg-white mt-[2rem] mmd:px-[18rem] px-[2rem] mt-[70vh] z-[10] relative pb-[50vh]"
       >
-        <PostContent />
+        <PostContent
+          scrap={scrap}
+          setScrap={setScrap}
+          outputData={postDetail.content}
+        />
         {postDetail.writer && (
           <div
             id="mainBottom"

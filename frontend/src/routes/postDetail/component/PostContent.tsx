@@ -1,8 +1,7 @@
 import { IoBookmarkOutline, IoBookmark } from "react-icons/io5";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import ViewEditor from "./ViewEditor";
 import postAPI, {
-  IPostDetail,
   IpostScrap,
 } from "../../../api/postDetailAPI";
 import { useParams } from "react-router-dom";
@@ -11,18 +10,17 @@ import CommentList from "./CommentList";
 import { FaRegComment } from "react-icons/fa";
 
 const service = new postAPI(import.meta.env.VITE_SERVER_POST_API_URI);
-export default function PostContent() {
-  const [outputData, setOutputData] = useState<OutputData>();
-  const [scrap, setScrap] = useState<boolean>(false);
+
+type Props = {
+  scrap: boolean,
+  outputData: OutputData,
+  setScrap: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export default function PostContent({scrap, setScrap, outputData} : Props) {
   const [vaildComment, setValidComment] = useState<boolean>(false);
 
   const { id } = useParams<{ id: string }>() as { id: string };
-  useEffect(() => {
-    service.getPost(id).then((res: IPostDetail) => {
-      console.log(res);
-      setOutputData(res.content);
-    });
-  }, [id]);
 
   async function handleLike() {
     if (scrap) {
@@ -30,6 +28,7 @@ export default function PostContent() {
         .deleteScrapPost(id)
         .then((res: IpostScrap) => {
           console.log(res);
+          alert("스크랩 삭제 성공")
           setScrap(false);
         })
         .catch((e) => {
@@ -41,6 +40,7 @@ export default function PostContent() {
         .scrapPost(id)
         .then((res: IpostScrap) => {
           console.log(res);
+          alert("스크랩 성공")
           setScrap(true);
         })
         .catch((e) => {
