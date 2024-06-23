@@ -10,6 +10,7 @@ export interface IPostDetail {
   public: boolean;
   writer: IPostWriter;
   writedAt: Date;
+  isScrapped: boolean;
 }
 export interface IPostWriter {
   writerId: string;
