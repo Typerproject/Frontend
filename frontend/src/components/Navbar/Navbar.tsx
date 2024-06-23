@@ -1,10 +1,8 @@
-// import React from 'react'
-import { NavLink,useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { IoMdSearch } from "react-icons/io";
 import { useAppSelector, useAppDispatch } from "../../store";
-// import defaultLogo from "../../assets/default_profile.svg";
 import { BsPersonCircle } from "react-icons/bs";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { logoutUser } from "../../store/reducers/user";
 import userAPI from "../../api/userAPI";
 import LoginModal from "../login/LoginModal";
@@ -17,11 +15,12 @@ export default function Navbar() {
   const navigate = useNavigate();
 
   const [menuOpen, setMenuOpen] = useState(false);
-  const [searchtext,setSearchText]=useState('');
+  const [searchtext, setSearchText] = useState("");
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const handleToggleMenu = () => {
-    setMenuOpen(!menuOpen);
+    setMenuOpen((prev) => !prev);
   };
 
   const handleLoginClick = () => {
@@ -39,19 +38,33 @@ export default function Navbar() {
       dispatch(logoutUser());
     });
   };
+
   const handleSearchClick = () => {
     navigate(`/search?text=${searchtext}`);
   };
 
-  const handleKeyDown=(e:any)=>{
-    if (e.key=='Enter'){
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
       handleSearchClick();
     }
-  }
+  };
 
-  
+  const handleClickOutside = (event: MouseEvent) => {
+    if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      // Clicked outside of menu area
+      setMenuOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   console.log(userInfo);
+
   return (
     <nav className="bg-black fixed w-full h-fit py-[0.75em] px-[1.5rem] top-0 flex justify-between z-[100]">
       <div className="flex gap-[2rem] items-center">
@@ -61,8 +74,15 @@ export default function Navbar() {
           </p>
         </NavLink>
         <div className="relative hidden md:inline-block">
-          <IoMdSearch className="absolute top-[25%] left-[10px]" onClick={handleSearchClick} />
-          <input className="h-[30px] rounded-full pl-[30px] pr-[10px] py-[5px] bg-white" onChange={(e)=>setSearchText(e.target.value)} onKeyDown={handleKeyDown}/>
+          <IoMdSearch
+            className="absolute top-[25%] left-[10px]"
+            onClick={handleSearchClick}
+          />
+          <input
+            className="h-[30px] rounded-full pl-[30px] pr-[10px] py-[5px] bg-white"
+            onChange={(e) => setSearchText(e.target.value)}
+            onKeyDown={handleKeyDown}
+          />
         </div>
       </div>
       <div className="flex gap-[1rem] items-center">
@@ -93,7 +113,10 @@ export default function Navbar() {
             <BsPersonCircle size={40} color="gray" />
           )}
           {menuOpen && (
-            <div className="absolute right-0 mt-2 w-36 bg-white rounded-md shadow-lg z-10">
+            <div
+              ref={menuRef}
+              className="absolute right-0 mt-2 w-36 bg-white rounded-md shadow-lg z-10"
+            >
               <ul className="py-2">
                 <li className="px-4 py-2 hover:bg-gray-100">
                   <NavLink

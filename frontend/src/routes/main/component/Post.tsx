@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import userAPI from "../../../api/userAPI";
 import postAPI, { IPost } from "../../../api/postDetailAPI";
-import { IoBookmarkOutline, IoBookmark } from "react-icons/io5";
-import { FaRegComment } from "react-icons/fa";
+import { FaRegComment, FaRegBookmark } from "react-icons/fa";
+import { FaBookmark } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 
 const useService = new userAPI(import.meta.env.VITE_BASE_URI);
@@ -20,6 +20,23 @@ export default function MainPost({ post }: MainPostProps) {
   const [isScraped, setIsScraped] = useState(post.isScrapped);
 
   const navigate = useNavigate();
+
+  const truncateText =
+    post.preview.text.length > 100
+      ? post.preview.text.slice(0, 100) + "..."
+      : post.preview.text;
+
+  //   const utcDate = new Date(post.createdAt);
+  //   const koreaDate = new Date(utcDate.getTime() + 9 * 60 * 60 * 1000);
+
+  //   const formattedTime = koreaDate.toLocaleString("ko-KR", {
+  //     year: "numeric",
+  //     month: "2-digit",
+  //     day: "2-digit",
+  //     hour: "2-digit",
+  //     minute: "2-digit",
+  //     second: "2-digit",
+  //   });
 
   // 스크랩 하기 핸들러
   const handleScraping = () => {
@@ -50,68 +67,84 @@ export default function MainPost({ post }: MainPostProps) {
   };
 
   return (
-    <div className="w-full p-[2rem]">
-      <div>
-        <div className="flex cursor-pointer">
-          {/* 미리보기 왼쪽 */}
-          <div className="flex-grow-[3] basis-3/4 w-full">
-            {/*글 정보*/}
-            <div className="flex items-center gap-[15rem]">
-              {/*유저 이름과 사진*/}
-              <div
-                onClick={() => navigate(`/my/{id}`)}
-                className="flex gap-[0.5rem] items-center"
+    <>
+      <div className="flex flex-row justify-between h-[180px] mb-4">
+        {/* 텍스트 */}
+        <div className="flex-1 h-[180px] flex flex-col gap-[10px] justify-between">
+          <div className="flex flex-row w-full h-[46px] justify-between">
+            <img
+              onClick={() => navigate(`/my/${post.writer.id}`)}
+              className="w-[46px] h-[46px] rounded-full cursor-pointer"
+              src={post.writer.img}
+            />
+
+            <div className="flex flex-row justify-between items-center flex-1 ml-4">
+              <p
+                onClick={() => navigate(`/my/${post.writer.id}`)}
+                className="cursor-pointer inline-block text-[16px] mr-12"
               >
-                <img className="w-[40px] rounded-full" src={post.writer.img} />
-                <p className="text-sm">{post.writer.name}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-400">{post.createdAt}</p>
-              </div>
+                {post.writer.name}
+              </p>
+
+              <p className="text-[13px] mr-20 text-gray-400">
+                {post.createdAt}
+              </p>
             </div>
-            <div>
-              <div onClick={() => navigate(`/post/{postId}`)}>
-                <div className="text-4xl mt-[1rem] max-w-[300px] overflow-hidden text-ellipsis whitespace-nowrap">
-                  {post.title}
+          </div>
+          <p
+            onClick={() => navigate(`/post/${post._id}`)}
+            className="text-[24px] cursor-pointer"
+          >
+            {post.title}
+          </p>
+          <p
+            onClick={() => navigate(`/post/${post._id}`)}
+            className="text-[14px] cursor-pointer"
+            style={{ color: "#595959" }}
+          >
+            {truncateText}
+          </p>
+
+          <div className="flex items-center gap-[1.5rem]">
+            <div className="flex items-center gap-[0.5rem]">
+              {isScraped ? (
+                <div
+                  onClick={handleDeleteScraping}
+                  className="mt-[1px] cursor-pointer"
+                >
+                  <FaBookmark size={16} />
                 </div>
-                <div className="text-base py-[2rem] text-gray-500">
-                  {post.preview.text}
+              ) : (
+                <div
+                  onClick={handleScraping}
+                  className="mt-[1px] cursor-pointer"
+                >
+                  <FaRegBookmark size={16} />
                 </div>
-              </div>
+              )}
+              <p>{scrapCount}</p>
+            </div>
+
+            <div
+              onClick={() => navigate(`/post/${post._id}`)}
+              className="flex items-center gap-[0.5rem] cursor-pointer"
+            >
+              <FaRegComment size={16} />
+              {/* 코멘트 '개수'가 있다고 생각! */}
+              <p>1억</p>
             </div>
           </div>
         </div>
 
-        {/* 미리보기 오른쪽 */}
-        <div className="flex-grow basis-1/4">
-          <div className="flex">
-            {/*게시글 이미지*/}
-            <div className="flex-none">
-              <img className="w-[200px] rounded" src={post.preview.img} />
-            </div>
-          </div>
+        {/* 이미지 */}
+        <div
+          onClick={() => navigate(`/post/${post._id}`)}
+          className="flex h-[180px] items-center ml-4 cursor-pointer"
+        >
+          <img className="h-[180px] object-contain" src={post.preview.img} />
         </div>
       </div>
-
-      <div className="text-base flex items-center gap-[1.5rem]">
-        <div className="flex items-center gap-[0.5rem] ">
-          {isScraped ? (
-            <div onClick={handleDeleteScraping} className="cursor-pointer">
-              <IoBookmark size={20} />
-            </div>
-          ) : (
-            <div onClick={handleScraping} className="cursor-pointer">
-              <IoBookmarkOutline size={20} />
-            </div>
-          )}
-          <p>{scrapCount}</p>
-        </div>
-        <div className="flex items-center gap-[0.5rem] ">
-          <FaRegComment size={20} />
-          {/* 코멘트 '개수'가 있다고 생각! */}
-          <p>1억</p>
-        </div>
-      </div>
-    </div>
+      <div className="w-full h-[2px] bg-gray-200 mb-4" />
+    </>
   );
 }
