@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useAppSelector } from "../../store";
 import FollowList from "./component/FollowList";
@@ -7,6 +7,7 @@ import userAPI, { IFollowerInfo, IUserInfo } from "../../api/userAPI";
 import { setUser } from "../../store/reducers/user";
 import { useAppDispatch } from "../../store";
 import Modal from "./component/Modal";
+import { IoMdArrowDropup } from "react-icons/io";
 
 type State = "follower" | "following" | false;
 
@@ -32,6 +33,12 @@ export default function MyPage() {
   const [cuserInfo, setCuserInfo] = useState<IUserInfo | null>(null);
   const currentUser = useAppSelector((state) => state.user);
   const currentUserId = useAppSelector((state) => state.user._id);
+
+  const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isEndOfPage, setIsEndOfPage] = useState(false);
+  const mainPostContainerRef = useRef<HTMLDivElement | null>(null);
+  const prevScrollY = useRef(0);
 
   useEffect(() => {
     if (currentUserId) {
@@ -72,6 +79,12 @@ export default function MyPage() {
   }, [userInfo?.scrappedPost, cuserInfo?.scrappedPost]);
 
   useEffect(() => {
+    if (page === 1) {
+      // 첫 페이지 로드 시 초기화
+      setPreviewPost([]);
+      setIsEndOfPage(false);
+    }
+
     if (userInfo?.writerdPost) {
       const tempPost: any = userInfo?.writerdPost.map((ele: Preview) => {
         return {
@@ -336,6 +349,41 @@ export default function MyPage() {
     return () => clearTimeout(timer);
   }, [flipped]);
 
+  //무한 스크롤
+
+  const handleScroll = () => {
+    const { current } = mainPostContainerRef;
+    if (
+      current &&
+      current.scrollTop + current.clientHeight >= current.scrollHeight - 50 &&
+      !isLoading &&
+      !isEndOfPage // 스크롤이 맨 밑으로 내렸을 때만 처리
+      // current.scrollTop > prevScrollY.current // 스크롤이 맨 밑으로 내렸을 때만 처리
+    ) {
+      setIsLoading(true);
+      setPage((prevPage) => prevPage + 1);
+    }
+    prevScrollY.current = current ? current.scrollTop : 0; // 현재 스크롤 위치
+  };
+
+  useEffect(() => {
+    const { current } = mainPostContainerRef;
+    if (current) {
+      current.addEventListener("scroll", handleScroll);
+      return () => {
+        current.removeEventListener("scroll", handleScroll);
+      };
+    }
+  }, []);
+
+  // 스크롤 맨 위로 올리는 함수
+  const scrollToTop = () => {
+    if (mainPostContainerRef.current) {
+      mainPostContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    window.scrollTo({ top: 0, behavior: "smooth" }); // 페이지의 스크롤도 맨 위로 이동
+  };
+
   return (
     <div className="mt-[7rem]">
       <div className="mmd:grid mmd:grid-cols-4 flex flex-col">
@@ -557,6 +605,15 @@ export default function MyPage() {
             )}
           </div>
         </div>
+      </div>
+      {/* 스크롤 맨 위로 올려주는 버튼 */}
+      <div className="relative w-full">
+        <button
+          onClick={scrollToTop}
+          className="absolute bottom-0 right-0 mr-[2rem] bg-gray-900 text-gray-100 rounded-md hover:bg-gray-100 hover:text-gray-900 border-[1px] border-black duration-100"
+        >
+          <IoMdArrowDropup size={30} />
+        </button>
       </div>
     </div>
   );
