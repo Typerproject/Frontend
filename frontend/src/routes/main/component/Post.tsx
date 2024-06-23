@@ -68,40 +68,61 @@ export default function MainPost({ post }: MainPostProps) {
 
   return (
     <>
-      <div className="flex flex-row justify-between h-[180px] mb-4">
+      <div className="flex flex-row justify-between mb-4">
         {/* 텍스트 */}
-        <div className="flex-1 h-[180px] flex flex-col gap-[10px] justify-between">
-          <div className="flex flex-row w-full h-[46px] justify-between">
-            <img
-              onClick={() => navigate(`/my/${post.writer.id}`)}
-              className="w-[46px] h-[46px] rounded-full cursor-pointer"
-              src={post.writer.img}
-            />
-
-            <div className="flex flex-row justify-between items-center flex-1 ml-4">
-              <p
+        <div className="flex-1 flex flex-col gap-[10px] justify-between">
+          <div className="flex flex-col mmd:flex-row mmd:justify-between gap-[1rem] w-full">
+            {/*유저 이름과 사진*/}
+            <div>
+              <div
                 onClick={() => navigate(`/my/${post.writer.id}`)}
-                className="cursor-pointer inline-block text-[16px] mr-12"
+                className="flex gap-[0.5rem] items-center cursor-pointer"
               >
-                {post.writer.name}
-              </p>
-
-              <p className="text-[13px] mr-20 text-gray-400">{formattedTime}</p>
+                <img className="w-[40px] rounded-full" src={post.writer.img} />
+                <div className="text-base min-w-full">{post.writer.name}</div>
+              </div>
+            </div>
+            <div>
+              <p className="text-sm text-gray-400">{formattedTime}</p>
             </div>
           </div>
-          <p
-            onClick={() => navigate(`/post/${post._id}`)}
-            className="text-[24px] cursor-pointer"
-          >
-            {post.title}
-          </p>
-          <p
-            onClick={() => navigate(`/post/${post._id}`)}
-            className="text-[14px] cursor-pointer"
-            style={{ color: "#595959" }}
-          >
-            {truncateText}
-          </p>
+
+          <div className="flex min-h-32">
+            <div className="flex-grow-[3] basis-3/4 w-full mr-10">
+              <p
+                onClick={() => navigate(`/post/${post._id}`)}
+                className="text-[24px] cursor-pointer"
+              >
+                {post.title}
+              </p>
+              <p
+                onClick={() => navigate(`/post/${post._id}`)}
+                className="text-[14px] cursor-pointer"
+                style={{ color: "#595959" }}
+              >
+                {truncateText}
+              </p>
+            </div>
+
+            {/* 이미지 */}
+            <div
+              onClick={() => navigate(`/post/${post._id}`)}
+              className="flex-grow basis-1/4"
+            >
+              {/* <img className="h-[180px] object-contain" src={post.preview.img} /> */}
+              <div className="flex w-full h-full">
+                <div
+                  className="w-full h-full object-contain"
+                  style={{
+                    backgroundImage: `url(${post.preview.img})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    height: "100%",
+                  }}
+                ></div>
+              </div>
+            </div>
+          </div>
 
           <div className="flex items-center gap-[1.5rem]">
             <div className="flex items-center gap-[0.5rem]">
@@ -132,14 +153,6 @@ export default function MainPost({ post }: MainPostProps) {
               <p>1억</p>
             </div>
           </div>
-        </div>
-
-        {/* 이미지 */}
-        <div
-          onClick={() => navigate(`/post/${post._id}`)}
-          className="flex h-[180px] items-center ml-4 cursor-pointer"
-        >
-          <img className="h-[180px] object-contain" src={post.preview.img} />
         </div>
       </div>
       <div className="w-full h-[2px] bg-gray-200 mb-4" />

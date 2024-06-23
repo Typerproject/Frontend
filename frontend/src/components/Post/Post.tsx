@@ -139,7 +139,7 @@ export default function Post({ id, post, scrapped }: User) {
               </div>
               <div>
                 <div>
-                  <div className="text-3xl font-semibold mt-[1.2rem] max-w-[400px] overflow-hidden text-ellipsis whitespace-nowrap">
+                  <div className="text-3xl font-semibold mt-[1.2rem] max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
                     {title}
                   </div>
                   <div className="text-base mt-[0.7rem] text-gray-500">
