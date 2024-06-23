@@ -31,6 +31,7 @@ export default function ViewEditor({ outPutData }: props) {
         finance: FinanceBlock,
         disclosure: DisclosureBlock,
       },
+      minHeight: 10
     });
   };
 

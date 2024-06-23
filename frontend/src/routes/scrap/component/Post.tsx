@@ -14,7 +14,6 @@ const service = new postAPI(import.meta.env.VITE_SERVER_POST_API_URI);
 
 export default function Post({ postInfo }: PostProps) {
   const like: number = 10;
-  const content: string = "흠..";
   const comment: string = "zz";
 
   const navigate = useNavigate();
@@ -94,7 +93,7 @@ export default function Post({ postInfo }: PostProps) {
           {/* 제목, 내용 */}
           <p className="text-4xl pt-[2rem] truncate">{postInfo.title}</p>
           <p className="text-base py-[1rem] text-gray-500 truncate">
-            {content}
+            {postInfo.preview.text}
           </p>
           {/* 하단 스크랩, 댓글 수 */}
           <div className="flex gap-[1rem] my-[1rem] items-center">
