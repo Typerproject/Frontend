@@ -69,61 +69,66 @@ export default function MainPost({ post }: MainPostProps) {
   return (
     <>
       <div className="flex flex-row justify-between mb-4">
-        {/* 텍스트 */}
         <div className="flex-1 flex flex-col gap-[10px] justify-between">
-          <div className="flex flex-col mmd:flex-row mmd:justify-between gap-[1rem] w-full">
-            {/*유저 이름과 사진*/}
-            <div>
+          <div>
+            <div className="flex cursor-pointer">
+              {/* 미리보기 왼쪽*/}
+              <div className="flex-grow-[3] basis-3/4 w-full mr-10">
+                <div className="flex flex-col items-start gap-[1rem] mb-[1rem]">
+                  {/*글 정보*/}
+                  <div className="flex flex-col mmd:flex-row mmd:justify-between gap-[1rem] w-full">
+                    {/*유저 이름과 사진*/}
+                    <div>
+                      <div
+                        onClick={() => navigate(`/my/${post.writer.id}`)}
+                        className="flex gap-[0.5rem] items-center"
+                      >
+                        <img
+                          className="w-[40px] rounded-full"
+                          src={post.writer.img}
+                        />
+                        <div className="text-base min-w-full">
+                          {post.writer.name}
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-400">{formattedTime}</p>
+                    </div>
+                  </div>
+                  <div onClick={() => navigate(`/post/${post._id}`)}>
+                    <div>
+                      <div className="text-3xl font-semibold mt-[1.2rem] max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
+                        {post.title}
+                      </div>
+                      <div className="text-base mt-[0.7rem] text-gray-500">
+                        {truncateText}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 미리보기 오른쪽 */}
               <div
-                onClick={() => navigate(`/my/${post.writer.id}`)}
-                className="flex gap-[0.5rem] items-center cursor-pointer"
-              >
-                <img className="w-[40px] rounded-full" src={post.writer.img} />
-                <div className="text-base min-w-full">{post.writer.name}</div>
-              </div>
-            </div>
-            <div>
-              <p className="text-sm text-gray-400">{formattedTime}</p>
-            </div>
-          </div>
-
-          <div className="flex min-h-32">
-            <div className="flex-grow-[3] basis-3/4 w-full mr-10">
-              <p
                 onClick={() => navigate(`/post/${post._id}`)}
-                className="text-[24px] cursor-pointer"
+                className="flex-grow basis-1/4"
               >
-                {post.title}
-              </p>
-              <p
-                onClick={() => navigate(`/post/${post._id}`)}
-                className="text-[14px] cursor-pointer"
-                style={{ color: "#595959" }}
-              >
-                {truncateText}
-              </p>
-            </div>
-
-            {/* 이미지 */}
-            <div
-              onClick={() => navigate(`/post/${post._id}`)}
-              className="flex-grow basis-1/4"
-            >
-              {/* <img className="h-[180px] object-contain" src={post.preview.img} /> */}
-              <div className="flex w-full h-full">
-                <div
-                  className="w-full h-full object-contain"
-                  style={{
-                    backgroundImage: `url(${post.preview.img})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    height: "100%",
-                  }}
-                ></div>
+                <div className="flex w-full h-full">
+                  <div
+                    // bg-center bg-cover
+                    className="w-full h-full rounded"
+                    style={{
+                      backgroundImage: `url(${post.preview.img})`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                      height: "100%",
+                    }}
+                  ></div>
+                </div>
               </div>
             </div>
           </div>
-
           <div className="flex items-center gap-[1.5rem]">
             <div className="flex items-center gap-[0.5rem]">
               {isScraped ? (
