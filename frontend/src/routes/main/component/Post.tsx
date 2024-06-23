@@ -26,17 +26,17 @@ export default function MainPost({ post }: MainPostProps) {
       ? post.preview.text.slice(0, 100) + "..."
       : post.preview.text;
 
-  //   const utcDate = new Date(post.createdAt);
+  const koreaDate = new Date(post.createdAt);
   //   const koreaDate = new Date(utcDate.getTime() + 9 * 60 * 60 * 1000);
 
-  //   const formattedTime = koreaDate.toLocaleString("ko-KR", {
-  //     year: "numeric",
-  //     month: "2-digit",
-  //     day: "2-digit",
-  //     hour: "2-digit",
-  //     minute: "2-digit",
-  //     second: "2-digit",
-  //   });
+  const formattedTime = koreaDate.toLocaleString("ko-KR", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
 
   // 스크랩 하기 핸들러
   const handleScraping = () => {
@@ -68,43 +68,67 @@ export default function MainPost({ post }: MainPostProps) {
 
   return (
     <>
-      <div className="flex flex-row justify-between h-[180px] mb-4">
-        {/* 텍스트 */}
-        <div className="flex-1 h-[180px] flex flex-col gap-[10px] justify-between">
-          <div className="flex flex-row w-full h-[46px] justify-between">
-            <img
-              onClick={() => navigate(`/my/${post.writer.id}`)}
-              className="w-[46px] h-[46px] rounded-full cursor-pointer"
-              src={post.writer.img}
-            />
+      <div className="flex flex-row justify-between mb-4">
+        <div className="flex-1 flex flex-col gap-[10px] justify-between">
+          <div>
+            <div className="flex cursor-pointer">
+              {/* 미리보기 왼쪽*/}
+              <div className="flex-grow-[3] basis-3/4 w-full mr-10">
+                <div className="flex flex-col items-start gap-[1rem] mb-[1rem]">
+                  {/*글 정보*/}
+                  <div className="flex flex-col mmd:flex-row mmd:justify-between gap-[1rem] w-full">
+                    {/*유저 이름과 사진*/}
+                    <div>
+                      <div
+                        onClick={() => navigate(`/my/${post.writer.id}`)}
+                        className="flex gap-[0.5rem] items-center"
+                      >
+                        <img
+                          className="w-[40px] rounded-full"
+                          src={post.writer.img}
+                        />
+                        <div className="text-base min-w-full">
+                          {post.writer.name}
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-400">{formattedTime}</p>
+                    </div>
+                  </div>
+                  <div onClick={() => navigate(`/post/${post._id}`)}>
+                    <div>
+                      <div className="text-3xl font-semibold mt-[1.2rem] max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
+                        {post.title}
+                      </div>
+                      <div className="text-base mt-[0.7rem] text-gray-500">
+                        {truncateText}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-            <div className="flex flex-row justify-between items-center flex-1 ml-4">
-              <p
-                onClick={() => navigate(`/my/${post.writer.id}`)}
-                className="cursor-pointer inline-block text-[16px] mr-12"
+              {/* 미리보기 오른쪽 */}
+              <div
+                onClick={() => navigate(`/post/${post._id}`)}
+                className="flex-grow basis-1/4"
               >
-                {post.writer.name}
-              </p>
-
-              <p className="text-[13px] mr-20 text-gray-400">
-                {post.createdAt}
-              </p>
+                <div className="flex w-full h-full">
+                  <div
+                    // bg-center bg-cover
+                    className="w-full h-full rounded"
+                    style={{
+                      backgroundImage: `url(${post.preview.img})`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                      height: "100%",
+                    }}
+                  ></div>
+                </div>
+              </div>
             </div>
           </div>
-          <p
-            onClick={() => navigate(`/post/${post._id}`)}
-            className="text-[24px] cursor-pointer"
-          >
-            {post.title}
-          </p>
-          <p
-            onClick={() => navigate(`/post/${post._id}`)}
-            className="text-[14px] cursor-pointer"
-            style={{ color: "#595959" }}
-          >
-            {truncateText}
-          </p>
-
           <div className="flex items-center gap-[1.5rem]">
             <div className="flex items-center gap-[0.5rem]">
               {isScraped ? (
@@ -134,14 +158,6 @@ export default function MainPost({ post }: MainPostProps) {
               <p>1억</p>
             </div>
           </div>
-        </div>
-
-        {/* 이미지 */}
-        <div
-          onClick={() => navigate(`/post/${post._id}`)}
-          className="flex h-[180px] items-center ml-4 cursor-pointer"
-        >
-          <img className="h-[180px] object-contain" src={post.preview.img} />
         </div>
       </div>
       <div className="w-full h-[2px] bg-gray-200 mb-4" />
