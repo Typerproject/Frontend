@@ -8,11 +8,6 @@ import userAPI, { IFollowerInfo, IDifferentUser } from "../../api/userAPI";
 const service = new postAPI(import.meta.env.VITE_SERVER_POST_API_URI);
 const userService = new userAPI(import.meta.env.VITE_BASE_URI);
 
-interface IprogressStyle {
-  width: number;
-  opacity: number;
-}
-
 export default function PostDetail() {
   const navigate = useNavigate();
   const userId = useAppSelector((state) => state.user._id);
@@ -79,37 +74,16 @@ export default function PostDetail() {
 
   //progress, opacity 등 동적으로 바뀌는 스타일
   const [opacity, setOpacity] = useState<number>(1);
-  const [progress, setProgress] = useState<IprogressStyle>(
-    {} as IprogressStyle
-  );
 
   const getElementPostion = () => {
     const main = document.getElementById("mainPost");
-    const mainBottom = document.getElementById("mainBottom");
-    const progressBar = document.getElementById("progress-bar");
 
     const scrollY = window.scrollY; // 스크롤 양
 
     const mainPosition =
       main && Math.floor(scrollY + main.getBoundingClientRect().top); // 절대위치, Math.floor로 정수로 변환
-    const mainBottomPosition =
-      mainBottom &&
-      Math.floor(scrollY + mainBottom.getBoundingClientRect().bottom); // mainBottom
-    const progressPostion =
-      progressBar &&
-      Math.floor(scrollY + progressBar.getBoundingClientRect().bottom);
 
     //window.innerHeight + scrollY가 mainBottomPosition아래로 내려가면 -> progress bar width는 100%이상이 되어야 한다...
-    setProgress({
-      width: mainBottomPosition
-        ? (Number(window.innerHeight + scrollY) / Number(mainBottomPosition)) *
-          100
-        : 0,
-      opacity:
-        mainPosition && progressPostion
-          ? Number(progressPostion > mainPosition)
-          : 0,
-    });
 
     setOpacity(
       mainPosition ? 1 - scrollY / mainPosition : 1 //스크롤양이 메인보다 많고 푸터보다 적을 때
@@ -120,7 +94,7 @@ export default function PostDetail() {
     window.addEventListener("scroll", getElementPostion); // 스크롤시 getBannerPosition 발생
 
     return () => window.removeEventListener("scroll", getElementPostion); // 클린업, 페이지를 나가면 이벤트 삭제
-  }, [opacity]); // position 값이 변할 때마다 effect 실행
+  }, []); // position 값이 변할 때마다 effect 실행
 
   const parsingDate = (): string => {
     const utcDate = new Date(postDetail.writedAt);
@@ -139,15 +113,6 @@ export default function PostDetail() {
 
   return (
     <div>
-      <div
-        id="progress-bar"
-        className="fixed top-0 left-0 bg-slate-400 z-[99] h-[85px] "
-        style={{
-          width: `${progress.width}%`,
-          opacity: `${progress.opacity}`,
-          transition: 'width .2s ease-out'
-        }}
-      ></div>
       <div className="w-[100vw] bg-[#000000b5] mmd:px-[18rem] px-[2rem] fixed top-0 z-[9] flex items-center h-[70vh]">
         <div style={{ opacity: `${opacity}` }}>
           <p className={`text-white text-5xl pb-[1rem]`}>{postDetail.title}</p>
