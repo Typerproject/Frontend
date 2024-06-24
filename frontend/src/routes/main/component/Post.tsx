@@ -88,7 +88,7 @@ export default function MainPost({ post }: MainPostProps) {
                           src={post.writer.img}
                         />
                         <div className="text-base min-w-full">
-                          {post.writer.name}
+                          {post.writer.nickname}
                         </div>
                       </div>
                     </div>
