@@ -8,6 +8,7 @@ import { setUser } from "../../store/reducers/user";
 import { useAppDispatch } from "../../store";
 import Modal from "./component/Modal";
 import { IoMdArrowDropup } from "react-icons/io";
+import Footbar from "../../components/Footbar/Footbar";
 
 type State = "follower" | "following" | false;
 
@@ -385,8 +386,8 @@ export default function MyPage() {
   };
 
   return (
-    <div className="mt-[7rem]">
-      <div className="mmd:grid mmd:grid-cols-4 flex flex-col">
+    <div className="mt-[7rem] flex flex-col min-h-[calc(100vh-76.5px)]">
+      <div className="mmd:grid mmd:grid-cols-4 flex flex-col flex-grow">
         {/*글목록*/}
         <div className="order-last mmd:col-span-3 text-5xl flex flex-col items-center gap-[2rem]">
           <p className="tracking-wide font-medium hidden mmd:block mmd:py-[2rem]">
@@ -539,7 +540,9 @@ export default function MyPage() {
                   />
                 ) : (
                   <p
-                    style={{ fontFamily: "Ownglyph_Dailyokja-Rg, sans-serif" }}
+                    style={{
+                      fontFamily: "Ownglyph_Dailyokja-Rg, sans-serif",
+                    }}
                     className="flex gap-10 text-[#88898a] mt-[0.7rem] w-[270px]"
                   >
                     {userInfo?.comment}
@@ -610,11 +613,12 @@ export default function MyPage() {
       <div className="relative w-full">
         <button
           onClick={scrollToTop}
-          className="absolute bottom-0 right-0 mr-[2rem] bg-gray-900 text-gray-100 rounded-md hover:bg-gray-100 hover:text-gray-900 border-[1px] border-black duration-100"
+          className="absolute bottom-0 right-0 mb-[1rem] mr-[2rem] bg-gray-900 text-gray-100 rounded-md hover:bg-gray-100 hover:text-gray-900 border-[1px] border-black duration-100"
         >
           <IoMdArrowDropup size={30} />
         </button>
       </div>
+      <Footbar />
     </div>
   );
 }

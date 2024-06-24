@@ -3,6 +3,7 @@ import Post from "./component/Post";
 import postAPI from "../../api/postDetailAPI";
 import { useEffect, useState } from "react";
 import { IoTrashBin } from "react-icons/io5";
+import Footbar from "../../components/Footbar/Footbar";
 
 const service = new postAPI(import.meta.env.VITE_SERVER_POST_API_URI);
 
@@ -44,21 +45,26 @@ export default function ScrapPage() {
     fetchScrapList();
   }, []);
 
-  if(post.length ===0) {
-    return <div className="w-fit mx-auto mt-[10rem] flex flex-col items-center gap-[2rem]">
-        <IoTrashBin size={60} color="gray"/>
+  if (post.length === 0) {
+    return (
+      <div className="w-fit mx-auto mt-[10rem] flex flex-col items-center gap-[2rem]">
+        <IoTrashBin size={60} color="gray" />
         <p>스크랩 한 post가 없습니다!</p>
-    </div>
+      </div>
+    );
   }
 
   return (
-    <div className="w-[65%] mx-auto mt-[8rem]">
-      {post.map((post) => (
-        <div key={post._id}>
-          <Post postInfo={post} />
-          <div className="h-[1px] w-full bg-gray-200"></div>
-        </div>
-      ))}
+    <div className="flex flex-col min-h-[calc(100vh-76.5px)]">
+      <div className="w-[65%] mx-auto mt-[8rem] flex-grow">
+        {post.map((post) => (
+          <div key={post._id}>
+            <Post postInfo={post} />
+            <div className="h-[1px] w-full bg-gray-200"></div>
+          </div>
+        ))}
+      </div>
+      <Footbar />
     </div>
   );
 }
