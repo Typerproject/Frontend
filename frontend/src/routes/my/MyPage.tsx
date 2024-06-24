@@ -421,7 +421,7 @@ export default function MyPage() {
         {/*프로필*/}
         <div
           style={{
-            right: "10%",
+            right: "7%",
           }}
           className="mmd:fixed grid place-items-center mmd:order-last mmd:col-span-1 mmd:place-items-start"
         >
