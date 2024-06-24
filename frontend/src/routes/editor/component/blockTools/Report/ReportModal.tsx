@@ -30,6 +30,7 @@ const AnalystReportModal: React.FC<AnalystReportModalProps> = ({ createIframe, o
     try {
       setShow(false);
       setMainLoading(true);
+      setMore(true);
       const response = await axios.get(import.meta.env.VITE_SERVER_REPORT_API_URI, {
         params: { company: formData.company, fromDate: formData.fromDate, toDate: formData.toDate, page: 1 }
       });
