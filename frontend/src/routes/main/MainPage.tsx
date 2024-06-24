@@ -5,6 +5,7 @@ import MainPost from "./component/Post";
 import { useAppSelector } from "../../store";
 import PostLoading from "./component/PostLoading";
 import { IoMdArrowDropup } from "react-icons/io";
+import Footbar from "../../components/Footbar/Footbar";
 
 const postService = new postAPI(import.meta.env.VITE_SERVER_POST_API_URI);
 
@@ -93,72 +94,74 @@ const MyComponent = () => {
   };
 
   return (
-    <div className="bg-gray-100">
+    <div className="bg-gray-100 flex flex-col min-h-screen">
       <Navigator />
-
-      <div className="mt-[45px] flex flex-col">
-        <div className="flex flex-row x-[276px] h-[55px] mt-14 pl-[88px] ">
-          <button
-            onClick={() => handleClick("Hot")}
-            className={`w-[72px] text-[23px] border-b-4 ${
-              activeButton === "Hot" ? `border-gray-900` : `text-gray-400`
-            }`}
-          >
-            Hot
-          </button>
-          <button
-            onClick={() => handleClick("New")}
-            className={`w-[80px] text-[23px] border-b-4 ${
-              activeButton === "New" ? `border-gray-900` : `text-gray-400`
-            }`}
-          >
-            New
-          </button>
-          <button
-            onClick={() => handleClick("Follow")}
-            className={`w-[102px] text-[23px] border-b-4 ${
-              activeButton === "Follow" ? `border-gray-900` : `text-gray-400`
-            }`}
-          >
-            Follow
-          </button>
-        </div>
-
-        <div className="px-[100px] my-10">
-          <div
-            className="min-h-[500px] max-h-[800px] overflow-y-auto"
-            ref={mainPostContainerRef}
-            style={{
-              scrollbarWidth: "none",
-              msOverflowStyle: "none",
-            }}
-          >
-            {!postList || (postList.posts.length === 0 && isLoading) ? (
-              <div>
-                <PostLoading />
-                <PostLoading />
-                <PostLoading />
-              </div>
-            ) : postList.posts.length === 0 ? (
-              <div>No content</div>
-            ) : (
-              postList.posts.map((post: IPost) => <MainPost post={post} />)
-            )}
-          </div>
-          {/* 스크롤 맨 위로 올려주는 버튼 */}
-          <div className="flex justify-end w-full">
+      <div className="flex-grow">
+        <div className="mt-[45px] flex flex-col">
+          <div className="flex flex-row x-[276px] h-[55px] mt-14 pl-[88px] ">
             <button
-              onClick={scrollToTop}
-              className="flex mt-4 bg-gray-900 text-gray-100 rounded-md hover:bg-gray-100 hover:text-gray-900 border-[1px] border-black duration-100"
+              onClick={() => handleClick("Hot")}
+              className={`w-[72px] text-[23px] border-b-4 ${
+                activeButton === "Hot" ? `border-gray-900` : `text-gray-400`
+              }`}
             >
-              <IoMdArrowDropup size={30} />
+              Hot
+            </button>
+            <button
+              onClick={() => handleClick("New")}
+              className={`w-[80px] text-[23px] border-b-4 ${
+                activeButton === "New" ? `border-gray-900` : `text-gray-400`
+              }`}
+            >
+              New
+            </button>
+            <button
+              onClick={() => handleClick("Follow")}
+              className={`w-[102px] text-[23px] border-b-4 ${
+                activeButton === "Follow" ? `border-gray-900` : `text-gray-400`
+              }`}
+            >
+              Follow
             </button>
           </div>
 
-          {/* 로딩 화면을 보여 주기 */}
-          {isEndOfPage ? <p>다 보여줬으니까 그만 내려;;</p> : <p>어쭈?</p>}
+          <div className="px-[100px] my-10">
+            <div
+              className="min-h-[500px] max-h-[800px] overflow-y-auto"
+              ref={mainPostContainerRef}
+              style={{
+                scrollbarWidth: "none",
+                msOverflowStyle: "none",
+              }}
+            >
+              {!postList || (postList.posts.length === 0 && isLoading) ? (
+                <div>
+                  <PostLoading />
+                  <PostLoading />
+                  <PostLoading />
+                </div>
+              ) : postList.posts.length === 0 ? (
+                <div>No content</div>
+              ) : (
+                postList.posts.map((post: IPost) => <MainPost post={post} />)
+              )}
+            </div>
+            {/* 스크롤 맨 위로 올려주는 버튼 */}
+            <div className="flex justify-end w-full">
+              <button
+                onClick={scrollToTop}
+                className="flex mt-4 bg-gray-900 text-gray-100 rounded-md hover:bg-gray-100 hover:text-gray-900 border-[1px] border-black duration-100"
+              >
+                <IoMdArrowDropup size={30} />
+              </button>
+            </div>
+
+            {/* 로딩 화면을 보여 주기 */}
+            {isEndOfPage ? <p>다 보여줬으니까 그만 내려;;</p> : <p>어쭈?</p>}
+          </div>
         </div>
       </div>
+      <Footbar />
     </div>
   );
 };

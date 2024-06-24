@@ -68,7 +68,7 @@ export default function MainPost({ post }: MainPostProps) {
 
   return (
     <>
-      <div className="flex flex-row justify-between mb-4">
+      <div className="flex flex-row px-[1rem] py-[2rem] justify-between mb-4 hover:bg-gray-200 hover:rounded-lg">
         <div className="flex-1 flex flex-col gap-[10px] justify-between">
           <div>
             <div className="flex cursor-pointer">
@@ -117,7 +117,7 @@ export default function MainPost({ post }: MainPostProps) {
                 <div className="flex w-full h-full">
                   <div
                     // bg-center bg-cover
-                    className="w-full h-full rounded"
+                    className="w-3/4 mmd:w-full h-full rounded"
                     style={{
                       backgroundImage: `url(${post.preview.img})`,
                       backgroundSize: "cover",
