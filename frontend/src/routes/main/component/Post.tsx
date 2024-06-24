@@ -117,7 +117,7 @@ export default function MainPost({ post }: MainPostProps) {
                 <div className="flex w-full h-full">
                   <div
                     // bg-center bg-cover
-                    className="w-full h-full rounded"
+                    className="w-3/4 mmd:w-full h-full rounded"
                     style={{
                       backgroundImage: `url(${post.preview.img})`,
                       backgroundSize: "cover",
