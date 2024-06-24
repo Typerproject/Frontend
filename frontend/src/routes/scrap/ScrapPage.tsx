@@ -154,9 +154,10 @@ export default function ScrapPage() {
           </div>
         ))}
       </div>
-      <Footbar />
+
       {isLoading && <p>Loading...</p>}
       <div id="observer" ref={targetRef}></div>
+      <Footbar />
     </div>
   );
 }
