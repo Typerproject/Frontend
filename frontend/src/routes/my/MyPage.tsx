@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useAppSelector } from "../../store";
 import FollowList from "./component/FollowList";
@@ -6,6 +6,8 @@ import Post from "../../components/Post/Post";
 import userAPI, { IFollowerInfo, IUserInfo } from "../../api/userAPI";
 import { setUser } from "../../store/reducers/user";
 import { useAppDispatch } from "../../store";
+import Modal from "./component/Modal";
+import { IoMdArrowDropup } from "react-icons/io";
 
 type State = "follower" | "following" | false;
 
@@ -28,11 +30,61 @@ const service = new userAPI(import.meta.env.VITE_BASE_URI);
 
 export default function MyPage() {
   const [userInfo, setUserInfo] = useState<IUserInfo | null>(null);
+  const [cuserInfo, setCuserInfo] = useState<IUserInfo | null>(null);
+  const currentUser = useAppSelector((state) => state.user);
+  const currentUserId = useAppSelector((state) => state.user._id);
+
+  const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isEndOfPage, setIsEndOfPage] = useState(false);
+  const mainPostContainerRef = useRef<HTMLDivElement | null>(null);
+  const prevScrollY = useRef(0);
+
+  useEffect(() => {
+    if (currentUserId) {
+      console.log("파라미터 잘 가져와 지나?", currentUserId);
+
+      // 유저 정보 획득
+      service
+        .getUserInfo(currentUserId)
+        .then((data) => {
+          console.log("마이페이지 접근 유저", data);
+          setCuserInfo(data);
+        })
+        .catch((err) => {
+          console.error("마이페이지 접근 유저", err);
+        });
+
+      console.log("ID 有", currentUserId);
+    } else {
+      console.log("ID 無", currentUserId);
+    }
+  }, [currentUser]);
 
   //게시글 미리보기
   const [previewPost, setPreviewPost] = useState<Preview[]>([]);
+  const [scrappedPost, setScrappedPost] = useState<string[]>([]);
 
   useEffect(() => {
+    let getScrapped: string[] | undefined;
+    if (id != currentUserId) {
+      getScrapped = cuserInfo?.scrappedPost;
+    } else {
+      getScrapped = userInfo?.scrappedPost;
+    }
+
+    if (getScrapped) {
+      setScrappedPost([...getScrapped]);
+    }
+  }, [userInfo?.scrappedPost, cuserInfo?.scrappedPost]);
+
+  useEffect(() => {
+    if (page === 1) {
+      // 첫 페이지 로드 시 초기화
+      setPreviewPost([]);
+      setIsEndOfPage(false);
+    }
+
     if (userInfo?.writerdPost) {
       const tempPost: any = userInfo?.writerdPost.map((ele: Preview) => {
         return {
@@ -55,8 +107,6 @@ export default function MyPage() {
 
   //현재 접속한 마이 페이지의 유저 아이디
   const { id } = useParams<{ id: string }>(); // useParams의 반환 타입을 명시
-
-  const currentUser = useAppSelector((state) => state.user);
 
   const dispatch = useAppDispatch();
 
@@ -190,6 +240,10 @@ export default function MyPage() {
     }
   };
 
+  useEffect(() => {
+    setFollow(false);
+  }, [id]);
+
   // 팔로잉 핸들러
   const handleFollowClick = () => {
     if (!id) {
@@ -280,31 +334,86 @@ export default function MyPage() {
       });
   };
 
+  //프로필 효과
+  const [flipped, setFlipped] = useState(false);
+
+  const handleFlipped = () => {
+    setFlipped(false);
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setFlipped(true);
+    }, 1000); // 페이지가 로드된 후 1초 뒤에 애니메이션 시작
+
+    return () => clearTimeout(timer);
+  }, [flipped]);
+
+  //무한 스크롤
+
+  const handleScroll = () => {
+    const { current } = mainPostContainerRef;
+    if (
+      current &&
+      current.scrollTop + current.clientHeight >= current.scrollHeight - 50 &&
+      !isLoading &&
+      !isEndOfPage // 스크롤이 맨 밑으로 내렸을 때만 처리
+      // current.scrollTop > prevScrollY.current // 스크롤이 맨 밑으로 내렸을 때만 처리
+    ) {
+      setIsLoading(true);
+      setPage((prevPage) => prevPage + 1);
+    }
+    prevScrollY.current = current ? current.scrollTop : 0; // 현재 스크롤 위치
+  };
+
+  useEffect(() => {
+    const { current } = mainPostContainerRef;
+    if (current) {
+      current.addEventListener("scroll", handleScroll);
+      return () => {
+        current.removeEventListener("scroll", handleScroll);
+      };
+    }
+  }, []);
+
+  // 스크롤 맨 위로 올리는 함수
+  const scrollToTop = () => {
+    if (mainPostContainerRef.current) {
+      mainPostContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    window.scrollTo({ top: 0, behavior: "smooth" }); // 페이지의 스크롤도 맨 위로 이동
+  };
+
   return (
     <div className="mt-[7rem]">
       <div className="mmd:grid mmd:grid-cols-4 flex flex-col">
         {/*글목록*/}
         <div className="order-last mmd:col-span-3 text-5xl flex flex-col items-center gap-[2rem]">
-          <p className="hidden mmd:block mmd:py-[2rem]">
+          <p className="tracking-wide font-medium hidden mmd:block mmd:py-[2rem]">
             {userInfo?.nickname}'s Typer
           </p>
           <hr
-            style={{ width: "82%", borderWidth: "2px", color: "#404040" }}
+            style={{ width: "82%", borderWidth: "2px", color: "#080808" }}
           ></hr>
+
           <div className="w-3/4">
             {/*가져온 글 목록을 map돌면서 출력*/}
-            {previewPost.map((post: Preview) => (
-              <div>
-                <Post id={id} post={post} />
-                <hr
-                  style={{
-                    width: "105%",
-                    borderWidth: "2px",
-                    color: "#ababab",
-                  }}
-                ></hr>
-              </div>
-            ))}
+            {previewPost.map((post: Preview) => {
+              const scrapped: boolean =
+                scrappedPost?.includes(post._id) || false;
+              return (
+                <div>
+                  <Post id={id} post={post} scrapped={scrapped} />
+                  <hr
+                    style={{
+                      width: "100%",
+                      borderWidth: "2px",
+                      color: "#ababab",
+                    }}
+                  ></hr>
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -315,13 +424,22 @@ export default function MyPage() {
           }}
           className="mmd:fixed grid place-items-center mmd:order-last mmd:col-span-1 mmd:place-items-start"
         >
-          {/* place-items-center */}
           <div className="mmd:flex-col">
-            <div className="flex pt-[2rem] pb-[5rem] mmd:py-[1rem] gap-[2rem] mmd:flex-col mmd:gap-[1rem]">
-              <img
-                className="size-32 mmd:size-24 rounded-full"
-                src={userInfo?.profile}
-              />
+            <div className="flex pt-[2rem] pb-[3rem] mmd:py-[1rem] gap-[3.5rem] mmd:flex-col mmd:gap-[1rem]">
+              <div
+                onMouseOver={handleFlipped}
+                className={`mmd:w-[96px] ${
+                  flipped
+                    ? "animate-flip-back-front"
+                    : "animate-flip-front-back"
+                }`}
+              >
+                <img
+                  className="size-32 mmd:size-24 rounded-full"
+                  src={userInfo?.profile}
+                />
+              </div>
+
               <div className="content-center">
                 <div className="flex gap-[1rem] items-center">
                   {/* 닉네임 */}
@@ -363,14 +481,14 @@ export default function MyPage() {
                     ) : isFollowing ? (
                       <button
                         onClick={handleUnfollowClick} // unFollowClick 함수로 수정
-                        className="text-xs mt-[0.5rem] border-[1px] bg-red-500 text-gray-50 rounded-full border-red-500 text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-red-500 duration-300"
+                        className="text-xs border-[1px] bg-red-500 text-gray-50 rounded-full border-red-500 text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-red-500 duration-300"
                       >
                         Unfollow
                       </button>
                     ) : (
                       <button
                         onClick={handleFollowClick}
-                        className="text-xs mt-[0.5rem] border-[1px] bg-gray-900 text-gray-50 rounded-full border-black text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-black duration-300"
+                        className="text-xs border-[1px] bg-gray-900 text-gray-50 rounded-full border-black text-sm px-[0.7rem] py-[0.3rem] hover:bg-white hover:text-black duration-300"
                       >
                         Follow
                       </button>
@@ -383,26 +501,31 @@ export default function MyPage() {
                   <div></div>
                 ) : (
                   <div className={`flex gap-5  mt-[0.5rem] text-[#b1b2b3]`}>
-                    <span
-                      onClick={handleFollowerBtn}
-                      className={`hover:text-[#141414] cursor-pointer  ${
-                        follow === "follower"
-                          ? "text-[#141414]"
-                          : "text-[#b1b2b3]"
-                      }`}
-                    >
-                      {followerInfo?.followerCount} followers
-                    </span>
-                    <span
-                      onClick={handleFollowingBtn}
-                      className={`hover:text-[#141414] cursor-pointer ${
-                        follow === "following"
-                          ? "text-[#141414]"
-                          : "text-[#b1b2b3]"
-                      }`}
-                    >
-                      {followerInfo?.followingCount} following
-                    </span>
+                    <div className="relative">
+                      <span
+                        onClick={handleFollowerBtn}
+                        className={`hover:text-[#141414] cursor-pointer  ${
+                          follow === "follower"
+                            ? "text-[#141414]"
+                            : "text-[#b1b2b3]"
+                        }`}
+                      >
+                        {followerInfo?.followerCount} followers
+                      </span>
+                    </div>
+
+                    <div className="relative">
+                      <span
+                        onClick={handleFollowingBtn}
+                        className={`hover:text-[#141414] cursor-pointer ${
+                          follow === "following"
+                            ? "text-[#141414]"
+                            : "text-[#b1b2b3]"
+                        }`}
+                      >
+                        {followerInfo?.followingCount} following
+                      </span>
+                    </div>
                   </div>
                 )}
                 {/* 코멘트 */}
@@ -430,7 +553,7 @@ export default function MyPage() {
           <div>
             {follow === "follower" && (
               <div>
-                <div className="mt-[1rem]">
+                <div className="mt-[1rem] hidden mmd:block">
                   <p className="text-lg">Follower</p>
                   <ul className="space-y-4">
                     {followerInfo?.followerUsers.map((user) => (
@@ -444,11 +567,19 @@ export default function MyPage() {
                     ))}
                   </ul>
                 </div>
+                <div>
+                  <Modal
+                    followList={followerInfo?.followerUsers}
+                    which={follow}
+                    setRefreshKey={setRefreshKey}
+                    handleClose={handleFollowerBtn}
+                  />
+                </div>
               </div>
             )}
             {follow === "following" && (
               <div>
-                <div className="mt-[1rem]">
+                <div className="mt-[1rem] hidden mmd:block">
                   <p className="text-lg">Following</p>
                   <ul className="space-y-4">
                     {followerInfo?.followingUsers.map((user) => (
@@ -462,10 +593,27 @@ export default function MyPage() {
                     ))}
                   </ul>
                 </div>
+                <div>
+                  <Modal
+                    followList={followerInfo?.followingUsers}
+                    which={follow}
+                    setRefreshKey={setRefreshKey}
+                    handleClose={handleFollowingBtn}
+                  />
+                </div>
               </div>
             )}
           </div>
         </div>
+      </div>
+      {/* 스크롤 맨 위로 올려주는 버튼 */}
+      <div className="relative w-full">
+        <button
+          onClick={scrollToTop}
+          className="absolute bottom-0 right-0 mr-[2rem] bg-gray-900 text-gray-100 rounded-md hover:bg-gray-100 hover:text-gray-900 border-[1px] border-black duration-100"
+        >
+          <IoMdArrowDropup size={30} />
+        </button>
       </div>
     </div>
   );
