@@ -48,6 +48,8 @@ export default function ScrapPage() {
       entries: IntersectionObserverEntry[]
       // observer: IntersectionObserver
     ): void => {
+
+      
       // 인스턴스가 생기면 타겟, 루트 교차 안 되어도 계속 실행됨...
       // 타겟 요소가 루트 요소와 교차하는 점이 없으면 콜백을 호출했으되, 조기에 탈출 (예외처리)
       const entry: IntersectionObserverEntry = entries[0];
@@ -56,7 +58,6 @@ export default function ScrapPage() {
       //
       // if (entry.intersectionRatio <= 0) return;
       console.log(entry);
-      if (isLoading) return;
 
       if (entry.isIntersecting) {
         fetchScrapList();
@@ -79,7 +80,13 @@ export default function ScrapPage() {
   const fetchScrapList = async (): Promise<boolean> => {
     try {
       setIsLoading(true); // 데이터를 가져오는 중임을 나타내는 상태 설정
-      const data = await service.getScrapList(page + 1);
+      const currentPage = page + 1;
+
+      if(observerRef.current){
+        observerRef.current.disconnect();
+      }
+
+      const data = await service.getScrapList(currentPage);
       console.log('page', page);
 
       if (
@@ -88,7 +95,6 @@ export default function ScrapPage() {
         targetRef.current
       ) {
         setIsLoading(false);
-        observerRef.current.disconnect();
         console.log(data.scrappedPosts.length);
         // data.scrappedPosts = ["the end"];
         setPostInfo((prevData) => [...prevData, ...data.scrappedPosts]);
@@ -135,7 +141,6 @@ export default function ScrapPage() {
         <IoTrashBin size={60} color="gray" />
         <p>스크랩 한 post가 없습니다!</p>
         <div id="observer" ref={targetRef}>
-          observer!
         </div>
       </div>
     );
