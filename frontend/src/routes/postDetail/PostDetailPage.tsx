@@ -145,6 +145,7 @@ export default function PostDetail() {
         style={{
           width: `${progress.width}%`,
           opacity: `${progress.opacity}`,
+          transition: 'width .2s ease-out'
         }}
       ></div>
       <div className="w-[100vw] bg-[#000000b5] mmd:px-[18rem] px-[2rem] fixed top-0 z-[9] flex items-center h-[70vh]">
