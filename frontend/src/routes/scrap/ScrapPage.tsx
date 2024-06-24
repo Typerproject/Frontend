@@ -3,6 +3,7 @@ import Post from "./component/Post";
 import postAPI from "../../api/postDetailAPI";
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import { IoTrashBin } from "react-icons/io5";
+import Footbar from "../../components/Footbar/Footbar";
 
 const service = new postAPI(import.meta.env.VITE_SERVER_POST_API_URI);
 
@@ -50,8 +51,6 @@ export default function ScrapPage() {
       entries: IntersectionObserverEntry[]
       // observer: IntersectionObserver
     ): void => {
-
-      
       // 인스턴스가 생기면 타겟, 루트 교차 안 되어도 계속 실행됨...
       // 타겟 요소가 루트 요소와 교차하는 점이 없으면 콜백을 호출했으되, 조기에 탈출 (예외처리)
       const entry: IntersectionObserverEntry = entries[0];
@@ -84,12 +83,12 @@ export default function ScrapPage() {
       setIsLoading(true); // 데이터를 가져오는 중임을 나타내는 상태 설정
       const currentPage = page + 1;
 
-      if(observerRef.current){
+      if (observerRef.current) {
         observerRef.current.disconnect();
       }
 
       const data = await service.getScrapList(currentPage);
-      console.log('page', page);
+      console.log("page", page);
 
       if (
         data.scrappedPosts.length === 0 &&
@@ -109,11 +108,11 @@ export default function ScrapPage() {
         setPage((prevPage) => prevPage + 1);
         setPostInfo((prevData) => [...prevData, ...data.scrappedPosts]);
         setIsLoading(false);
-        return true;  // 데이터를 가져오는 작업 완료 후 상태 변경
+        return true; // 데이터를 가져오는 작업 완료 후 상태 변경
       }
     } catch (error) {
       console.log(error);
-    } 
+    }
     return false;
   };
 
@@ -142,23 +141,25 @@ export default function ScrapPage() {
       <div className="w-fit mx-auto mt-[10rem] flex flex-col items-center gap-[2rem]">
         <IoTrashBin size={60} color="gray" />
         <p>스크랩 한 post가 없습니다!</p>
-        <div id="observer" ref={targetRef}>
-        </div>
+        <div id="observer" ref={targetRef}></div>
       </div>
     );
   }
 
   return (
-    <div className="w-[100%] md:w-[65%] mx-auto mt-[8rem]">
-      {post.map((post) => (
-        <div key={post._id}>
-          <Post postInfo={post} />
-          <div className="h-[1px] w-full bg-gray-200"></div>
-        </div>
-      ))}
-      {isLoading && <p>Loading...</p>}
-      <div id="observer" ref={targetRef}>
+    <div className="flex flex-col min-h-[calc(100vh-76.5px)]">
+      <div className="w-[65%] mx-auto mt-[8rem] flex-grow">
+        {post.map((post) => (
+          <div key={post._id}>
+            <Post postInfo={post} />
+            <div className="h-[1px] w-full bg-gray-200"></div>
+          </div>
+        ))}
       </div>
+
+      {isLoading && <p>Loading...</p>}
+      <div id="observer" ref={targetRef}></div>
+      <Footbar />
     </div>
   );
 }
