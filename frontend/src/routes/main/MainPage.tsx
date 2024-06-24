@@ -6,6 +6,7 @@ import { useAppSelector } from "../../store";
 import PostLoading from "./component/PostLoading";
 import { IoMdArrowDropup } from "react-icons/io";
 import Footbar from "../../components/Footbar/Footbar";
+import SliderTest from "./component/SliderTest";
 
 const postService = new postAPI(import.meta.env.VITE_SERVER_POST_API_URI);
 
@@ -96,6 +97,11 @@ const MyComponent = () => {
   return (
     <div className="bg-gray-100 flex flex-col min-h-screen">
       <Navigator />
+
+      <div className="mt-[77px]">
+        <SliderTest />
+      </div>
+
       <div className="flex-grow">
         <div className="mt-[45px] flex flex-col">
           <div className="flex flex-row x-[276px] h-[55px] mt-14 pl-[88px] ">
