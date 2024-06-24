@@ -169,7 +169,7 @@ const AnalystReportModal: React.FC<AnalystReportModalProps> = ({ createIframe, o
       <Modal.Header className="flex flex-col items-start space-y-4">
           <div className="w-full flex justify-between items-center">
             <Modal.Title className="text-lg font-semibold">기업 리포트입니다.</Modal.Title>
-            <Button className="bg-white text-black-500 hover:text-black-700" onClick={() => { setReportshow(false); onExit(); }}>
+            <Button className="bg-white border-none text-black hover:text-black-700" onClick={() => { setReportshow(false); onExit(); }}>
               X
             </Button>
           </div>
