@@ -24,6 +24,13 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onRequestClose }) => {
       className="flex flex-col justify-between items-center text-center mx-auto my-40 w-[380px] h-[500px] relative mb-0 bg-white rounded-[22px] shadow-2xl"
       isOpen={isOpen}
       onRequestClose={onRequestClose}
+      shouldFocusAfterRender={false}
+      style={
+        { overlay:{
+          zIndex:1000
+        }}
+      }
+
     >
       {/* 닫기 버튼 */}
       <button
