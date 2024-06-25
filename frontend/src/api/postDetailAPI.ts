@@ -11,6 +11,7 @@ export interface IPostDetail {
   writer: IPostWriter;
   writedAt: Date;
   isScrapped: boolean;
+  scrapingCount: number;
 }
 export interface IPostWriter {
   writerId: string;
@@ -55,6 +56,7 @@ export interface IPost {
   writer: IWriter;
   scrapingCount: number;
   isScrapped: boolean;
+  commnetCount: number;
 }
 
 // 메인 화면용 포스트 리스트를 담는 인터페이스

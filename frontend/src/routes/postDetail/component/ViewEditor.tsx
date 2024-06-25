@@ -7,6 +7,7 @@ import { ChartBLock } from "../../editor/component/blockTools/chart/ChartBlock";
 import { ReportBlock } from "../../editor/component/blockTools/Report/ReportBlock";
 import { FinanceBlock } from "../../editor/component/blockTools/finance/FinanceBlock";
 import { DisclosureBlock } from "../../editor/component/blockTools/disclosure/DisclosureBlock";
+import { ImageBlock } from "../../editor/component/blockTools/image/ImageBlock";
 
 type props = {
   outPutData: OutputData;
@@ -25,6 +26,7 @@ export default function ViewEditor({ outPutData }: props) {
       },
       tools: {
         header: Header,
+        image: ImageBlock,
         news: NewsBlock,
         charts: ChartBLock,
         Report: ReportBlock,

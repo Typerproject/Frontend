@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 
 const service = new commentAPI(import.meta.env.VITE_BASE_URI);
 
-export default function CommentList() {
+export default function CommentList({ comments }) {
   const [text, setText] = useState<string>("");
   const { id } = useParams<{ id: string }>() as { id: string };
 
@@ -18,8 +18,7 @@ export default function CommentList() {
       console.log(resp);
       if (resp.status !== 201) {
         throw Error("댓글 작성 실패");
-      }
-      else {
+      } else {
         setText("");
         history.scrollRestoration = "auto";
         location.reload();
@@ -32,13 +31,12 @@ export default function CommentList() {
 
   return (
     <div className="mb-[5rem]">
-      <p>댓글 14</p>
+      <p>댓글 {comments.length}</p>
       <hr className="my-[2rem]" />
-      {/* 정보 받았을 때 이런 형태로 돌리기 */}
-      {/* {Array.map((comment) => (
-        <Comment />
-      ))} */}
-      <Comment />
+
+      {comments.map((ele, idx) => {
+        return <Comment key={idx} comment={ele} service={service} />;
+      })}
 
       <div className="w-full flex flex-col gap-[1rem] items-end	">
         <textarea
