@@ -20,6 +20,7 @@ export default {
       },
     },
     screens: {
+      phone: { min: "10px", max: "450px" },
       md: "768px",
       mmd: "1250px",
     },

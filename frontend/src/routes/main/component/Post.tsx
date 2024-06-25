@@ -87,7 +87,7 @@ export default function MainPost({ post }: MainPostProps) {
                     {/*유저 이름과 사진*/}
                     <div>
                       <div
-                        onClick={() => navigate(`/my/${post.writer.id}`)}
+                        // onClick={() => navigate(`/my/${post.writer.id}`)}
                         className="flex gap-[0.5rem] items-center"
                       >
                         <img
@@ -105,7 +105,7 @@ export default function MainPost({ post }: MainPostProps) {
                   </div>
                   <div onClick={() => navigate(`/post/${post._id}`)}>
                     <div>
-                      <div className="text-3xl font-semibold mt-[1.2rem] max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
+                      <div className="text-3xl font-semibold mt-[1.2rem] max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">
                         {post.title}
                       </div>
                       <div className="text-base mt-[0.7rem] text-gray-500">
@@ -121,7 +121,7 @@ export default function MainPost({ post }: MainPostProps) {
                 onClick={() => navigate(`/post/${post._id}`)}
                 className="flex-grow basis-1/4"
               >
-                <div className="flex w-full h-full">
+                <div className="flex w-full h-full phone:hidden">
                   <div
                     // bg-center bg-cover
                     className="w-3/4 mmd:w-full h-full rounded"

@@ -375,7 +375,7 @@ export default function MyPage() {
   };
 
   return (
-    <div className="mt-[7rem] flex flex-col min-h-[calc(100vh-76.5px)]">
+    <div className="mt-[7rem] phone:mt-[5rem] flex flex-col min-h-[calc(100vh-76.5px)]">
       <div className="mmd:grid mmd:grid-cols-4 flex flex-col flex-grow">
         {/*글목록*/}
         <div className="order-last mmd:col-span-3 text-5xl flex flex-col items-center gap-[2rem]">
@@ -419,19 +419,22 @@ export default function MyPage() {
           className="mmd:fixed grid place-items-center mmd:order-last mmd:col-span-1 mmd:place-items-start"
         >
           <div className="mmd:flex-col">
-            <div className="flex pt-[2rem] pb-[3rem] mmd:py-[1rem] gap-[3.5rem] mmd:flex-col mmd:gap-[1rem]">
-              <div
-                onMouseOver={handleFlipped}
-                className={`mmd:w-[96px] ${
-                  flipped
-                    ? "animate-flip-back-front"
-                    : "animate-flip-front-back"
-                }`}
-              >
-                <img
-                  className="size-32 mmd:size-24 rounded-full"
-                  src={userInfo?.profile}
-                />
+            <div className="flex phone:flex-col pt-[2rem] pb-[3rem] mmd:py-[1rem] phone:px-[2rem] gap-[3.5rem] phone:gap-[0.2rem] mmd:flex-col mmd:gap-[1rem]">
+              <div className="phone:flex phone:justify-center">
+                <div
+                  onMouseOver={handleFlipped}
+                  className={`mmd:w-[96px] phone:w-24
+                  ${
+                    flipped
+                      ? "animate-flip-back-front"
+                      : "animate-flip-front-back"
+                  }`}
+                >
+                  <img
+                    className="size-32 mmd:size-24 phone:size-24 rounded-full"
+                    src={userInfo?.profile}
+                  />
+                </div>
               </div>
 
               <div className="content-center">
@@ -445,7 +448,9 @@ export default function MyPage() {
                       onChange={(e) => setEditedNickname(e.target.value)}
                     />
                   ) : (
-                    <p className="text-3xl ">{userInfo?.nickname}</p>
+                    <p className="text-3xl phone:text-xl">
+                      {userInfo?.nickname}
+                    </p>
                   )}
 
                   {/*버튼*/}
@@ -494,7 +499,9 @@ export default function MyPage() {
                 {isEditing ? (
                   <div></div>
                 ) : (
-                  <div className={`flex gap-5  mt-[0.5rem] text-[#b1b2b3]`}>
+                  <div
+                    className={`flex gap-5  mt-[0.5rem] text-[#b1b2b3] phone:text-sm`}
+                  >
                     <div className="relative">
                       <span
                         onClick={handleFollowerBtn}
