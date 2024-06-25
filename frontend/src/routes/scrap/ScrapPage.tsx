@@ -27,6 +27,8 @@ export interface IPostInfo {
   updatedAt: Date;
   writer: UserInfo;
   _id: string;
+  scrapingCount: number;
+  commentCount: number;
 }
 
 interface IntersectionObserverInit {
@@ -52,17 +54,12 @@ export default function ScrapPage() {
       // 인스턴스가 생기면 타겟, 루트 교차 안 되어도 계속 실행됨...
       // 타겟 요소가 루트 요소와 교차하는 점이 없으면 콜백을 호출했으되, 조기에 탈출 (예외처리)
       const entry: IntersectionObserverEntry = entries[0];
-      // entries.forEach((entry: IntersectionObserverEntry) => {
       //target지정 한개만 하니까 entries의 길이는 아마도 1
-      //
-      // if (entry.intersectionRatio <= 0) return;
       console.log(entry);
 
       if (entry.isIntersecting) {
         fetchScrapList();
-        // return setPage((prevPage) => prevPage + 1);
       }
-      // });
     },
     [page]
   );
@@ -92,13 +89,11 @@ export default function ScrapPage() {
         data.scrappedPosts.length === 0 &&
         observerRef.current &&
         targetRef.current
-      ) {
+      ) { //page state를 업데이트 하지 않으므로 추가 요청을 보내지 않게 됨
         setIsLoading(false);
         console.log(data.scrappedPosts.length);
-        // data.scrappedPosts = ["the end"];
         setPostInfo((prevData) => [...prevData, ...data.scrappedPosts]);
         return false;
-        // observerRef.current.unobserve(targetRef.current);
       }
 
       if (data.scrappedPosts.length > 0) {
@@ -113,13 +108,6 @@ export default function ScrapPage() {
     }
     return false;
   };
-
-  // useEffect(() => {
-  //   if (isLoading === false) {
-  //     setIsLoading(true);
-  //     fetchScrapList();
-  //   }
-  // }, [page]);
 
   useEffect(() => {
     if (!targetRef.current) return;
