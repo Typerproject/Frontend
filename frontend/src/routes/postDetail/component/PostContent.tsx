@@ -2,11 +2,12 @@ import { IoBookmarkOutline, IoBookmark } from "react-icons/io5";
 import { useState, useEffect } from "react";
 import ViewEditor from "./ViewEditor";
 import postAPI, { IpostScrap } from "../../../api/postDetailAPI";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { OutputData } from "@editorjs/editorjs";
 import CommentList from "./CommentList";
 import { FaRegComment } from "react-icons/fa";
 import commentAPI from "../../../api/commentAPI";
+import { useAppSelector } from "../../../store";
 
 const service = new postAPI(import.meta.env.VITE_SERVER_POST_API_URI);
 
@@ -15,6 +16,7 @@ type Props = {
   outputData: OutputData;
   setScrap: React.Dispatch<React.SetStateAction<boolean>>;
   scrapingCount: number;
+  writerId: string;
 };
 
 const commentService = new commentAPI(import.meta.env.VITE_BASE_URI);
@@ -29,10 +31,12 @@ export default function PostContent({
   setScrap,
   outputData,
   scrapingCount,
+  writerId,
 }: Props) {
   const [vaildComment, setValidComment] = useState<boolean>(false);
-
+  const currentUserId = useAppSelector((state) => state.user._id);
   const { id } = useParams<{ id: string }>() as { id: string };
+  const navigate = useNavigate();
 
   const [progress, setProgress] = useState<IprogressStyle>(
     {} as IprogressStyle
@@ -114,6 +118,28 @@ export default function PostContent({
     return () => window.removeEventListener("scroll", getElementPostion); // 클린업, 페이지를 나가면 이벤트 삭제
   }, []);
 
+  const clickDelete = async () => {
+    if (!confirm("정말 삭제하시겠습니까?")) {
+      return;
+    }
+
+    const resp = await service.deletePost(id);
+
+    if (resp.status !== 200) {
+      alert("게시글 삭제 실패");
+      return;
+    }
+
+    alert("삭제되었습니다.");
+    navigate(-1);
+  };
+
+  const clickEdit = ():void => {
+    if(window.confirm("게시글을 수정하시겠습니까?")){
+      navigate(`/edit/${id}`);
+    }
+  }
+
   return (
     <>
       <div
@@ -151,6 +177,22 @@ export default function PostContent({
           <div onClick={() => handleLike()} className="cursor-pointer">
             {scrap ? <IoBookmark size={20} /> : <IoBookmarkOutline size={20} />}
           </div>
+          {currentUserId === writerId && (
+            <>
+              <div
+                className="text-red-400 hover:bg-gray-400 rounded cursor-pointer"
+                onClick={clickDelete}
+              >
+                삭제
+              </div>
+              <div
+                className="text-blue-400 hover:bg-gray-400 rounded cursor-pointer"
+                onClick={clickEdit}
+              >
+                수정
+              </div>
+            </>
+          )}
         </div>
       </div>
 

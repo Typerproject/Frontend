@@ -25,6 +25,7 @@ interface Preview {
   createdAt: string;
   public: boolean;
   scrapingCount: number;
+  isScrapped: boolean;
   commentCount: number;
 }
 
@@ -82,8 +83,8 @@ export default function MyPage() {
           createdAt: ele.createdAt,
           public: ele.public,
           scrapingCount: ele.scrapingCount,
-          commentCount: ele.commentCount,
           isScrapped: ele.isScrapped,
+          commentCount: ele.commentCount,
         };
       });
 
@@ -416,7 +417,7 @@ export default function MyPage() {
           style={{
             right: "7%",
           }}
-          className="mmd:fixed grid place-items-center mmd:order-last mmd:col-span-1 mmd:place-items-start"
+          className=" mmd:fixed grid place-items-center mmd:order-last mmd:col-span-1 mmd:place-items-start"
         >
           <div className="mmd:flex-col">
             <div className="flex phone:flex-col pt-[2rem] pb-[3rem] mmd:py-[1rem] phone:px-[2rem] gap-[3.5rem] phone:gap-[0.2rem] mmd:flex-col mmd:gap-[1rem]">
@@ -437,8 +438,8 @@ export default function MyPage() {
                 </div>
               </div>
 
-              <div className="content-center">
-                <div className="flex gap-[1rem] items-center">
+              <div className="phone:mt-[1rem] content-center">
+                <div className="flex gap-[1rem] items-center phone:justify-center">
                   {/* 닉네임 */}
                   {isEditing ? (
                     <input
@@ -454,7 +455,7 @@ export default function MyPage() {
                   )}
 
                   {/*버튼*/}
-                  <div className="grid place-items-start">
+                  <div className="grid place-items-start ">
                     {currentUser._id === id && isEditing ? (
                       <div className="flex gap-10 ">
                         <button
@@ -500,7 +501,7 @@ export default function MyPage() {
                   <div></div>
                 ) : (
                   <div
-                    className={`flex gap-5  mt-[0.5rem] text-[#b1b2b3] phone:text-sm`}
+                    className={`flex gap-5  mt-[0.5rem] text-[#b1b2b3]  phone:justify-center phone:text-sm phone:py-[0.2rem]`}
                   >
                     <div className="relative">
                       <span
@@ -533,7 +534,7 @@ export default function MyPage() {
                 {isEditing ? (
                   <textarea
                     className="flex gap-10 text-[#88898a] text-blue-500 border-none italic w-54
-                shadow-md rounded px-8 pt-6 pb-8 bg-gray-50
+                shadow-md rounded px-8 pt-6 pb-8 bg-gray-50 
                 text-base mt-2 text-color text-blue-500 italic p-2 h-10"
                     value={editedComment}
                     onChange={(e) => setEditedComment(e.target.value)}
@@ -543,7 +544,7 @@ export default function MyPage() {
                     style={{
                       fontFamily: "Ownglyph_Dailyokja-Rg, sans-serif",
                     }}
-                    className="flex gap-10 text-[#88898a] mt-[0.7rem] w-[270px]"
+                    className="flex gap-10 text-[#88898a] mt-[0.7rem] w-[270px] phone:justify-center"
                   >
                     {userInfo?.comment}
                   </p>
