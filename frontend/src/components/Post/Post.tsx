@@ -31,11 +31,10 @@ interface User {
   nickname: string | undefined;
   profile: string | undefined;
   post: Preview;
-  scrapped: boolean;
 }
 
 //게시글을 작성한 유저의 id와 user/info/:_id에서 가져온 게시글 정보 필요
-export default function Post({ id, nickname, profile, post, scrapped }: User) {
+export default function Post({ id, nickname, profile, post }: User) {
   const navigate = useNavigate();
 
   const userName: string | undefined = nickname;
@@ -45,7 +44,7 @@ export default function Post({ id, nickname, profile, post, scrapped }: User) {
   //api호출을 통해 게시글 정보를 받아옴
   const title: string = post.title;
   const [like, setLike] = useState(post.scrapingCount);
-  const [validLike, setValidLike] = useState(scrapped);
+  const [validLike, setValidLike] = useState(post.isScrapped);
   const content: string = post.preview.text;
   const comment: number = post.commentCount;
   const picture: string = post.preview.img; //미리보기 사진
@@ -63,8 +62,8 @@ export default function Post({ id, nickname, profile, post, scrapped }: User) {
   });
 
   useEffect(() => {
-    setValidLike(scrapped);
-  }, [scrapped]);
+    setValidLike(post.isScrapped);
+  }, [post.isScrapped]);
 
   // 스크랩 하기 핸들러
   const handleLike = () => {
