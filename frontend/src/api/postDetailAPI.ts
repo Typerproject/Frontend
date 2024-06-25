@@ -146,4 +146,15 @@ export default class postAPI extends BaseApi {
 
     return data;
   }
+
+  //title: string | null;
+  // content: OutputData;
+  async patchPost(postId:string, title:string | null, content: OutputData) {
+    const resp = await this.fetcher.patch(`${postId}`, {
+      title,
+      content
+    });
+
+    return resp;
+  }
 }
