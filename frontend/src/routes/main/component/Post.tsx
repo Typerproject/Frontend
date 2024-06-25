@@ -66,6 +66,10 @@ export default function MainPost({ post }: MainPostProps) {
       });
   };
 
+  {
+    console.log("이름 왜 출력 안돼?: ", post.writer.nickname);
+  }
+
   return (
     <>
       <div className="flex flex-row px-[1rem] py-[2rem] justify-between mb-4 hover:bg-gray-200 hover:rounded-lg">
@@ -73,14 +77,17 @@ export default function MainPost({ post }: MainPostProps) {
           <div>
             <div className="flex cursor-pointer">
               {/* 미리보기 왼쪽*/}
-              <div className="flex-grow-[3] basis-3/4 w-full mr-10">
+              <div
+                className="flex-grow-[3] basis-3/4 w-full mr-10"
+                onClick={() => navigate(`/post/${post._id}`)}
+              >
                 <div className="flex flex-col items-start gap-[1rem] mb-[1rem]">
                   {/*글 정보*/}
                   <div className="flex flex-col mmd:flex-row mmd:justify-between gap-[1rem] w-full">
                     {/*유저 이름과 사진*/}
                     <div>
                       <div
-                        onClick={() => navigate(`/my/${post.writer.id}`)}
+                        // onClick={() => navigate(`/my/${post.writer.id}`)}
                         className="flex gap-[0.5rem] items-center"
                       >
                         <img
@@ -98,7 +105,7 @@ export default function MainPost({ post }: MainPostProps) {
                   </div>
                   <div onClick={() => navigate(`/post/${post._id}`)}>
                     <div>
-                      <div className="text-3xl font-semibold mt-[1.2rem] max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
+                      <div className="text-3xl font-semibold mt-[1.2rem] max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">
                         {post.title}
                       </div>
                       <div className="text-base mt-[0.7rem] text-gray-500">
@@ -114,7 +121,7 @@ export default function MainPost({ post }: MainPostProps) {
                 onClick={() => navigate(`/post/${post._id}`)}
                 className="flex-grow basis-1/4"
               >
-                <div className="flex w-full h-full">
+                <div className="flex w-full h-full phone:hidden">
                   <div
                     // bg-center bg-cover
                     className="w-3/4 mmd:w-full h-full rounded"
@@ -155,7 +162,7 @@ export default function MainPost({ post }: MainPostProps) {
             >
               <FaRegComment size={16} />
               {/* 코멘트 '개수'가 있다고 생각! */}
-              <p>1억</p>
+              <p>{post.commentCount}</p>
             </div>
           </div>
         </div>

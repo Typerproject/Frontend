@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import userAPI, { IUserInfo } from "../../api/userAPI";
+//import userAPI, { IUserInfo } from "../../api/userAPI";
 import postAPI from "../../api/postDetailAPI";
 import { FaRegComment } from "react-icons/fa";
 import { FaRegBookmark } from "react-icons/fa";
 import { FaBookmark } from "react-icons/fa6";
 
-const service = new userAPI(import.meta.env.VITE_BASE_URI);
+//const service = new userAPI(import.meta.env.VITE_BASE_URI);
 const postService = new postAPI(import.meta.env.VITE_SERVER_POST_API_URI);
 
 export interface Pre {
@@ -18,56 +18,36 @@ export interface Pre {
 interface Preview {
   title: string;
   _id: string;
+  //preview: object;
   preview: Pre;
   createdAt: string;
   public: boolean;
   scrapingCount: number;
+  isScrapped: boolean;
+  commentCount: number;
 }
 
 interface User {
   id: string | undefined;
+  nickname: string | undefined;
+  profile: string | undefined;
   post: Preview;
-  scrapped: boolean;
 }
 
 //게시글을 작성한 유저의 id와 user/info/:_id에서 가져온 게시글 정보 필요
-export default function Post({ id, post, scrapped }: User) {
+export default function Post({ id, nickname, profile, post }: User) {
   const navigate = useNavigate();
 
-  const [userInfo, setUserInfo] = useState<IUserInfo | null>(null);
-
-  //유저 정보 가져오기
-  useEffect(() => {
-    if (id) {
-      console.log("파라미터 잘 가져와 지나?", id);
-
-      // 유저 정보 겟또다제
-      service
-        .getUserInfo(id)
-        .then((data) => {
-          console.log("마페 유저", data);
-          setUserInfo(data);
-        })
-        .catch((err) => {
-          console.error("마페 유저", err);
-        });
-      console.log("post에 띄울 유저 정보 가져오기 성공");
-    } else {
-      console.log("post에 띄울 유저 정보 가져오기 실패");
-    }
-  }, [id]);
-
-  //유저의 정보
-  const userName: string | undefined = userInfo?.nickname;
-  const userProfile: string | undefined = userInfo?.profile;
+  const userName: string | undefined = nickname;
+  const userProfile: string | undefined = profile;
   //const currentUser = useAppSelector((state) => state.user);
 
   //api호출을 통해 게시글 정보를 받아옴
   const title: string = post.title;
   const [like, setLike] = useState(post.scrapingCount);
-  const [validLike, setValidLike] = useState(scrapped);
+  const [validLike, setValidLike] = useState(post.isScrapped);
   const content: string = post.preview.text;
-  const comment: number = 10;
+  const comment: number = post.commentCount;
   const picture: string = post.preview.img; //미리보기 사진
   const postId: string = post._id;
 
@@ -83,8 +63,8 @@ export default function Post({ id, post, scrapped }: User) {
   });
 
   useEffect(() => {
-    setValidLike(scrapped);
-  }, [scrapped]);
+    setValidLike(post.isScrapped);
+  }, [post.isScrapped]);
 
   // 스크랩 하기 핸들러
   const handleLike = () => {
@@ -115,7 +95,7 @@ export default function Post({ id, post, scrapped }: User) {
   };
 
   return (
-    <div className="w-full p-[2rem] hover:bg-gray-100 hover:rounded-lg">
+    <div className="w-full p-[2rem] phone:p-0 phone:py-[1rem] hover:bg-gray-100 hover:rounded-lg">
       <div onClick={() => navigate(`/post/${postId}`)}>
         <div className="flex cursor-pointer">
           {/* 미리보기 왼쪽*/}
@@ -139,10 +119,10 @@ export default function Post({ id, post, scrapped }: User) {
               </div>
               <div>
                 <div>
-                  <div className="text-3xl font-semibold mt-[1.2rem] max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
+                  <div className="text-3xl font-semibold mt-[1.2rem] max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">
                     {title}
                   </div>
-                  <div className="text-base mt-[0.7rem] text-gray-500">
+                  <div className="text-base mt-[0.7rem] text-gray-500 max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">
                     {content}
                   </div>
                 </div>
@@ -151,7 +131,7 @@ export default function Post({ id, post, scrapped }: User) {
           </div>
 
           {/* 미리보기 오른쪽 */}
-          <div className="flex-grow basis-1/4">
+          <div className="flex-grow basis-1/4 phone:hidden">
             <div className="flex w-full h-full">
               <div
                 // bg-center bg-cover

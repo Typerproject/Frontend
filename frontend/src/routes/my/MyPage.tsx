@@ -25,6 +25,8 @@ interface Preview {
   createdAt: string;
   public: boolean;
   scrapingCount: number;
+  isScrapped: boolean;
+  commentCount: number;
 }
 
 const service = new userAPI(import.meta.env.VITE_BASE_URI);
@@ -64,20 +66,6 @@ export default function MyPage() {
 
   //게시글 미리보기
   const [previewPost, setPreviewPost] = useState<Preview[]>([]);
-  const [scrappedPost, setScrappedPost] = useState<string[]>([]);
-
-  useEffect(() => {
-    let getScrapped: string[] | undefined;
-    if (id != currentUserId) {
-      getScrapped = cuserInfo?.scrappedPost;
-    } else {
-      getScrapped = userInfo?.scrappedPost;
-    }
-
-    if (getScrapped) {
-      setScrappedPost([...getScrapped]);
-    }
-  }, [userInfo?.scrappedPost, cuserInfo?.scrappedPost]);
 
   useEffect(() => {
     if (page === 1) {
@@ -95,6 +83,8 @@ export default function MyPage() {
           createdAt: ele.createdAt,
           public: ele.public,
           scrapingCount: ele.scrapingCount,
+          isScrapped: ele.isScrapped,
+          commentCount: ele.commentCount,
         };
       });
 
@@ -386,7 +376,7 @@ export default function MyPage() {
   };
 
   return (
-    <div className="mt-[7rem] flex flex-col min-h-[calc(100vh-76.5px)]">
+    <div className="mt-[7rem] phone:mt-[5rem] flex flex-col min-h-[calc(100vh-76.5px)]">
       <div className="mmd:grid mmd:grid-cols-4 flex flex-col flex-grow">
         {/*글목록*/}
         <div className="order-last mmd:col-span-3 text-5xl flex flex-col items-center gap-[2rem]">
@@ -400,11 +390,15 @@ export default function MyPage() {
           <div className="w-3/4">
             {/*가져온 글 목록을 map돌면서 출력*/}
             {previewPost.map((post: Preview) => {
-              const scrapped: boolean =
-                scrappedPost?.includes(post._id) || false;
               return (
                 <div>
-                  <Post id={id} post={post} scrapped={scrapped} />
+                  {/*주인의 아이디와 profile*/}
+                  <Post
+                    id={id}
+                    nickname={userInfo?.nickname}
+                    profile={userInfo?.profile}
+                    post={post}
+                  />
                   <hr
                     style={{
                       width: "100%",
@@ -423,26 +417,29 @@ export default function MyPage() {
           style={{
             right: "7%",
           }}
-          className="mmd:fixed grid place-items-center mmd:order-last mmd:col-span-1 mmd:place-items-start"
+          className=" mmd:fixed grid place-items-center mmd:order-last mmd:col-span-1 mmd:place-items-start"
         >
           <div className="mmd:flex-col">
-            <div className="flex pt-[2rem] pb-[3rem] mmd:py-[1rem] gap-[3.5rem] mmd:flex-col mmd:gap-[1rem]">
-              <div
-                onMouseOver={handleFlipped}
-                className={`mmd:w-[96px] ${
-                  flipped
-                    ? "animate-flip-back-front"
-                    : "animate-flip-front-back"
-                }`}
-              >
-                <img
-                  className="size-32 mmd:size-24 rounded-full"
-                  src={userInfo?.profile}
-                />
+            <div className="flex phone:flex-col pt-[2rem] pb-[3rem] mmd:py-[1rem] phone:px-[2rem] gap-[3.5rem] phone:gap-[0.2rem] mmd:flex-col mmd:gap-[1rem]">
+              <div className="phone:flex phone:justify-center">
+                <div
+                  onMouseOver={handleFlipped}
+                  className={`mmd:w-[96px] phone:w-24
+                  ${
+                    flipped
+                      ? "animate-flip-back-front"
+                      : "animate-flip-front-back"
+                  }`}
+                >
+                  <img
+                    className="size-32 mmd:size-24 phone:size-24 rounded-full"
+                    src={userInfo?.profile}
+                  />
+                </div>
               </div>
 
-              <div className="content-center">
-                <div className="flex gap-[1rem] items-center">
+              <div className="phone:mt-[1rem] content-center">
+                <div className="flex gap-[1rem] items-center phone:justify-center">
                   {/* 닉네임 */}
                   {isEditing ? (
                     <input
@@ -452,11 +449,13 @@ export default function MyPage() {
                       onChange={(e) => setEditedNickname(e.target.value)}
                     />
                   ) : (
-                    <p className="text-3xl ">{userInfo?.nickname}</p>
+                    <p className="text-3xl phone:text-xl">
+                      {userInfo?.nickname}
+                    </p>
                   )}
 
                   {/*버튼*/}
-                  <div className="grid place-items-start">
+                  <div className="grid place-items-start ">
                     {currentUser._id === id && isEditing ? (
                       <div className="flex gap-10 ">
                         <button
@@ -501,7 +500,9 @@ export default function MyPage() {
                 {isEditing ? (
                   <div></div>
                 ) : (
-                  <div className={`flex gap-5  mt-[0.5rem] text-[#b1b2b3]`}>
+                  <div
+                    className={`flex gap-5  mt-[0.5rem] text-[#b1b2b3]  phone:justify-center phone:text-sm phone:py-[0.2rem]`}
+                  >
                     <div className="relative">
                       <span
                         onClick={handleFollowerBtn}
@@ -533,7 +534,7 @@ export default function MyPage() {
                 {isEditing ? (
                   <textarea
                     className="flex gap-10 text-[#88898a] text-blue-500 border-none italic w-54
-                shadow-md rounded px-8 pt-6 pb-8 bg-gray-50
+                shadow-md rounded px-8 pt-6 pb-8 bg-gray-50 
                 text-base mt-2 text-color text-blue-500 italic p-2 h-10"
                     value={editedComment}
                     onChange={(e) => setEditedComment(e.target.value)}
@@ -543,7 +544,7 @@ export default function MyPage() {
                     style={{
                       fontFamily: "Ownglyph_Dailyokja-Rg, sans-serif",
                     }}
-                    className="flex gap-10 text-[#88898a] mt-[0.7rem] w-[270px]"
+                    className="flex gap-10 text-[#88898a] mt-[0.7rem] w-[270px] phone:justify-center"
                   >
                     {userInfo?.comment}
                   </p>

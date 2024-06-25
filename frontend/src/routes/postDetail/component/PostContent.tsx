@@ -2,10 +2,12 @@ import { IoBookmarkOutline, IoBookmark } from "react-icons/io5";
 import { useState, useEffect } from "react";
 import ViewEditor from "./ViewEditor";
 import postAPI, { IpostScrap } from "../../../api/postDetailAPI";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { OutputData } from "@editorjs/editorjs";
 import CommentList from "./CommentList";
 import { FaRegComment } from "react-icons/fa";
+import commentAPI from "../../../api/commentAPI";
+import { useAppSelector } from "../../../store";
 
 const service = new postAPI(import.meta.env.VITE_SERVER_POST_API_URI);
 
@@ -13,21 +15,41 @@ type Props = {
   scrap: boolean;
   outputData: OutputData;
   setScrap: React.Dispatch<React.SetStateAction<boolean>>;
+  scrapingCount: number;
+  writerId: string;
 };
+
+const commentService = new commentAPI(import.meta.env.VITE_BASE_URI);
 
 interface IprogressStyle {
   width: number;
   opacity: number;
 }
 
-export default function PostContent({ scrap, setScrap, outputData }: Props) {
+export default function PostContent({
+  scrap,
+  setScrap,
+  outputData,
+  scrapingCount,
+  writerId,
+}: Props) {
   const [vaildComment, setValidComment] = useState<boolean>(false);
-
+  const currentUserId = useAppSelector((state) => state.user._id);
   const { id } = useParams<{ id: string }>() as { id: string };
+  const navigate = useNavigate();
 
   const [progress, setProgress] = useState<IprogressStyle>(
     {} as IprogressStyle
   );
+  const [comments, setComments] = useState([]);
+
+  useEffect(() => {
+    const fetcthComments = async () => {
+      const resp = await commentService.getCommentList(id);
+      setComments(resp);
+    };
+    fetcthComments();
+  }, []);
 
   async function handleLike() {
     if (scrap) {
@@ -96,6 +118,22 @@ export default function PostContent({ scrap, setScrap, outputData }: Props) {
     return () => window.removeEventListener("scroll", getElementPostion); // 클린업, 페이지를 나가면 이벤트 삭제
   }, []);
 
+  const clickDelete = async () => {
+    if (!confirm("정말 삭제하시겠습니까?")) {
+      return;
+    }
+
+    const resp = await service.deletePost(id);
+
+    if (resp.status !== 200) {
+      alert("게시글 삭제 실패");
+      return;
+    }
+
+    alert("삭제되었습니다.");
+    navigate(-1);
+  };
+
   return (
     <>
       <div
@@ -118,21 +156,33 @@ export default function PostContent({ scrap, setScrap, outputData }: Props) {
         <hr id="post-end" className="mb-[2rem]" />
         <div className="flex flex-row-reverse items-center gap-[1rem]">
           {/* 코멘트 수 */}
-          <p>12</p>
+          <p>
+            {comments.reduce((acc, cur) => {
+              return acc + 1 + cur.replies.length;
+            }, 0)}
+          </p>
           <div
             className="cursor-pointer"
             onClick={() => setValidComment((prev) => !prev)}
           >
             <FaRegComment />
           </div>
-          <p className="mr-[10px]">123</p>
+          <p className="mr-[10px]">{scrapingCount}</p>
           <div onClick={() => handleLike()} className="cursor-pointer">
             {scrap ? <IoBookmark size={20} /> : <IoBookmarkOutline size={20} />}
           </div>
+          {currentUserId === writerId && (
+            <div
+              className="text-red-400 hover:bg-gray-400 rounded"
+              onClick={clickDelete}
+            >
+              삭제
+            </div>
+          )}
         </div>
       </div>
 
-      {vaildComment && <CommentList />}
+      {vaildComment && <CommentList comments={comments} />}
     </>
   );
 }

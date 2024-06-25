@@ -104,7 +104,7 @@ const MyComponent = () => {
 
       <div className="flex-grow">
         <div className="mt-[45px] flex flex-col">
-          <div className="flex flex-row x-[276px] h-[55px] mt-14 pl-[88px] ">
+          <div className="flex flex-row x-[276px] h-[55px] mt-14 ml-[3rem] phone:mr-[3rem] phone:justify-center">
             <button
               onClick={() => handleClick("Hot")}
               className={`w-[72px] text-[23px] border-b-4 ${
@@ -131,7 +131,7 @@ const MyComponent = () => {
             </button>
           </div>
 
-          <div className="px-[100px] my-10">
+          <div className="px-[10px] my-10">
             <div
               className="min-h-[500px] max-h-[800px] overflow-y-auto"
               ref={mainPostContainerRef}
@@ -141,13 +141,13 @@ const MyComponent = () => {
               }}
             >
               {!postList || (postList.posts.length === 0 && isLoading) ? (
+                <div>No content</div>
+              ) : postList.posts.length === 0 ? (
                 <div>
                   <PostLoading />
                   <PostLoading />
                   <PostLoading />
                 </div>
-              ) : postList.posts.length === 0 ? (
-                <div>No content</div>
               ) : (
                 postList.posts.map((post: IPost) => <MainPost post={post} />)
               )}
@@ -161,9 +161,6 @@ const MyComponent = () => {
                 <IoMdArrowDropup size={30} />
               </button>
             </div>
-
-            {/* 로딩 화면을 보여 주기 */}
-            {isEndOfPage ? <p>다 보여줬으니까 그만 내려;;</p> : <p>어쭈?</p>}
           </div>
         </div>
       </div>
