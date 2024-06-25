@@ -375,6 +375,32 @@ export default function MyPage() {
     window.scrollTo({ top: 0, behavior: "smooth" }); // 페이지의 스크롤도 맨 위로 이동
   };
 
+  //팔로우 스크롤 감지
+  const contentRef = useRef<HTMLDivElement>(null);
+  const footerRef = useRef<HTMLDivElement>(null);
+  const [maxHeight, setMaxHeight] = useState<number | undefined>(undefined);
+
+  useEffect(() => {
+    const handleResizeOrScroll = () => {
+      if (contentRef.current && footerRef.current) {
+        const footerTop = footerRef.current.getBoundingClientRect().top;
+        const contentTop = contentRef.current.getBoundingClientRect().top;
+        const viewportHeight = window.innerHeight;
+        const newMaxHeight = footerTop - contentTop - 20; // Adjust 20px for padding/margin
+        setMaxHeight(newMaxHeight);
+      }
+    };
+
+    window.addEventListener("resize", handleResizeOrScroll);
+    window.addEventListener("scroll", handleResizeOrScroll);
+    handleResizeOrScroll(); // Initial call to set the maxHeight
+
+    return () => {
+      window.removeEventListener("resize", handleResizeOrScroll);
+      window.removeEventListener("scroll", handleResizeOrScroll);
+    };
+  }, []);
+
   return (
     <div className="mt-[7rem] phone:mt-[5rem] flex flex-col min-h-[calc(100vh-76.5px)]">
       <div className="mmd:grid mmd:grid-cols-4 flex flex-col flex-grow">
@@ -559,17 +585,23 @@ export default function MyPage() {
               <div>
                 <div className="mt-[1rem] hidden mmd:block">
                   <p className="text-lg">Follower</p>
-                  <ul className="space-y-4">
-                    {followerInfo?.followerUsers.map((user) => (
-                      <FollowList
-                        _id={user._id}
-                        nickname={user.nickname}
-                        profile={user.profile}
-                        which={follow}
-                        setRefreshKey={setRefreshKey}
-                      />
-                    ))}
-                  </ul>
+                  <div
+                    ref={contentRef}
+                    className="overflow-y-auto pt-3"
+                    style={{ maxHeight: maxHeight ? `${maxHeight}px` : "auto" }}
+                  >
+                    <ul className="space-y-4 w-[12rem]">
+                      {followerInfo?.followerUsers.map((user) => (
+                        <FollowList
+                          _id={user._id}
+                          nickname={user.nickname}
+                          profile={user.profile}
+                          which={follow}
+                          setRefreshKey={setRefreshKey}
+                        />
+                      ))}
+                    </ul>
+                  </div>
                 </div>
                 <div>
                   <Modal
@@ -585,17 +617,23 @@ export default function MyPage() {
               <div>
                 <div className="mt-[1rem] hidden mmd:block">
                   <p className="text-lg">Following</p>
-                  <ul className="space-y-4">
-                    {followerInfo?.followingUsers.map((user) => (
-                      <FollowList
-                        _id={user._id}
-                        nickname={user.nickname}
-                        profile={user.profile}
-                        which={follow}
-                        setRefreshKey={setRefreshKey}
-                      />
-                    ))}
-                  </ul>
+                  <div
+                    ref={contentRef}
+                    className="overflow-y-auto pt-3"
+                    style={{ maxHeight: maxHeight ? `${maxHeight}px` : "auto" }}
+                  >
+                    <ul className="space-y-4 w-[12rem] ">
+                      {followerInfo?.followingUsers.map((user) => (
+                        <FollowList
+                          _id={user._id}
+                          nickname={user.nickname}
+                          profile={user.profile}
+                          which={follow}
+                          setRefreshKey={setRefreshKey}
+                        />
+                      ))}
+                    </ul>
+                  </div>
                 </div>
                 <div>
                   <Modal
@@ -619,7 +657,9 @@ export default function MyPage() {
           <IoMdArrowDropup size={30} />
         </button>
       </div>
-      <Footbar />
+      <div ref={footerRef}>
+        <Footbar />
+      </div>
     </div>
   );
 }
