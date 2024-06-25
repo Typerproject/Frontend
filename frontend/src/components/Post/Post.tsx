@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import userAPI, { IUserInfo } from "../../api/userAPI";
+//import userAPI, { IUserInfo } from "../../api/userAPI";
 import postAPI from "../../api/postDetailAPI";
 import { FaRegComment } from "react-icons/fa";
 import { FaRegBookmark } from "react-icons/fa";
 import { FaBookmark } from "react-icons/fa6";
 
-const service = new userAPI(import.meta.env.VITE_BASE_URI);
+//const service = new userAPI(import.meta.env.VITE_BASE_URI);
 const postService = new postAPI(import.meta.env.VITE_SERVER_POST_API_URI);
 
 export interface Pre {
@@ -23,6 +23,7 @@ interface Preview {
   createdAt: string;
   public: boolean;
   scrapingCount: number;
+  isScrapped: boolean;
   commentCount: number;
 }
 
@@ -94,7 +95,7 @@ export default function Post({ id, nickname, profile, post }: User) {
   };
 
   return (
-    <div className="w-full p-[2rem] hover:bg-gray-100 hover:rounded-lg">
+    <div className="w-full p-[2rem] phone:p-0 phone:py-[1rem] hover:bg-gray-100 hover:rounded-lg">
       <div onClick={() => navigate(`/post/${postId}`)}>
         <div className="flex cursor-pointer">
           {/* 미리보기 왼쪽*/}

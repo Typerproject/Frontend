@@ -84,6 +84,11 @@ export default class postAPI extends BaseApi {
     return resp.data;
   }
 
+  async deletePost(postId: string) {
+    const resp = await this.fetcher.delete(`/${postId}`);
+    return resp;
+  }
+
   async scrapPost(postId: string) {
     const resp = await this.fetcher.patch("/scrap", {
       postId: postId,
