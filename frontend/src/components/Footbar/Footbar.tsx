@@ -5,10 +5,10 @@ export default function Footbar() {
   return (
     <div className="h-56 w-full bg-black">
       <div className="grid grid-rows-5 h-full">
-        <div className="row-span-4">
+        <div className="row-span-4 ">
           {/*footer contents*/}
           <div className="flex justify-center mt-[1rem] text-white">
-            <div className="grid grid-cols-5 w-3/4">
+            <div className="grid grid-cols-5 w-3/4 phone:flex phone:flex-col phone:gap-[0.3rem] phone:mt-[0.7rem]">
               {/*logo & intro */}
               <div className="col-span-4 flex flex-col">
                 <div>
@@ -21,7 +21,7 @@ export default function Footbar() {
                 </div>
               </div>
               {/*소개 및 github*/}
-              <div className="row-span-2 col-span-1 mt-[0.2rem] flex flex-col gap-[0.5rem]">
+              <div className="row-span-2 col-span-1 mt-[0.2rem] flex flex-col phone:flex-row phone:gap-[1rem] phone:items-end gap-[0.5rem]">
                 <div className="row-span-2 col-span-2 mt-[0.5rem] flex flex-col text-white">
                   <div>공식 깃허브</div>
                   <div
@@ -42,12 +42,10 @@ export default function Footbar() {
             </div>
           </div>
         </div>
-        <div className="row-span-1 px-24">
+        <div className="row-span-1 px-24 phone:px-8">
           <hr
-            style={{
-              borderWidth: "2px",
-              color: "white",
-            }}
+            style={{ color: "white" }}
+            className="border-x-2 phone:border-x-0"
           ></hr>
           <div className="flex flex-row-reverse mt-[0.5rem] text-xs text-white end">
             프로 디지털 아카데미 4기
