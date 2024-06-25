@@ -417,7 +417,7 @@ export default function MyPage() {
           style={{
             right: "7%",
           }}
-          className="mmd:fixed grid place-items-center mmd:order-last mmd:col-span-1 mmd:place-items-start"
+          className=" mmd:fixed grid place-items-center mmd:order-last mmd:col-span-1 mmd:place-items-start"
         >
           <div className="mmd:flex-col">
             <div className="flex phone:flex-col pt-[2rem] pb-[3rem] mmd:py-[1rem] phone:px-[2rem] gap-[3.5rem] phone:gap-[0.2rem] mmd:flex-col mmd:gap-[1rem]">
@@ -438,7 +438,7 @@ export default function MyPage() {
                 </div>
               </div>
 
-              <div className="content-center">
+              <div className="phone:mt-[1rem] content-center">
                 <div className="flex gap-[1rem] items-center phone:justify-center">
                   {/* 닉네임 */}
                   {isEditing ? (
