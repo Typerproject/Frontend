@@ -19,6 +19,14 @@ const StyledSlider = styled(Slider)`
       font-size: 50px;
     }
   }
+
+  @media (max-width: 470px) {
+    .slick-track,
+    .slick-list {
+      height: 400px;
+    }
+    height: 400px;
+  }
 `;
 
 const SliderTest: React.FC = () => {
@@ -53,6 +61,29 @@ const SliderTest: React.FC = () => {
     autoplaySpeed: 2000,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
   };
 
   function NextArrow(props: any) {
@@ -227,7 +258,7 @@ const SliderTest: React.FC = () => {
               <div className="flex flex-col items-center justify-center gap-12 h-full text-white text-center">
                 <p
                   style={{
-                    fontSize: "25px",
+                    fontSize: "21px",
                     color: "white",
                     wordBreak: "break-word",
                     width: "80%",
@@ -275,7 +306,7 @@ const SliderTest: React.FC = () => {
               <div className="flex flex-col items-center justify-center gap-12 h-full text-white text-center">
                 <p
                   style={{
-                    fontSize: "25px",
+                    fontSize: "21px",
                     color: "white",
                     wordBreak: "break-word",
                     width: "80%",
