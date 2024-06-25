@@ -141,13 +141,13 @@ const MyComponent = () => {
               }}
             >
               {!postList || (postList.posts.length === 0 && isLoading) ? (
+                <div>No content</div>
+              ) : postList.posts.length === 0 ? (
                 <div>
                   <PostLoading />
                   <PostLoading />
                   <PostLoading />
                 </div>
-              ) : postList.posts.length === 0 ? (
-                <div>No content</div>
               ) : (
                 postList.posts.map((post: IPost) => <MainPost post={post} />)
               )}
