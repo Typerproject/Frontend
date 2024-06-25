@@ -162,7 +162,7 @@ export default function MainPost({ post }: MainPostProps) {
             >
               <FaRegComment size={16} />
               {/* 코멘트 '개수'가 있다고 생각! */}
-              <p>1억</p>
+              <p>{post.commentCount}</p>
             </div>
           </div>
         </div>
