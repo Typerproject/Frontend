@@ -104,7 +104,7 @@ const MyComponent = () => {
 
       <div className="flex-grow">
         <div className="mt-[45px] flex flex-col">
-          <div className="flex flex-row x-[276px] h-[55px] mt-14 justify-center">
+          <div className="flex flex-row x-[276px] h-[55px] mt-14 ml-[3rem] phone:justify-center">
             <button
               onClick={() => handleClick("Hot")}
               className={`w-[72px] text-[23px] border-b-4 ${
@@ -161,9 +161,6 @@ const MyComponent = () => {
                 <IoMdArrowDropup size={30} />
               </button>
             </div>
-
-            {/* 로딩 화면을 보여 주기 */}
-            {isEndOfPage ? <p>다 보여줬으니까 그만 내려;;</p> : <p>어쭈?</p>}
           </div>
         </div>
       </div>

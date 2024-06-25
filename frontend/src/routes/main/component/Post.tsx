@@ -87,7 +87,7 @@ export default function MainPost({ post }: MainPostProps) {
                     {/*유저 이름과 사진*/}
                     <div>
                       <div
-                        onClick={() => navigate(`/my/${post.writer.id}`)}
+                        // onClick={() => navigate(`/my/${post.writer.id}`)}
                         className="flex gap-[0.5rem] items-center"
                       >
                         <img
