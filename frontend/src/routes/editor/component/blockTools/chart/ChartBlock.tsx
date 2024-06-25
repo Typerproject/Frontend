@@ -187,6 +187,9 @@ const ChartModal = ({ setData, onExit }: ChartModalProps) => {
         e.preventDefault();
         if (selectedIndex !== -1) {
           handleSelect(filteredCodes[selectedIndex]);
+          setSelectedIndex(-1);
+          setFilteredCodes([]);
+          setShowDropdown(false);
         }
         break;
 
@@ -212,11 +215,19 @@ const ChartModal = ({ setData, onExit }: ChartModalProps) => {
     }
   };
 
-  // useEffect(() => {
-  //   if (dropdownRef.current) {
-  //     dropdownRef.current.focus();
-  //   }
-  // }, [showDropdown]);
+  useEffect(() => {
+    if (dropdownRef.current && selectedIndex !== -1) {
+      const selectedElement = dropdownRef.current.children[
+        selectedIndex
+      ] as HTMLElement;
+      if (selectedElement) {
+        selectedElement.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+        });
+      }
+    }
+  }, [selectedIndex]);
 
   const handleCodeChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
