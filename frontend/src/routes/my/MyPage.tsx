@@ -25,6 +25,7 @@ interface Preview {
   createdAt: string;
   public: boolean;
   scrapingCount: number;
+  commentCount: number;
 }
 
 const service = new userAPI(import.meta.env.VITE_BASE_URI);
@@ -64,20 +65,6 @@ export default function MyPage() {
 
   //게시글 미리보기
   const [previewPost, setPreviewPost] = useState<Preview[]>([]);
-  const [scrappedPost, setScrappedPost] = useState<string[]>([]);
-
-  useEffect(() => {
-    let getScrapped: string[] | undefined;
-    if (id != currentUserId) {
-      getScrapped = cuserInfo?.scrappedPost;
-    } else {
-      getScrapped = userInfo?.scrappedPost;
-    }
-
-    if (getScrapped) {
-      setScrappedPost([...getScrapped]);
-    }
-  }, [userInfo?.scrappedPost, cuserInfo?.scrappedPost]);
 
   useEffect(() => {
     if (page === 1) {
@@ -95,6 +82,8 @@ export default function MyPage() {
           createdAt: ele.createdAt,
           public: ele.public,
           scrapingCount: ele.scrapingCount,
+          commentCount: ele.commentCount,
+          isScrapped: ele.isScrapped,
         };
       });
 
@@ -400,8 +389,6 @@ export default function MyPage() {
           <div className="w-3/4">
             {/*가져온 글 목록을 map돌면서 출력*/}
             {previewPost.map((post: Preview) => {
-              const scrapped: boolean =
-                scrappedPost?.includes(post._id) || false;
               return (
                 <div>
                   {/*주인의 아이디와 profile*/}
@@ -410,7 +397,6 @@ export default function MyPage() {
                     nickname={userInfo?.nickname}
                     profile={userInfo?.profile}
                     post={post}
-                    scrapped={scrapped}
                   />
                   <hr
                     style={{

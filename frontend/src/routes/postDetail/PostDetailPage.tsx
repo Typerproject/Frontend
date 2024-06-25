@@ -18,12 +18,12 @@ export default function PostDetail() {
   const [isWriter, setIsWriter] = useState<boolean>(false);
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const { id } = useParams<{ id: string }>() as { id: string };
+
   useEffect(() => {
     const fetchPostData = async (): Promise<void> => {
       const postDetailData = await service
         .getPost(id)
         .then((res: IPostDetail) => {
-          console.log(res);
           setPostDetail(res);
           setIsWriter(userId === res.writer.writerId);
           setScrap(res.isScrapped);
@@ -97,10 +97,9 @@ export default function PostDetail() {
   }, []); // position 값이 변할 때마다 effect 실행
 
   const parsingDate = (): string => {
-    const utcDate = new Date(postDetail.writedAt);
-    const koreaDate = new Date(utcDate.getTime() + 9 * 60 * 60 * 1000);
+    const date = new Date(postDetail.writedAt);
 
-    const formattedTime = koreaDate.toLocaleString("ko-KR", {
+    const formattedTime = date.toLocaleString("ko-KR", {
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
@@ -132,6 +131,7 @@ export default function PostDetail() {
           scrap={scrap}
           setScrap={setScrap}
           outputData={postDetail.content}
+          scrapingCount={postDetail.scrapingCount}
         />
         {postDetail.writer && (
           <div

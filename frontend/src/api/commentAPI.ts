@@ -26,11 +26,16 @@ export default class commentAPI extends BaseApi {
       parentCommentId: req.parentCommentId,
     });
 
-    return resp.data;
+    return resp;
   }
 
-  async deleteComment(commentId:string) {
+  async deleteComment(commentId: string) {
     const resp = await this.fetcher.delete(`/comment/${commentId}`);
     return resp;
+  }
+
+  async getCommentList(postId: string) {
+    const resp = await this.fetcher.get(`/comment/${postId}`);
+    return resp.data;
   }
 }

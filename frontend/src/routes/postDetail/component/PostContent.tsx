@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import { OutputData } from "@editorjs/editorjs";
 import CommentList from "./CommentList";
 import { FaRegComment } from "react-icons/fa";
+import commentAPI from "../../../api/commentAPI";
 
 const service = new postAPI(import.meta.env.VITE_SERVER_POST_API_URI);
 
@@ -13,14 +14,22 @@ type Props = {
   scrap: boolean;
   outputData: OutputData;
   setScrap: React.Dispatch<React.SetStateAction<boolean>>;
+  scrapingCount: number;
 };
+
+const commentService = new commentAPI(import.meta.env.VITE_BASE_URI);
 
 interface IprogressStyle {
   width: number;
   opacity: number;
 }
 
-export default function PostContent({ scrap, setScrap, outputData }: Props) {
+export default function PostContent({
+  scrap,
+  setScrap,
+  outputData,
+  scrapingCount,
+}: Props) {
   const [vaildComment, setValidComment] = useState<boolean>(false);
 
   const { id } = useParams<{ id: string }>() as { id: string };
@@ -28,6 +37,15 @@ export default function PostContent({ scrap, setScrap, outputData }: Props) {
   const [progress, setProgress] = useState<IprogressStyle>(
     {} as IprogressStyle
   );
+  const [comments, setComments] = useState([]);
+
+  useEffect(() => {
+    const fetcthComments = async () => {
+      const resp = await commentService.getCommentList(id);
+      setComments(resp);
+    };
+    fetcthComments();
+  }, []);
 
   async function handleLike() {
     if (scrap) {
@@ -118,21 +136,25 @@ export default function PostContent({ scrap, setScrap, outputData }: Props) {
         <hr id="post-end" className="mb-[2rem]" />
         <div className="flex flex-row-reverse items-center gap-[1rem]">
           {/* 코멘트 수 */}
-          <p>12</p>
+          <p>
+            {comments.reduce((acc, cur) => {
+              return acc + 1 + cur.replies.length;
+            }, 0)}
+          </p>
           <div
             className="cursor-pointer"
             onClick={() => setValidComment((prev) => !prev)}
           >
             <FaRegComment />
           </div>
-          <p className="mr-[10px]">123</p>
+          <p className="mr-[10px]">{scrapingCount}</p>
           <div onClick={() => handleLike()} className="cursor-pointer">
             {scrap ? <IoBookmark size={20} /> : <IoBookmarkOutline size={20} />}
           </div>
         </div>
       </div>
 
-      {vaildComment && <CommentList />}
+      {vaildComment && <CommentList comments={comments} />}
     </>
   );
 }
