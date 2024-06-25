@@ -66,14 +66,21 @@ export default function MainPost({ post }: MainPostProps) {
       });
   };
 
+  {
+    console.log("이름 왜 출력 안돼?: ", post.writer.nickname);
+  }
+
   return (
     <>
-      <div className="flex flex-row justify-between mb-4">
+      <div className="flex flex-row px-[1rem] py-[2rem] justify-between mb-4 hover:bg-gray-200 hover:rounded-lg">
         <div className="flex-1 flex flex-col gap-[10px] justify-between">
           <div>
             <div className="flex cursor-pointer">
               {/* 미리보기 왼쪽*/}
-              <div className="flex-grow-[3] basis-3/4 w-full mr-10">
+              <div
+                className="flex-grow-[3] basis-3/4 w-full mr-10"
+                onClick={() => navigate(`/post/${post._id}`)}
+              >
                 <div className="flex flex-col items-start gap-[1rem] mb-[1rem]">
                   {/*글 정보*/}
                   <div className="flex flex-col mmd:flex-row mmd:justify-between gap-[1rem] w-full">
@@ -88,7 +95,7 @@ export default function MainPost({ post }: MainPostProps) {
                           src={post.writer.img}
                         />
                         <div className="text-base min-w-full">
-                          {post.writer.name}
+                          {post.writer.nickname}
                         </div>
                       </div>
                     </div>
@@ -117,7 +124,7 @@ export default function MainPost({ post }: MainPostProps) {
                 <div className="flex w-full h-full">
                   <div
                     // bg-center bg-cover
-                    className="w-full h-full rounded"
+                    className="w-3/4 mmd:w-full h-full rounded"
                     style={{
                       backgroundImage: `url(${post.preview.img})`,
                       backgroundSize: "cover",

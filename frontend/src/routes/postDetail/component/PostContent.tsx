@@ -1,5 +1,5 @@
 import { IoBookmarkOutline, IoBookmark } from "react-icons/io5";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import ViewEditor from "./ViewEditor";
 import postAPI, { IpostScrap } from "../../../api/postDetailAPI";
 import { useParams } from "react-router-dom";
@@ -19,6 +19,11 @@ type Props = {
 
 const commentService = new commentAPI(import.meta.env.VITE_BASE_URI);
 
+interface IprogressStyle {
+  width: number;
+  opacity: number;
+}
+
 export default function PostContent({
   scrap,
   setScrap,
@@ -28,6 +33,10 @@ export default function PostContent({
   const [vaildComment, setValidComment] = useState<boolean>(false);
 
   const { id } = useParams<{ id: string }>() as { id: string };
+
+  const [progress, setProgress] = useState<IprogressStyle>(
+    {} as IprogressStyle
+  );
   const [comments, setComments] = useState([]);
 
   useEffect(() => {
@@ -66,13 +75,65 @@ export default function PostContent({
     }
   }
 
+  const getElementPostion = () => {
+    const mainPost = document.getElementById("mainPost");
+    const progressBar = document.getElementById("progress-bar");
+    const postEnd = document.getElementById("post-end");
+
+    const scrollY = window.scrollY; // 스크롤 양
+
+    const mainPostPosition =
+      mainPost && Math.floor(scrollY + mainPost.getBoundingClientRect().top); // 절대위치, Math.floor로 정수로 변환
+
+    const progressPostion =
+      progressBar &&
+      Math.floor(scrollY + progressBar.getBoundingClientRect().bottom);
+
+    const postEndPosition =
+      postEnd && Math.floor(scrollY + postEnd.getBoundingClientRect().top);
+
+    // console.log("scrollY : ", scrollY);
+    // console.log("progressPostion : ", progressPostion);
+    // console.log("postEndPosition : ", postEndPosition);
+
+    // window.innerHeight + scrollY가 mainBottomPosition아래로 내려가면 -> progress bar width는 100%이상이 되어야 한다...
+    setProgress({
+      width: postEndPosition
+        ? (Number(window.innerHeight + scrollY) / Number(postEndPosition)) * 100
+        : 0,
+      opacity:
+        mainPostPosition && progressPostion
+          ? Number(progressPostion > mainPostPosition)
+          : 0,
+    });
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", getElementPostion); // 스크롤시 getBannerPosition 발생
+
+    return () => window.removeEventListener("scroll", getElementPostion); // 클린업, 페이지를 나가면 이벤트 삭제
+  }, []);
+
   return (
     <>
-      <div className="w-full h-full min-h-70 rounded-[10px] py-[4rem]">
+      <div
+        id="mainPost"
+        className="w-full h-full min-h-70 rounded-[10px] py-[4rem]"
+      >
+        <div
+          id="progress-bar"
+          className="fixed top-0 left-0 bg-[#388BFF] z-[99] h-[80px] "
+          style={{
+            width: `${progress.width}%`,
+            opacity: `${progress.opacity}`,
+            transition: "width .2s ease-out",
+          }}
+        ></div>
+
         {/* 글 내용 */}
         {outputData && <ViewEditor outPutData={outputData} />}
 
-        <hr className="mb-[2rem]" />
+        <hr id="post-end" className="mb-[2rem]" />
         <div className="flex flex-row-reverse items-center gap-[1rem]">
           {/* 코멘트 수 */}
           <p>

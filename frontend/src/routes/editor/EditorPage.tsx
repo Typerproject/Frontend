@@ -57,12 +57,16 @@ export default function EditorPage() {
           <Editor setContent={setContent} />
         </div>
         <footer className="bg-black h-14 fixed bottom-0 right-0 left-0 flex items-center justify-between px-16 z-[100]">
-          <p className="text-white text-xl" onClick={() => navigate("/my")}>
+          <p
+            className="text-white text-xl cursor-pointer hover:opacity-80"
+            onClick={() => navigate(-1)}
+          >
             나가기
           </p>
-          <div className="flex items-center w-[10%] justify-between ">
+          <div className="flex items-center w-[10%] justify-between">
             {isPublic ? (
               <IoMdUnlock
+                className="hover:opacity-80 cursor-pointer"
                 color={"white"}
                 size={30}
                 onClick={changeVisibility}
@@ -70,13 +74,17 @@ export default function EditorPage() {
               />
             ) : (
               <IoMdLock
+                className="hover:opacity-80 cursor-pointer"
                 color={"white"}
                 size={30}
                 onClick={changeVisibility}
                 title="비공개"
               />
             )}
-            <p className="text-white text-xl" onClick={publish}>
+            <p
+              className="text-white text-xl cursor-pointer hover:opacity-80"
+              onClick={publish}
+            >
               출간
             </p>
           </div>

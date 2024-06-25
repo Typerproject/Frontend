@@ -18,48 +18,28 @@ export interface Pre {
 interface Preview {
   title: string;
   _id: string;
+  //preview: object;
   preview: Pre;
   createdAt: string;
   public: boolean;
   scrapingCount: number;
+  commentCount: number;
 }
 
 interface User {
   id: string | undefined;
+  nickname: string | undefined;
+  profile: string | undefined;
   post: Preview;
   scrapped: boolean;
 }
 
 //게시글을 작성한 유저의 id와 user/info/:_id에서 가져온 게시글 정보 필요
-export default function Post({ id, post, scrapped }: User) {
+export default function Post({ id, nickname, profile, post, scrapped }: User) {
   const navigate = useNavigate();
 
-  const [userInfo, setUserInfo] = useState<IUserInfo | null>(null);
-
-  //유저 정보 가져오기
-  useEffect(() => {
-    if (id) {
-      console.log("파라미터 잘 가져와 지나?", id);
-
-      // 유저 정보 겟또다제
-      service
-        .getUserInfo(id)
-        .then((data) => {
-          console.log("마페 유저", data);
-          setUserInfo(data);
-        })
-        .catch((err) => {
-          console.error("마페 유저", err);
-        });
-      console.log("post에 띄울 유저 정보 가져오기 성공");
-    } else {
-      console.log("post에 띄울 유저 정보 가져오기 실패");
-    }
-  }, [id]);
-
-  //유저의 정보
-  const userName: string | undefined = userInfo?.nickname;
-  const userProfile: string | undefined = userInfo?.profile;
+  const userName: string | undefined = nickname;
+  const userProfile: string | undefined = profile;
   //const currentUser = useAppSelector((state) => state.user);
 
   //api호출을 통해 게시글 정보를 받아옴
@@ -67,7 +47,7 @@ export default function Post({ id, post, scrapped }: User) {
   const [like, setLike] = useState(post.scrapingCount);
   const [validLike, setValidLike] = useState(scrapped);
   const content: string = post.preview.text;
-  const comment: number = 10;
+  const comment: number = post.commentCount;
   const picture: string = post.preview.img; //미리보기 사진
   const postId: string = post._id;
 

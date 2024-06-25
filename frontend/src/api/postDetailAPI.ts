@@ -35,7 +35,7 @@ export interface IpostScrap {
 // 작성자 정보를 담는 인터페이스
 interface IWriter {
   id: string;
-  name: string;
+  nickname: string;
   img: string;
 }
 
@@ -61,6 +61,15 @@ export interface IPost {
 // 메인 화면용 포스트 리스트를 담는 인터페이스
 export interface IPostListForMain {
   posts: IPost[];
+}
+
+// 메인 슬라이드
+export interface IPostSlider {
+  _id: string;
+  title: string;
+  preview: IPreview;
+  userId: string;
+  writer: IWriter;
 }
 
 export default class postAPI extends BaseApi {
@@ -113,20 +122,22 @@ export default class postAPI extends BaseApi {
 
       const data: IPost[] = await resp.data;
 
-      console.log("나와라 제이슨 형식!", data);
-
-      // const previewForMain = data.map((elem: IPost) => ({
-      //   preview: elem.preview,
-      // }));
-
-      // console.log("나와라 프리뷰~", previewForMain);
+      console.log("메인 페이지 리스트", data);
 
       return { posts: data };
-
-      // return posts;
     } catch (error) {
       console.error("Error fetching post list:", error);
-      throw error; // 예외 처리를 원하는 방식으로 수정 가능
+      throw error;
     }
+  }
+
+  async getPostListForSlide() {
+    const resp = await this.fetcher.get("/random");
+
+    const data: IPostSlider[] = resp.data.randomPosts;
+
+    console.log("슬라이드 리스트 데이터", data);
+
+    return data;
   }
 }

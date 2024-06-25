@@ -1,6 +1,7 @@
 import React from "react";
 import ReactApexChart from "react-apexcharts";
 import { stockResp } from "./ChartBlock";
+import { ApexOptions } from "apexcharts";
 
 // 날짜 포맷 변환 함수 (예시)
 function formatDate(dateStr: string) {
@@ -79,8 +80,8 @@ function JsonChartTest({ stockData }: chartProps) {
   return (
     <ReactApexChart
       id="chartTarget"
-      options={options}
-      series={series}
+      options={options as ApexOptions}
+      series={series as ApexOptions["series"]}
       type="candlestick"
       height={350}
     />

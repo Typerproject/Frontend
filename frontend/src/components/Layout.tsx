@@ -7,10 +7,10 @@ import Navbar from "./Navbar/Navbar";
 export default function Layout() {
   return (
     <div>
-        <Navbar />
-        <div>
-            <Outlet />
-        </div>
+      <Navbar />
+      <div>
+        <Outlet />
+      </div>
     </div>
-  )
+  );
 }
