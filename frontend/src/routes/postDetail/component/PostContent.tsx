@@ -134,6 +134,12 @@ export default function PostContent({
     navigate(-1);
   };
 
+  const clickEdit = ():void => {
+    if(window.confirm("게시글을 수정하시겠습니까?")){
+      navigate(`/edit/${id}`);
+    }
+  }
+
   return (
     <>
       <div
@@ -172,12 +178,20 @@ export default function PostContent({
             {scrap ? <IoBookmark size={20} /> : <IoBookmarkOutline size={20} />}
           </div>
           {currentUserId === writerId && (
-            <div
-              className="text-red-400 hover:bg-gray-400 rounded"
-              onClick={clickDelete}
-            >
-              삭제
-            </div>
+            <>
+              <div
+                className="text-red-400 hover:bg-gray-400 rounded cursor-pointer"
+                onClick={clickDelete}
+              >
+                삭제
+              </div>
+              <div
+                className="text-blue-400 hover:bg-gray-400 rounded cursor-pointer"
+                onClick={clickEdit}
+              >
+                수정
+              </div>
+            </>
           )}
         </div>
       </div>
