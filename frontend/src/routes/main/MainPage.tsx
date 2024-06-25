@@ -84,32 +84,10 @@ const MyComponent = () => {
       // 현재 버튼이 클릭된 버튼과 같지 않을 때만 페이지 초기화
       setActiveButton(buttonName);
       setPage(1);
+      setPostList({ posts: [] });
       setIsLoading(true);
     }
   };
-
-  // useEffect(() => {
-  //   if (page === 1) {
-  //     // 첫 페이지 로드 시 초기화
-  //     setPostList({ posts: [] });
-  //   }
-
-  //   postService
-  //     .getPostListForMain(page, activeButton.toLowerCase())
-  //     .then((data) => {
-  //       console.log("메인 페이지 포스트 데이터 잘 가져와 지나??", data);
-  //       setPostList((prevPostList) => ({
-  //         ...prevPostList,
-  //         posts:
-  //           page === 1 ? data.posts : [...prevPostList.posts, ...data.posts],
-  //       }));
-
-  //       setIsLoading(false);
-  //     })
-  //     .catch((err) => {
-  //       console.error(err);
-  //     });
-  // }, [page, activeButton]);
 
   // 스크롤 맨 위로 올리는 함수
   const scrollToTop = () => {

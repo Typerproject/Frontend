@@ -64,10 +64,6 @@ export default function MainPost({ post }: MainPostProps) {
       });
   };
 
-  {
-    console.log("이름 왜 출력 안돼?: ", post.writer.nickname);
-  }
-
   return (
     <>
       <div className="flex flex-row px-[1rem] py-[2rem] justify-between mb-4 hover:bg-gray-200 hover:rounded-lg duration-200">
