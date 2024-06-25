@@ -404,7 +404,14 @@ export default function MyPage() {
                 scrappedPost?.includes(post._id) || false;
               return (
                 <div>
-                  <Post id={id} post={post} scrapped={scrapped} />
+                  {/*주인의 아이디와 profile*/}
+                  <Post
+                    id={id}
+                    nickname={userInfo?.nickname}
+                    profile={userInfo?.profile}
+                    post={post}
+                    scrapped={scrapped}
+                  />
                   <hr
                     style={{
                       width: "100%",
