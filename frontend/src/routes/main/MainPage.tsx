@@ -104,7 +104,7 @@ const MyComponent = () => {
 
       <div className="flex-grow">
         <div className="mt-[45px] flex flex-col">
-          <div className="flex flex-row x-[276px] h-[55px] mt-14 pl-[88px] ">
+          <div className="flex flex-row x-[276px] h-[55px] mt-14 justify-center">
             <button
               onClick={() => handleClick("Hot")}
               className={`w-[72px] text-[23px] border-b-4 ${
@@ -131,7 +131,7 @@ const MyComponent = () => {
             </button>
           </div>
 
-          <div className="px-[100px] my-10">
+          <div className="px-[10px] my-10">
             <div
               className="min-h-[500px] max-h-[800px] overflow-y-auto"
               ref={mainPostContainerRef}
