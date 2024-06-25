@@ -17,7 +17,6 @@ export interface IUserInfo {
   comment: string;
   profile: string;
   writerdPost: Preview[];
-  scrappedPost: string[];
 }
 
 // IFollowerInfo 배열 안의 유저 데이터를 표현한 거임
