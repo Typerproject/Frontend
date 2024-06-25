@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react";
-import userAPI from "../../../api/userAPI";
+import { useState } from "react";
 import postAPI, { IPost } from "../../../api/postDetailAPI";
 import { FaRegComment, FaRegBookmark } from "react-icons/fa";
 import { FaBookmark } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 
-const useService = new userAPI(import.meta.env.VITE_BASE_URI);
 const postService = new postAPI(import.meta.env.VITE_SERVER_POST_API_URI);
 
 // 스크랩/코멘트 누르면 로그인 요청 알럿 + login 창 뜨도록?
@@ -72,7 +70,7 @@ export default function MainPost({ post }: MainPostProps) {
 
   return (
     <>
-      <div className="flex flex-row px-[1rem] py-[2rem] justify-between mb-4 hover:bg-gray-200 hover:rounded-lg">
+      <div className="flex flex-row px-[1rem] py-[2rem] justify-between mb-4 hover:bg-gray-200 hover:rounded-lg duration-200">
         <div className="flex-1 flex flex-col gap-[10px] justify-between">
           <div>
             <div className="flex cursor-pointer">
@@ -161,7 +159,6 @@ export default function MainPost({ post }: MainPostProps) {
               className="flex items-center gap-[0.5rem] cursor-pointer"
             >
               <FaRegComment size={16} />
-              {/* 코멘트 '개수'가 있다고 생각! */}
               <p>{post.commentCount}</p>
             </div>
           </div>
