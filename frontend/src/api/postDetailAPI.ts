@@ -56,7 +56,7 @@ export interface IPost {
   writer: IWriter;
   scrapingCount: number;
   isScrapped: boolean;
-  commnetCount: number;
+  commentCount: number;
 }
 
 // 메인 화면용 포스트 리스트를 담는 인터페이스
