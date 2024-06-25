@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import CreateDOM from "react-dom/client";
 import JsonChartTest from "./Chart";
 import editorAPI from "../../../../../api/editorAPI";
@@ -21,6 +21,11 @@ interface stockData {
   low: string;
   close: string;
   date: string;
+}
+
+interface CodeItem {
+  code: string;
+  name: string;
 }
 
 export class ChartBLock {
@@ -100,22 +105,123 @@ const ChartModal = ({ setData, onExit }: ChartModalProps) => {
     period: "",
     prc: "0",
   });
-  const [codeList, setCodeList] = useState();
+  const [codeList, setCodeList] = useState<CodeItem[]>([]);
+  const [codeSearch, setCodeSearch] = useState("");
+  const [filteredCodes, setFilteredCodes] = useState<CodeItem[]>([]);
+  const [showDropdown, setShowDropdown] = useState<boolean>(false);
+  const [selectedIndex, setSelectedIndex] = useState<number>(-1); // 선택된 항목의 인덱스
+  const dropdownRef = useRef<HTMLUListElement>(null); // 드롭다운 요소의 ref
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     service
       .getCodeList()
       .then((data) => {
-        setCodeList(data);
+        console.log("Received data:", data.codeList);
+
+        setCodeList(data.codeList);
       })
       .catch((err) => {
-        console.error("아 시발 ㅋㅋ", err);
+        console.error("getCodeList Error: ", err);
+        setCodeList([]);
       });
   }, []);
+
+  useEffect(() => {
+    if (codeSearch && codeList) {
+      const filtered = codeList.filter((item) => {
+        return item.name.toLowerCase().includes(codeSearch.toLocaleLowerCase());
+      });
+
+      console.log("제발제발 필터된 데이터", filtered);
+
+      setShowDropdown(true);
+      setFilteredCodes(filtered);
+      setSelectedIndex(-1);
+    } else {
+      setShowDropdown(false);
+      setFilteredCodes([]);
+      setSelectedIndex(-1);
+    }
+  }, [codeSearch, codeList]);
+
+  const handleFocusToDropdown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (filteredCodes.length > 0 && showDropdown) {
+      switch (e.key) {
+        case "ArrowDown":
+          e.preventDefault();
+          if (dropdownRef.current) {
+            dropdownRef.current.focus();
+          }
+          break;
+        default:
+          break;
+      }
+    }
+  };
+
+  const handleCodeKeyDown = (e: KeyboardEvent<HTMLUListElement>) => {
+    if (filteredCodes.length === 0) {
+      return;
+    }
+
+    switch (e.key) {
+      case "ArrowUp":
+        e.preventDefault();
+        if (selectedIndex === 0) {
+          inputRef.current?.focus();
+        } else {
+          setSelectedIndex((preIndex) => Math.max(preIndex - 1, 0));
+        }
+
+        break;
+
+      case "ArrowDown":
+        e.preventDefault();
+        setSelectedIndex((prevIndex) =>
+          Math.min(prevIndex + 1, filteredCodes.length - 1)
+        );
+        break;
+
+      case "Enter":
+        e.preventDefault();
+        if (selectedIndex !== -1) {
+          handleSelect(filteredCodes[selectedIndex]);
+        }
+        break;
+
+      default:
+        break;
+    }
+  };
 
   const handleClose = () => {
     onExit();
     setShow(false);
+  };
+
+  const handleSelect = (item: CodeItem) => {
+    console.log("handleSelect: ", item);
+
+    setCodeSearch(item.name);
+    setFormData({ ...formData, stockCode: item.code });
+    setFilteredCodes([]);
+    setShowDropdown(false);
+    if (inputRef.current) {
+      inputRef.current.focus(); // 입력 필드로 포커스 이동
+    }
+  };
+
+  // useEffect(() => {
+  //   if (dropdownRef.current) {
+  //     dropdownRef.current.focus();
+  //   }
+  // }, [showDropdown]);
+
+  const handleCodeChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    setCodeSearch(e.target.value);
   };
 
   const handleChange = (
@@ -130,6 +236,14 @@ const ChartModal = ({ setData, onExit }: ChartModalProps) => {
       const stockResp = await service.getStockData(formData);
 
       setData(stockResp);
+      setFormData({
+        marketCode: "J",
+        stockCode: "",
+        startDate: "",
+        endDate: "",
+        period: "",
+        prc: "0",
+      });
       setShow(false);
     } catch (error) {
       console.error("Failed to fetch stock data", error);
@@ -170,16 +284,38 @@ const ChartModal = ({ setData, onExit }: ChartModalProps) => {
             <div className="p-4">
               <form>
                 <div className="mb-4">
-                  <label className="block text-gray-700">종목 코드</label>
+                  <label className="block text-gray-700">종목 이름</label>
                   <input
+                    ref={inputRef}
                     type="text"
-                    placeholder="종목번호 (6자리)"
                     name="stockCode"
-                    value={formData.stockCode}
-                    onChange={handleChange}
+                    placeholder="(ex. 삼성전자)"
+                    value={codeSearch}
+                    onChange={handleCodeChange}
+                    onKeyDown={handleFocusToDropdown}
                     className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                     required
                   />
+                  {showDropdown && filteredCodes.length > 0 && (
+                    <ul
+                      ref={dropdownRef}
+                      className="absolute z-10 border border-gray-300 mt-2 rounded-md shadow-sm max-h-40 overflow-y-auto bg-gray-100"
+                      onKeyDown={handleCodeKeyDown}
+                      tabIndex={0}
+                    >
+                      {filteredCodes.map((item, index) => (
+                        <li
+                          key={item.code}
+                          className={`p-2 hover:bg-gray-200 cursor-pointer ${
+                            index === selectedIndex ? "bg-gray-200" : ""
+                          }`}
+                          onClick={() => handleSelect(item)}
+                        >
+                          {item.name}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
                 <div className="mb-4">
                   <label className="block text-gray-700">
