@@ -104,7 +104,7 @@ const MyComponent = () => {
 
       <div className="flex-grow">
         <div className="mt-[45px] flex flex-col">
-          <div className="flex flex-row x-[276px] h-[55px] mt-14 ml-[3rem] phone:justify-center">
+          <div className="flex flex-row x-[276px] h-[55px] mt-14 ml-[3rem] phone:mr-[3rem] phone:justify-center">
             <button
               onClick={() => handleClick("Hot")}
               className={`w-[72px] text-[23px] border-b-4 ${
