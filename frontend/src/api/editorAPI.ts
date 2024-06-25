@@ -25,6 +25,14 @@ export default class editorAPI extends BaseApi {
     return resp.data;
   }
 
+  async getCodeList() {
+    const resp = await this.fetcher.get("/stock/code");
+
+    console.log("주식 종목 리스트", resp.data.codeList);
+
+    return resp.data;
+  }
+
   async getNewsData(newsUrl: string) {
     const resp = await this.fetcher.post("/news", {
       url: newsUrl,

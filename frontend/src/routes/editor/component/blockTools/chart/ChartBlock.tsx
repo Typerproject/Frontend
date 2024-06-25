@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CreateDOM from "react-dom/client";
 import JsonChartTest from "./Chart";
 import editorAPI from "../../../../../api/editorAPI";
@@ -100,6 +100,18 @@ const ChartModal = ({ setData, onExit }: ChartModalProps) => {
     period: "",
     prc: "0",
   });
+  const [codeList, setCodeList] = useState();
+
+  useEffect(() => {
+    service
+      .getCodeList()
+      .then((data) => {
+        setCodeList(data);
+      })
+      .catch((err) => {
+        console.error("아 시발 ㅋㅋ", err);
+      });
+  }, []);
 
   const handleClose = () => {
     onExit();
@@ -183,7 +195,7 @@ const ChartModal = ({ setData, onExit }: ChartModalProps) => {
                     required
                   />
                 </div>
-                <div className="mb-4">
+                <div className="mb-4 ">
                   <label className="block text-gray-700">
                     입력 날짜 (종료)
                   </label>
