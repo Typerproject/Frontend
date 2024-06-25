@@ -11,6 +11,7 @@ export interface IPostDetail {
   writer: IPostWriter;
   writedAt: Date;
   isScrapped: boolean;
+  scrapingCount: number;
 }
 export interface IPostWriter {
   writerId: string;
@@ -90,8 +91,8 @@ export default class postAPI extends BaseApi {
   async getScrapList(page: number) {
     const resp = await this.fetcher.get("/scrap/list", {
       params: {
-        page: page
-      }
+        page: page,
+      },
     });
 
     return resp.data;

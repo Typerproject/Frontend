@@ -12,7 +12,6 @@ interface IprogressStyle {
   width: number;
   opacity: number;
 }
-
 export default function PostDetail() {
   const navigate = useNavigate();
   const userId = useAppSelector((state) => state.user._id);
@@ -23,12 +22,12 @@ export default function PostDetail() {
   const [isWriter, setIsWriter] = useState<boolean>(false);
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const { id } = useParams<{ id: string }>() as { id: string };
+
   useEffect(() => {
     const fetchPostData = async (): Promise<void> => {
       const postDetailData = await service
         .getPost(id)
         .then((res: IPostDetail) => {
-          console.log(res);
           setPostDetail(res);
           setIsWriter(userId === res.writer.writerId);
           setScrap(res.isScrapped);
@@ -123,10 +122,9 @@ export default function PostDetail() {
   }, [opacity]); // position 값이 변할 때마다 effect 실행
 
   const parsingDate = (): string => {
-    const utcDate = new Date(postDetail.writedAt);
-    const koreaDate = new Date(utcDate.getTime() + 9 * 60 * 60 * 1000);
+    const date = new Date(postDetail.writedAt);
 
-    const formattedTime = koreaDate.toLocaleString("ko-KR", {
+    const formattedTime = date.toLocaleString("ko-KR", {
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
@@ -145,7 +143,7 @@ export default function PostDetail() {
         style={{
           width: `${progress.width}%`,
           opacity: `${progress.opacity}`,
-          transition: 'width .2s ease-out'
+          transition: "width .2s ease-out",
         }}
       ></div>
       <div className="w-[100vw] bg-[#000000b5] mmd:px-[18rem] px-[2rem] fixed top-0 z-[9] flex items-center h-[70vh]">
@@ -167,6 +165,7 @@ export default function PostDetail() {
           scrap={scrap}
           setScrap={setScrap}
           outputData={postDetail.content}
+          scrapingCount={postDetail.scrapingCount}
         />
         {postDetail.writer && (
           <div
