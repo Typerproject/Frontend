@@ -25,6 +25,7 @@ export default function PostDetail() {
         .getPost(id)
         .then((res: IPostDetail) => {
           setPostDetail(res);
+          console.log(res);
           setIsWriter(userId === res.writer.writerId);
           setScrap(res.isScrapped);
           return res;
@@ -132,6 +133,7 @@ export default function PostDetail() {
           setScrap={setScrap}
           outputData={postDetail.content}
           scrapingCount={postDetail.scrapingCount}
+          writerId={postDetail.writer?.writerId}
         />
         {postDetail.writer && (
           <div
