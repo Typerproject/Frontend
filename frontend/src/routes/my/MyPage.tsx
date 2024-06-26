@@ -48,15 +48,17 @@ export default function MyPage() {
   const observerRef = useRef<IntersectionObserver | null>(null);
   const loader = useRef<HTMLDivElement | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isDone, setIsDone] = useState(false);
 
   const handleObserver = useCallback(
     (entries: IntersectionObserverEntry[]) => {
       const target = entries[0];
-      if (target.isIntersecting && !isLoading) {
-        fetchMorePosts();
+      if (target.isIntersecting && !isLoading && !isDone) {
+        setPage((page) => page + 1);
+        // fetchMorePosts();
       }
     },
-    [page]
+    [isLoading, isDone]
   );
 
   useEffect(() => {
@@ -77,33 +79,41 @@ export default function MyPage() {
     };
   }, [handleObserver]);
 
-  const fetchMorePosts = async () => {
-    if (observerRef.current) {
-      observerRef.current.disconnect();
-    }
-    if (page === 1) {
-      setPreviewPost({ posts: [] });
-    }
-    try {
-      setIsLoading(true);
-      service.getWritedPost(id, page).then((data) => {
-        setPreviewPost((prevPostList) => ({
-          posts:
-            page === 1 ? data.posts : [...prevPostList.posts, ...data.posts],
-        }));
-        if (data.posts.length !== 0) {
-          setPage((prevPage) => prevPage + 1);
+  const fetchMorePosts = useCallback(
+    () =>
+      (async () => {
+        if (observerRef.current) {
+          observerRef.current.disconnect();
         }
-        setIsLoading(false);
-      });
-    } catch (error) {
-      console.error("Error fetching posts:", error);
-    }
-  };
+        if (page === 1) {
+          setPreviewPost({ posts: [] });
+        }
+        try {
+          setIsLoading(true);
+          service.getWritedPost(id, page).then((data) => {
+            setPreviewPost((prevPostList) => ({
+              posts:
+                page === 1
+                  ? data.posts
+                  : [...prevPostList.posts, ...data.posts],
+            }));
+
+            if (data.posts.length === 0) {
+              setIsDone(() => true);
+            }
+            setIsLoading(false);
+          });
+        } catch (error) {
+          console.error("Error fetching posts:", error);
+        }
+      })(),
+    [page, id]
+  );
 
   useEffect(() => {
+    console.log("A");
     fetchMorePosts();
-  }, [page]);
+  }, [fetchMorePosts]);
 
   useEffect(() => {
     if (currentUserId) {
@@ -538,14 +548,9 @@ export default function MyPage() {
                     onChange={(e) => setEditedComment(e.target.value)}
                   />
                 ) : (
-                  <p
-                    style={{
-                      fontFamily: "Ownglyph_Dailyokja-Rg, sans-serif",
-                    }}
-                    className="flex gap-10 text-[#88898a] mt-[0.7rem] w-[270px] phone:justify-center"
-                  >
-                    {userInfo?.comment}
-                  </p>
+                  <div className="flex justify-center gap-10 text-[#88898a] mt-[0.7rem] w-64 phone:justify-center">
+                    <p className="break-words">{userInfo?.comment}</p>
+                  </div>
                 )}
               </div>
             </div>
