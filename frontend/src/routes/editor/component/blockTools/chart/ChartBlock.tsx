@@ -210,9 +210,6 @@ const ChartModal = ({ setData, onExit }: ChartModalProps) => {
     setFormData({ ...formData, stockCode: item.code });
     setFilteredCodes([]);
     setShowDropdown(false);
-    if (inputRef.current) {
-      inputRef.current.focus(); // 입력 필드로 포커스 이동
-    }
   };
 
   useEffect(() => {
@@ -301,32 +298,35 @@ const ChartModal = ({ setData, onExit }: ChartModalProps) => {
                     type="text"
                     name="stockCode"
                     placeholder="(ex. 삼성전자)"
+                    autoComplete="off"
                     value={codeSearch}
                     onChange={handleCodeChange}
                     onKeyDown={handleFocusToDropdown}
                     className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                     required
                   />
-                  {showDropdown && filteredCodes.length > 0 && (
-                    <ul
-                      ref={dropdownRef}
-                      className="absolute z-10 border border-gray-300 mt-2 rounded-md shadow-sm max-h-40 overflow-y-auto bg-gray-100"
-                      onKeyDown={handleCodeKeyDown}
-                      tabIndex={0}
-                    >
-                      {filteredCodes.map((item, index) => (
-                        <li
-                          key={item.code}
-                          className={`p-2 hover:bg-gray-200 cursor-pointer ${
-                            index === selectedIndex ? "bg-gray-200" : ""
-                          }`}
-                          onClick={() => handleSelect(item)}
-                        >
-                          {item.name}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+                  {showDropdown &&
+                    filteredCodes.length > 0 &&
+                    codeSearch !== filteredCodes[0].name && (
+                      <ul
+                        ref={dropdownRef}
+                        className="absolute z-10 border border-gray-300 mt-2 rounded-md shadow-sm max-h-40 overflow-y-auto bg-gray-100"
+                        onKeyDown={handleCodeKeyDown}
+                        tabIndex={0}
+                      >
+                        {filteredCodes.map((item, index) => (
+                          <li
+                            key={item.code}
+                            className={`p-2 hover:bg-gray-200 cursor-pointer ${
+                              index === selectedIndex ? "bg-gray-200" : ""
+                            }`}
+                            onClick={() => handleSelect(item)}
+                          >
+                            {item.name}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                 </div>
                 <div className="mb-4">
                   <label className="block text-gray-700">

@@ -3,7 +3,7 @@ import MainPage from "./routes/main/MainPage";
 import PostDetail from "./routes/postDetail/PostDetailPage";
 import MyPage from "./routes/my/MyPage";
 import EditorPage from "./routes/editor/EditorPage";
-import Search from "./components/search/Search"
+import Search from "./components/search/Search";
 import PostEditPage from "./routes/postEdit/PostEditPage";
 
 import Info from "./components/info/info";
@@ -14,8 +14,14 @@ import ScrapPage from "./routes/scrap/ScrapPage";
 const routers = [
   {
     path: "/",
-    element: <MainPage />,
-    // index: true
+    element: <Layout />,
+    children: [
+      {
+        path: "",
+        element: <MainPage />,
+        index: true,
+      },
+    ],
   },
   {
     path: "/my",
@@ -48,7 +54,7 @@ const routers = [
         path: "scrap",
         element: <ScrapPage />,
         index: true,
-      }
+      },
     ],
   },
   {
@@ -56,17 +62,17 @@ const routers = [
     element: <Redirect />,
   },
   {
-    path:"/search",
+    path: "/search",
     element: <Search />,
   },
   {
     path: "/edit/:id",
-    element: <PostEditPage />
+    element: <PostEditPage />,
   },
   {
-    path:"/info",
-    element:<Info/>
-  }
+    path: "/info",
+    element: <Info />,
+  },
 ];
 
 const router = createBrowserRouter(routers);
