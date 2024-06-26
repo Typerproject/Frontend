@@ -1,6 +1,7 @@
 import React from "react";
 import Modal from "react-modal";
 import { GrFormClose } from "react-icons/gr";
+// import { useNavigate } from "react-router-dom";
 import kakaoButton from "../../assets/loginButton.png";
 
 Modal.setAppElement("#root");
@@ -11,13 +12,15 @@ interface LoginModalProps {
 }
 
 const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onRequestClose }) => {
+
   const restApiKey = import.meta.env.VITE_REST_API_KEY;
   const redirect_uri = import.meta.env.VITE_REDIRECT_URI;
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${restApiKey}&redirect_uri=${redirect_uri}`;
-
+  // const avigate=useNavigate();
   const handleLogin = () => {
     window.location.href = KAKAO_AUTH_URL;
   };
+
 
   return (
     <Modal
@@ -75,6 +78,8 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onRequestClose }) => {
         <button
           className="text-black text-sm underline cursor-pointer"
           style={{ textUnderlineOffset: "5px" }}
+          onClick={()=>window.location.href = "/info"}
+          
         >
           서비스 미리보기
         </button>
