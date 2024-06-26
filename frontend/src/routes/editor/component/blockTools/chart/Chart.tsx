@@ -70,6 +70,10 @@ function JsonChartTest({ stockData }: chartProps) {
     },
     plotOptions: {
       candlestick: {
+        colors: {
+          upward: "#FF0000",
+          downward: "#0000FF",
+        },
         wick: {
           useFillColor: true,
         },
