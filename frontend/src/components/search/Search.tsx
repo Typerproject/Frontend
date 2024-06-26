@@ -69,7 +69,7 @@ export default function Search() {
           console.log(response.data)
           const newWriterArray = response.data.new_array.map((item :any)=> {
             if (item.preview.text.length > 50) {
-              item.preview.text = item.preview.text.slice(0, 50) + "...";
+              item.preview.text = item.preview.text.slice(0, 50) + " ...";
             }
             return item;
           });
@@ -85,7 +85,7 @@ export default function Search() {
           const newWriterArray = response.data.new_array.map((item :any)=> {
            
             if (item.comment.length > 50) {
-              item.comment = item.comment.slice(0, 50) + "...";
+              item.comment = item.comment.slice(0, 50) + " ...";
             }
             return item;
           });
@@ -182,7 +182,7 @@ export default function Search() {
                         <div className="flex flex-col p-4 w-2/3">
                           <div className="flex items-center mb-2">
                             <img
-                              className="w-12 h-12 object-cover rounded-full mr-4"
+                              className="w-12 h-12 object-cover rounded-full  ml-2 mr-4"
                               src={elem.profile}
                               alt="Profile"
                             />
@@ -219,12 +219,12 @@ export default function Search() {
                         >
                           <div className="flex flex-col p-4 w-full">
                             <div className="flex items-center justify-between mb-2">
-                              <div className="flex flex-col">
+                              <div className="flex flex-col mr-4">
                                 <div className="font-bold text-xl">{elem.nickname}</div>
-                                <div className="mt-2 text-lg">{elem.comment}</div>
+                                <div className="mt-2 text-lg ">{elem.comment}</div>
                               </div>
                               <img
-                                className="w-24 h-24 object-cover rounded-full"
+                                className="w-24 h-24 object-cover rounded-full " 
                                 src={elem.profile}
                                 alt="Profile"
                               />
