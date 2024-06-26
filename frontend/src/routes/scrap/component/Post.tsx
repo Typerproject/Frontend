@@ -8,16 +8,20 @@ import postAPI, { IpostScrap } from "../../../api/postDetailAPI";
 
 type PostProps = {
   postInfo: IPostInfo;
+  index: number;
+  setPostInfo: React.Dispatch<React.SetStateAction<IPostInfo[]>>
 };
 
 const service = new postAPI(import.meta.env.VITE_SERVER_POST_API_URI);
 
-export default function Post({ postInfo }: PostProps) {
+export default function Post({ postInfo, index, setPostInfo }: PostProps) {
 
   const navigate = useNavigate();
 
   const [scrap, setScrap] = useState<boolean>(true);
   const [updatedAt, setUpdatedAt] = useState<string>("");
+
+  const [scrapCount, setScrapCount] = useState<number>(postInfo.scrapingCount)
 
   const handleMarkClick = async (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -30,6 +34,10 @@ export default function Post({ postInfo }: PostProps) {
         .then((res: IpostScrap) => {
           console.log(res);
           setScrap(false);
+          console.log(index);
+          
+          // setPostInfo()
+          setScrapCount(prev => prev - 1);
         })
         .catch((e) => {
           console.log(e);
@@ -41,6 +49,7 @@ export default function Post({ postInfo }: PostProps) {
         .then((res: IpostScrap) => {
           console.log(res);
           setScrap(true);
+          setScrapCount(prev => prev + 1);
         })
         .catch((e) => {
           console.log(e);
@@ -108,7 +117,8 @@ export default function Post({ postInfo }: PostProps) {
               ) : (
                 <IoBookmarkOutline size={20} />
               )}
-              <p>{postInfo.scrapingCount}</p>
+              {/* <p>{postInfo.scrapingCount}</p> */}
+              <p>{scrapCount}</p>
             </div>
           </div>
           {/* 날짜 */}
