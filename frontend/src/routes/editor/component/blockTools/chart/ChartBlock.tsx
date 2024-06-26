@@ -119,13 +119,11 @@ const ChartModal = ({ setData, onExit }: ChartModalProps) => {
     service
       .getCodeList()
       .then((data) => {
-        console.log("Received data:", data.codeList);
-
         setCodeList(data.codeList);
       })
       .catch((err) => {
-        console.error("getCodeList Error: ", err);
         setCodeList([]);
+        console.error(err);
       });
   }, []);
 
@@ -134,8 +132,6 @@ const ChartModal = ({ setData, onExit }: ChartModalProps) => {
       const filtered = codeList.filter((item) => {
         return item.name.toLowerCase().includes(codeSearch.toLocaleLowerCase());
       });
-
-      console.log("제발제발 필터된 데이터", filtered);
 
       setShowDropdown(true);
       setFilteredCodes(filtered);
@@ -206,8 +202,6 @@ const ChartModal = ({ setData, onExit }: ChartModalProps) => {
   };
 
   const handleSelect = (item: CodeItem) => {
-    console.log("handleSelect: ", item);
-
     setCodeSearch(item.name);
     setFormData({ ...formData, stockCode: item.code });
     setFilteredCodes([]);

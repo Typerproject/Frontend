@@ -63,7 +63,6 @@ export default function Navbar() {
     };
   }, [menuRef]);
 
-  console.log(userInfo);
   return (
     <nav className="bg-black fixed w-full h-fit py-[0.75em] px-[1.5rem] top-0 flex justify-between items-center z-[100]">
       <div className="flex gap-[2rem] items-center">
