@@ -49,16 +49,10 @@ export default function MyPage() {
   const loader = useRef<HTMLDivElement | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  // useEffect(() => {
-
-  //   fetchMorePosts();
-  // }, []);
-
   const handleObserver = useCallback(
     (entries: IntersectionObserverEntry[]) => {
       const target = entries[0];
       if (target.isIntersecting && !isLoading) {
-        // setPage((prevPage) => prevPage + 1);
         fetchMorePosts();
       }
     },
@@ -67,9 +61,9 @@ export default function MyPage() {
 
   useEffect(() => {
     observerRef.current = new IntersectionObserver(handleObserver, {
-      threshold: 0, //  Intersection Observer의 옵션, 0일 때는 교차점이 한 번만 발생해도 실행, 1은 모든 영역이 교차해야 콜백 함수가 실행.
+      threshold: 0,
     });
-    // 최하단 요소를 관찰 대상으로 지정함
+    // 최하단 요소를 관찰 대상으로 지정
     const observerTarget = document.getElementById("observer");
     // 관찰 시작
     if (observerTarget) {
@@ -93,9 +87,7 @@ export default function MyPage() {
     try {
       setIsLoading(true);
       service.getWritedPost(id, page).then((data) => {
-        console.log("유저가 작성한 글 가져옴: ", data.posts);
         setPreviewPost((prevPostList) => ({
-          // ...prevPostList,
           posts:
             page === 1 ? data.posts : [...prevPostList.posts, ...data.posts],
         }));
@@ -113,19 +105,12 @@ export default function MyPage() {
     fetchMorePosts();
   }, [page]);
 
-  ///////
-
-  console.log("마페에서 가져온 주인의 post, ", previewPost);
-
   useEffect(() => {
     if (currentUserId) {
-      console.log("파라미터 잘 가져와 지나?", currentUserId);
-
       // 유저 정보 획득
       service
         .getUserInfo(currentUserId)
         .then((data) => {
-          console.log("마이페이지 접근 유저", data);
           setCuserInfo(data);
         })
         .catch((err) => {
@@ -164,8 +149,6 @@ export default function MyPage() {
     service
       .modifyUserNickname(editedNickname)
       .then((data) => {
-        console.log("닉넴 데이터", data);
-
         const user = {
           _id: currentUser._id || "",
           nickname: editedNickname || "",
@@ -173,8 +156,6 @@ export default function MyPage() {
           comment: currentUser.comment || null,
           profile: currentUser.profile || null,
         };
-
-        console.log("nick", user);
 
         dispatch(setUser({ user }));
       })
@@ -185,8 +166,6 @@ export default function MyPage() {
     service
       .updateUserComment(editedComment)
       .then((data) => {
-        console.log("comment: ", data);
-
         const user = {
           _id: currentUser._id || "",
           nickname: editedNickname || "",
@@ -195,15 +174,12 @@ export default function MyPage() {
           profile: currentUser.profile || null,
         };
 
-        console.log("--------", user);
-
         dispatch(setUser({ user }));
       })
       .catch((err) => {
         console.error("comment 에러: ", err);
       });
 
-    console.log("저장 버튼 클릭:", editedNickname, editedComment);
     setIsEditing(false);
   };
 
@@ -214,13 +190,10 @@ export default function MyPage() {
 
   useEffect(() => {
     if (id) {
-      console.log("파라미터 잘 가져와 지나?", id);
-
       // 유저 정보 획득
       service
         .getUserInfo(id)
         .then((data) => {
-          console.log("마이페이지 유저", data);
           setUserInfo(data);
         })
         .catch((err) => {
@@ -231,14 +204,11 @@ export default function MyPage() {
       service
         .getFollowingAndFollowerData(id)
         .then((data) => {
-          console.log("마이페이지 팔로우", data);
           setFollowerInfo(data);
 
           const found = data.followerUsers.some(
             (user) => user._id === currentUser._id
           );
-
-          console.log(found);
 
           if (found) {
             setIsFollowing(true);
@@ -287,8 +257,6 @@ export default function MyPage() {
     service
       .followingUser(id)
       .then((result) => {
-        console.log("followingUser result:", result);
-
         // 팔로우가 성공했을 때만 상태 업데이트
         if (result.response && currentUser && followerInfo) {
           // 이미 팔로잉 중이 아닌 경우에만 추가
@@ -333,8 +301,6 @@ export default function MyPage() {
     service
       .deleteFollowingUser(id)
       .then((result) => {
-        console.log("followerUser result:", result);
-
         if (result.response && currentUser && followerInfo) {
           const isAlreadyFollowing = followerInfo.followerUsers.some(
             (user) => user._id === currentUser._id
@@ -659,15 +625,7 @@ export default function MyPage() {
       ) : (
         <div id="observer" style={{ height: "10px" }}></div>
       )}
-      {/* 스크롤 맨 위로 올려주는 버튼 */}
-      {/* <div className="relative w-full">
-        <button
-          //onClick={scrollToTop}
-          className="absolute bottom-0 right-0 mb-[1rem] mr-[2rem] bg-gray-900 text-gray-100 rounded-md hover:bg-gray-100 hover:text-gray-900 border-[1px] border-black duration-100"
-        >
-          <IoMdArrowDropup size={30} />
-        </button>
-      </div> */}
+
       <div ref={footerRef}>
         <Footbar />
       </div>

@@ -21,29 +21,19 @@ export default function FollowList({
   setRefreshKey,
 }: FollowListProps) {
   const navigate = useNavigate();
-  //props로 id, 이름, 프사 받아오기
-
-  // const [dropBtn, setDropBtn] = useState(false);
 
   const currentUser = useAppSelector((state) => state.user);
 
   const { id } = useParams<{ id: string }>();
 
-  // function handleDrop() {
-  //   setDropBtn(!dropBtn);
-  // }
-
   function handleDelete() {
     const direction = which === "following" ? true : false;
-
-    console.log("direction", direction);
 
     if (direction) {
       // 팔로잉 취소
       service
         .deleteFollowingUser(_id)
         .then((result) => {
-          console.log("in FollowList followingUser result:", result);
           setRefreshKey((prevKey) => prevKey + 1);
         })
         .catch((err) => {
@@ -54,7 +44,6 @@ export default function FollowList({
       service
         .deleteFollowerUser(_id)
         .then((result) => {
-          console.log("in FollowList followerUser result:", result);
           setRefreshKey((prevKey) => prevKey + 1);
         })
         .catch((err) => {
@@ -73,7 +62,6 @@ export default function FollowList({
         <p className="text-sm mt-[0.7rem] w-32">{nickname}</p>
       </div>
 
-      {/* <div style={{ position: "relative", display: "inline-block" }}> */}
       <div className="">
         {currentUser._id === id ? (
           <div className="cursor-pointer ml-4">

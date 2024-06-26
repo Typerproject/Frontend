@@ -1,6 +1,6 @@
 import Modal from "react-modal";
 import FollowList from "./FollowList";
-import userAPI, { IFollowerInfo, IUserInfo } from "../../api/userAPI";
+//import userAPI, { IFollowerInfo, IUserInfo } from "../../api/userAPI";
 import { useState } from "react";
 
 type State = "follower" | "following" | false;

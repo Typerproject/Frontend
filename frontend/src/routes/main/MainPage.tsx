@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import Navigator from "../../components/Navbar/Navbar";
 import postAPI, { IPostListForMain, IPost } from "../../api/postDetailAPI";
 import MainPost from "./component/Post";
-import { useAppSelector } from "../../store";
+//import { useAppSelector } from "../../store";
 import PostLoading from "./component/PostLoading";
 import { IoMdArrowDropup } from "react-icons/io";
 import Footbar from "../../components/Footbar/Footbar";
@@ -18,7 +18,7 @@ const MyComponent = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isEndOfPage, setIsEndOfPage] = useState(false);
 
-  const currentUser = useAppSelector((state) => state.user);
+  //const currentUser = useAppSelector((state) => state.user);
 
   const mainPostContainerRef = useRef<HTMLDivElement | null>(null);
   const prevScrollY = useRef(0);
@@ -40,7 +40,6 @@ const MyComponent = () => {
       current.scrollTop + current.clientHeight >= current.scrollHeight - 50 &&
       !isLoading &&
       !isEndOfPage // 스크롤이 맨 밑으로 내렸을 때만 처리
-      // current.scrollTop > prevScrollY.current // 스크롤이 맨 밑으로 내렸을 때만 처리
     ) {
       setIsLoading(true);
       setPage((prevPage) => prevPage + 1);
@@ -68,7 +67,6 @@ const MyComponent = () => {
     postService
       .getPostListForMain(page, activeButton.toLowerCase())
       .then((data) => {
-        console.log("메인 페이지 포스트 데이터 잘 가져와 지나??", data);
         setPostList((prevPostList) => ({
           ...prevPostList,
           posts:

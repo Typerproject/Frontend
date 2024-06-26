@@ -21,7 +21,6 @@ export interface IUserInfo {
   nickname: string;
   comment: string;
   profile: string;
-  //writerdPost: Preview[];
 }
 
 // IFollowerInfo 배열 안의 유저 데이터를 표현한 거임
@@ -48,7 +47,7 @@ export default class userAPI extends BaseApi {
   async getUserInfo(_id: string): Promise<IUserInfo> {
     try {
       const resp = await this.fetcher.get(`/user/info/${_id}`);
-      console.log(resp);
+
       return resp.data;
     } catch (err) {
       console.error("유저 정보 api 에러: ", err);
@@ -67,37 +66,13 @@ export default class userAPI extends BaseApi {
         `/user/info/post/${_id}${queryParams}`
       );
       const data: Preview[] = await resp.data;
-      console.log(data);
+
       return { posts: data };
     } catch (err) {
       console.error("유저 포스트 api error");
       throw err;
     }
   }
-
-  // 메인 페이지
-  // async getPostListForMain(page = 1, type = "") {
-  //   try {
-  //     const queryParams = `?page=${page}${type !== "" ? `&type=${type}` : ""}`;
-  //     const resp = await this.fetcher.get(`/list${queryParams}`);
-
-  //     console.log("메인 페이지를 위한 데이터 GET: ", resp);
-
-  //     if (!resp) {
-  //       console.log("메인 페이지 GET /post/list error: 데이터 없음");
-  //       return { posts: [] };
-  //     }
-
-  //     const data: IPost[] = await resp.data;
-
-  //     console.log("메인 페이지 리스트", data);
-
-  //     return { posts: data };
-  //   } catch (error) {
-  //     console.error("Error fetching post list:", error);
-  //     throw error;
-  //   }
-  // }
 
   // 닉네임 변경 api
   async modifyUserNickname(nickname: string) {
@@ -113,7 +88,7 @@ export default class userAPI extends BaseApi {
     }
   }
 
-  // 유저의 팔로워 수와 팔로우 한 사람의 수 + 유저 리스트까지 (테스트 필요)
+  // 유저의 팔로워 수와 팔로우 한 사람의 수 + 유저 리스트까지
   async getFollowingAndFollowerData(_id: string): Promise<IFollowerInfo> {
     try {
       const resp = await this.fetcher.get(`/user/follower/${_id}`);
@@ -125,7 +100,6 @@ export default class userAPI extends BaseApi {
   }
 
   // 유저 한 줄 소개 수정 api
-  // 이거 실행되면 프론트 전역변수 수정해줘야 할듯
   async updateUserComment(comment: string): Promise<any> {
     try {
       const result = await this.fetcher.put(`/user/comment`, {
@@ -139,7 +113,7 @@ export default class userAPI extends BaseApi {
     }
   }
 
-  // 내가 누군가를 팔로잉 하는 api (테스트 필요)
+  // 내가 누군가를 팔로잉 하는 api
   async followingUser(_id: string): Promise<FollowResponse> {
     try {
       const result = await this.fetcher.post(`/user/following`, {
@@ -153,7 +127,7 @@ export default class userAPI extends BaseApi {
     }
   }
 
-  // 팔로잉 취소 api (테스트 필요)
+  // 팔로잉 취소 api
   async deleteFollowingUser(_id: string): Promise<any> {
     try {
       const resp = await this.fetcher.delete(`/user/following/${_id}`);
@@ -164,7 +138,7 @@ export default class userAPI extends BaseApi {
     }
   }
 
-  // 팔로워를 제거 api (테스트 필요)
+  // 팔로워를 제거 api
   async deleteFollowerUser(_id: string): Promise<any> {
     try {
       const resp = await this.fetcher.delete(`/user/follower/${_id}`);
@@ -180,8 +154,6 @@ export default class userAPI extends BaseApi {
     try {
       const resp = await this.fetcher.get(`/user/logout`);
 
-      console.log("로그아웃: ", resp);
-
       return resp.data;
     } catch (error) {
       console.error("로그아웃 하는 api: ", error);
@@ -192,8 +164,6 @@ export default class userAPI extends BaseApi {
   async checkCookie() {
     try {
       const resp = await this.fetcher.get(`/auth/cookie`);
-
-      console.log("쿠키 체크 데이터 ", resp.data);
 
       return resp.data;
     } catch (error) {
