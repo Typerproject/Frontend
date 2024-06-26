@@ -57,12 +57,8 @@ const routers = [
       },
     ],
   },
-  // {
-  //   path: "/kakao/auth",
-  //   element: <LoginModal isOpen={true} onRequestClose={() => false} />,
-  // },
   {
-    path: "/kakao/login",
+    path: "/kakao/api/login",
     element: <Redirect />,
   },
   {
