@@ -8,13 +8,11 @@ import postAPI, { IpostScrap } from "../../../api/postDetailAPI";
 
 type PostProps = {
   postInfo: IPostInfo;
-  index: number;
-  setPostInfo: React.Dispatch<React.SetStateAction<IPostInfo[]>>
 };
 
 const service = new postAPI(import.meta.env.VITE_SERVER_POST_API_URI);
 
-export default function Post({ postInfo, index, setPostInfo }: PostProps) {
+export default function Post({ postInfo }: PostProps) {
 
   const navigate = useNavigate();
 
@@ -33,10 +31,7 @@ export default function Post({ postInfo, index, setPostInfo }: PostProps) {
         .deleteScrapPost(postInfo._id)
         .then((res: IpostScrap) => {
           console.log(res);
-          setScrap(false);
-          console.log(index);
-          
-          // setPostInfo()
+          setScrap(false);          
           setScrapCount(prev => prev - 1);
         })
         .catch((e) => {
