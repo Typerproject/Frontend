@@ -46,7 +46,7 @@ const routers = [
         index: true,
       },
       {
-        path: "scrap",
+        path: "scrap/list",
         element: <ScrapPage />,
         index: true,
       }
