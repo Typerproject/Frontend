@@ -119,16 +119,11 @@ export default class postAPI extends BaseApi {
       const queryParams = `?page=${page}${type !== "" ? `&type=${type}` : ""}`;
       const resp = await this.fetcher.get(`/list${queryParams}`);
 
-      console.log("메인 페이지를 위한 데이터 GET: ", resp);
-
       if (!resp) {
-        console.log("메인 페이지 GET /post/list error: 데이터 없음");
         return { posts: [] };
       }
 
       const data: IPost[] = await resp.data;
-
-      console.log("메인 페이지 리스트", data);
 
       return { posts: data };
     } catch (error) {
@@ -141,8 +136,6 @@ export default class postAPI extends BaseApi {
     const resp = await this.fetcher.get("/random");
 
     const data: IPostSlider[] = resp.data.randomPosts;
-
-    console.log("슬라이드 리스트 데이터", data);
 
     return data;
   }

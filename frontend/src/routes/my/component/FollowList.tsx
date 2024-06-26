@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { GoKebabHorizontal } from "react-icons/go";
 import userAPI from "../../../api/userAPI";
 import { useAppSelector } from "../../../store";
 
@@ -22,29 +21,19 @@ export default function FollowList({
   setRefreshKey,
 }: FollowListProps) {
   const navigate = useNavigate();
-  //props로 id, 이름, 프사 받아오기
-
-  // const [dropBtn, setDropBtn] = useState(false);
 
   const currentUser = useAppSelector((state) => state.user);
 
   const { id } = useParams<{ id: string }>();
 
-  // function handleDrop() {
-  //   setDropBtn(!dropBtn);
-  // }
-
   function handleDelete() {
     const direction = which === "following" ? true : false;
-
-    console.log("direction", direction);
 
     if (direction) {
       // 팔로잉 취소
       service
         .deleteFollowingUser(_id)
         .then((result) => {
-          console.log("in FollowList followingUser result:", result);
           setRefreshKey((prevKey) => prevKey + 1);
         })
         .catch((err) => {
@@ -55,7 +44,6 @@ export default function FollowList({
       service
         .deleteFollowerUser(_id)
         .then((result) => {
-          console.log("in FollowList followerUser result:", result);
           setRefreshKey((prevKey) => prevKey + 1);
         })
         .catch((err) => {
@@ -64,10 +52,8 @@ export default function FollowList({
     }
   }
 
-  console.log("이 사람의 id는 ", _id);
-
   return (
-    <div className="flex flex-row justify-left items-center w-18rem mt-3">
+    <div className="flex flex-row justify-left items-center w-18rem mb-[1rem]">
       <div
         className="flex gap-[1rem] cursor-pointer w-30"
         onClick={() => navigate(`/my/${_id}`)}
@@ -76,7 +62,7 @@ export default function FollowList({
         <p className="text-sm mt-[0.7rem] w-32">{nickname}</p>
       </div>
 
-      <div style={{ position: "relative", display: "inline-block" }}>
+      <div className="">
         {currentUser._id === id ? (
           <div className="cursor-pointer ml-4">
             <button
