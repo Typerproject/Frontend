@@ -3,7 +3,11 @@ import { useParams } from "react-router-dom";
 import { useAppSelector } from "../../store";
 import FollowList from "./component/FollowList";
 import Post from "../../components/Post/Post";
-import userAPI, { IFollowerInfo, IUserInfo } from "../../api/userAPI";
+import userAPI, {
+  IFollowerInfo,
+  IUserInfo,
+  IWritedPost,
+} from "../../api/userAPI";
 import { setUser } from "../../store/reducers/user";
 import { useAppDispatch } from "../../store";
 import Modal from "./component/Modal";
@@ -20,7 +24,6 @@ export interface Pre {
 interface Preview {
   title: string;
   _id: string;
-  //preview: object;
   preview: Pre;
   createdAt: string;
   public: boolean;
@@ -36,12 +39,90 @@ export default function MyPage() {
   const [cuserInfo, setCuserInfo] = useState<IUserInfo | null>(null);
   const currentUser = useAppSelector((state) => state.user);
   const currentUserId = useAppSelector((state) => state.user._id);
+  const [previewPost, setPreviewPost] = useState<IWritedPost>({ posts: [] });
+  //현재 접속한 마이 페이지의 유저 아이디
+  const { id } = useParams<{ id: string }>(); // useParams의 반환 타입을 명시
 
+  //const [page, setPage] = useState(1);
+  //const [isLoading, setIsLoading] = useState(false);
+  //const [isEndOfPage, setIsEndOfPage] = useState(false);
+  //const mainPostContainerRef = useRef<HTMLDivElement | null>(null);
+  //const prevScrollY = useRef(0);
+
+  //무한 스크롤
   const [page, setPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isEndOfPage, setIsEndOfPage] = useState(false);
-  const mainPostContainerRef = useRef<HTMLDivElement | null>(null);
-  const prevScrollY = useRef(0);
+  const loader = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    fetchMorePosts();
+  }, []);
+
+  const handleObserver = (entries: IntersectionObserverEntry[]) => {
+    const target = entries[0];
+    if (target.isIntersecting) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(handleObserver, {
+      threshold: 0, //  Intersection Observer의 옵션, 0일 때는 교차점이 한 번만 발생해도 실행, 1은 모든 영역이 교차해야 콜백 함수가 실행.
+    });
+    // 최하단 요소를 관찰 대상으로 지정함
+    const observerTarget = document.getElementById("observer");
+    // 관찰 시작
+    if (observerTarget) {
+      observer.observe(observerTarget);
+    }
+  }, []);
+
+  // useEffect(() => {
+  //   const observer = new IntersectionObserver(handleObserver, {
+  //     threshold: 1.0,
+  //   });
+  //   if (loader.current) {
+  //     observer.observe(loader.current);
+  //   }
+  //   return () => {
+  //     if (loader.current) {
+  //       observer.unobserve(loader.current);
+  //     }
+  //   };
+  // }, []);
+
+  // const handleObserver = (entities: IntersectionObserverEntry[]) => {
+  //   const target = entities[0];
+  //   if (target.isIntersecting) {
+  //     setPage((prev) => prev + 1);
+  //   }
+  // };
+
+  const fetchMorePosts = async () => {
+    if (page === 1) {
+      setPreviewPost({ posts: [] });
+    }
+    try {
+      //const response = await fetch(`/api/posts?page=${page}`);
+      service.getWritedPost(id, page).then((data) => {
+        console.log("유저가 작성한 글 가져옴: ", data.posts);
+        setPreviewPost((prevPostList) => ({
+          ...prevPostList,
+          posts:
+            page === 1 ? data.posts : [...prevPostList.posts, ...data.posts],
+        }));
+      });
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchMorePosts();
+  }, [page]);
+
+  console.log("마페에서 가져온 주인의 post, ", previewPost);
+
+  ////////
 
   useEffect(() => {
     if (currentUserId) {
@@ -65,39 +146,36 @@ export default function MyPage() {
   }, [currentUser]);
 
   //게시글 미리보기
-  const [previewPost, setPreviewPost] = useState<Preview[]>([]);
+  // const [previewPost, setPreviewPost] = useState<Preview[]>([]);
 
-  useEffect(() => {
-    if (page === 1) {
-      // 첫 페이지 로드 시 초기화
-      setPreviewPost([]);
-      setIsEndOfPage(false);
-    }
+  // useEffect(() => {
+  //   // if (page === 1) {
+  //   //   // 첫 페이지 로드 시 초기화
+  //   //   setPreviewPost([]);
+  //   //   setIsEndOfPage(false);
+  //   // }
 
-    if (userInfo?.writerdPost) {
-      const tempPost: any = userInfo?.writerdPost.map((ele: Preview) => {
-        return {
-          title: ele.title,
-          _id: ele._id,
-          preview: ele.preview,
-          createdAt: ele.createdAt,
-          public: ele.public,
-          scrapingCount: ele.scrapingCount,
-          isScrapped: ele.isScrapped,
-          commentCount: ele.commentCount,
-        };
-      });
+  //   if (userInfo?.writerdPost) {
+  //     const tempPost: any = userInfo?.writerdPost.map((ele: Preview) => {
+  //       return {
+  //         title: ele.title,
+  //         _id: ele._id,
+  //         preview: ele.preview,
+  //         createdAt: ele.createdAt,
+  //         public: ele.public,
+  //         scrapingCount: ele.scrapingCount,
+  //         isScrapped: ele.isScrapped,
+  //         commentCount: ele.commentCount,
+  //       };
+  //     });
 
-      setPreviewPost(tempPost);
-    }
-  }, [userInfo]);
+  //     setPreviewPost(tempPost);
+  //   }
+  // }, [userInfo]);
 
   const [followerInfo, setFollowerInfo] = useState<IFollowerInfo | null>(null);
   const [refreshKey, setRefreshKey] = useState(0); // 상태 변경을 감지하기 위한 키
   const [follow, setFollow] = useState<State>(false);
-
-  //현재 접속한 마이 페이지의 유저 아이디
-  const { id } = useParams<{ id: string }>(); // useParams의 반환 타입을 명시
 
   const dispatch = useAppDispatch();
 
@@ -341,39 +419,81 @@ export default function MyPage() {
   }, [flipped]);
 
   //무한 스크롤
+  // const [page, setPage] = useState(1);
+  // const loader = useRef<HTMLDivElement | null>(null);
 
-  const handleScroll = () => {
-    const { current } = mainPostContainerRef;
-    if (
-      current &&
-      current.scrollTop + current.clientHeight >= current.scrollHeight - 50 &&
-      !isLoading &&
-      !isEndOfPage // 스크롤이 맨 밑으로 내렸을 때만 처리
-      // current.scrollTop > prevScrollY.current // 스크롤이 맨 밑으로 내렸을 때만 처리
-    ) {
-      setIsLoading(true);
-      setPage((prevPage) => prevPage + 1);
-    }
-    prevScrollY.current = current ? current.scrollTop : 0; // 현재 스크롤 위치
-  };
+  // useEffect(() => {
+  //   fetchMorePosts();
+  // }, []);
 
-  useEffect(() => {
-    const { current } = mainPostContainerRef;
-    if (current) {
-      current.addEventListener("scroll", handleScroll);
-      return () => {
-        current.removeEventListener("scroll", handleScroll);
-      };
-    }
-  }, []);
+  // useEffect(() => {
+  //   const observer = new IntersectionObserver(handleObserver, {
+  //     threshold: 1.0,
+  //   });
+  //   if (loader.current) {
+  //     observer.observe(loader.current);
+  //   }
+  //   return () => {
+  //     if (loader.current) {
+  //       observer.unobserve(loader.current);
+  //     }
+  //   };
+  // }, []);
+
+  // const handleObserver = (entities: IntersectionObserverEntry[]) => {
+  //   const target = entities[0];
+  //   if (target.isIntersecting) {
+  //     setPage((prev) => prev + 1);
+  //   }
+  // };
+
+  // const fetchMorePosts = async () => {
+  //   try {
+  //     const response = await fetch(`/api/posts?page=${page}`);
+  //     const data = await response.json();
+  //     setPreviewPost((prev) => [...prev, ...data]);
+  //   } catch (error) {
+  //     console.error("Error fetching posts:", error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchMorePosts();
+  // }, [page]);
+
+  //조디 코드
+  // const handleScroll = () => {
+  //   const { current } = mainPostContainerRef;
+  //   if (
+  //     current &&
+  //     current.scrollTop + current.clientHeight >= current.scrollHeight - 50 &&
+  //     !isLoading &&
+  //     !isEndOfPage // 스크롤이 맨 밑으로 내렸을 때만 처리
+  //     // current.scrollTop > prevScrollY.current // 스크롤이 맨 밑으로 내렸을 때만 처리
+  //   ) {
+  //     setIsLoading(true);
+  //     setPage((prevPage) => prevPage + 1);
+  //   }
+  //   prevScrollY.current = current ? current.scrollTop : 0; // 현재 스크롤 위치
+  // };
+
+  // useEffect(() => {
+  //   const { current } = mainPostContainerRef;
+  //   if (current) {
+  //     current.addEventListener("scroll", handleScroll);
+  //     return () => {
+  //       current.removeEventListener("scroll", handleScroll);
+  //     };
+  //   }
+  // }, []);
 
   // 스크롤 맨 위로 올리는 함수
-  const scrollToTop = () => {
-    if (mainPostContainerRef.current) {
-      mainPostContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
-    }
-    window.scrollTo({ top: 0, behavior: "smooth" }); // 페이지의 스크롤도 맨 위로 이동
-  };
+  // const scrollToTop = () => {
+  //   if (mainPostContainerRef.current) {
+  //     mainPostContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
+  //   }
+  //   window.scrollTo({ top: 0, behavior: "smooth" }); // 페이지의 스크롤도 맨 위로 이동
+  // };
 
   //팔로우 스크롤 감지
   const contentRef = useRef<HTMLDivElement>(null);
@@ -415,7 +535,7 @@ export default function MyPage() {
 
           <div className="w-3/4">
             {/*가져온 글 목록을 map돌면서 출력*/}
-            {previewPost.map((post: Preview) => {
+            {previewPost.posts.map((post: Preview) => {
               return (
                 <div>
                   {/*주인의 아이디와 profile*/}
@@ -587,7 +707,7 @@ export default function MyPage() {
                   <p className="text-lg">Follower</p>
                   <div
                     ref={contentRef}
-                    className="overflow-y-auto pt-3"
+                    className="overflow-y-auto pt-3 w-[15rem]"
                     style={{ maxHeight: maxHeight ? `${maxHeight}px` : "auto" }}
                   >
                     <ul className="space-y-4 w-[12rem]">
@@ -619,7 +739,7 @@ export default function MyPage() {
                   <p className="text-lg">Following</p>
                   <div
                     ref={contentRef}
-                    className="overflow-y-auto pt-3"
+                    className="overflow-y-auto pt-3 w-[15rem]"
                     style={{ maxHeight: maxHeight ? `${maxHeight}px` : "auto" }}
                   >
                     <ul className="space-y-4 w-[12rem] ">
@@ -648,15 +768,16 @@ export default function MyPage() {
           </div>
         </div>
       </div>
+      <div id="observer" style={{ height: "10px" }}></div>
       {/* 스크롤 맨 위로 올려주는 버튼 */}
-      <div className="relative w-full">
+      {/* <div className="relative w-full">
         <button
-          onClick={scrollToTop}
+          //onClick={scrollToTop}
           className="absolute bottom-0 right-0 mb-[1rem] mr-[2rem] bg-gray-900 text-gray-100 rounded-md hover:bg-gray-100 hover:text-gray-900 border-[1px] border-black duration-100"
         >
           <IoMdArrowDropup size={30} />
         </button>
-      </div>
+      </div> */}
       <div ref={footerRef}>
         <Footbar />
       </div>

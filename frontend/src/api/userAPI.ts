@@ -12,11 +12,16 @@ interface Preview {
   isScrapped: boolean;
 }
 
+//writedPost를 api 분리
+export interface IWritedPost {
+  posts: Preview[];
+}
+
 export interface IUserInfo {
   nickname: string;
   comment: string;
   profile: string;
-  writerdPost: Preview[];
+  //writerdPost: Preview[];
 }
 
 // IFollowerInfo 배열 안의 유저 데이터를 표현한 거임
@@ -50,6 +55,49 @@ export default class userAPI extends BaseApi {
       throw err; // 에러를 호출한 쪽으로 던짐
     }
   }
+
+  //마이페이지 유저가 작성한 포스트를 띄우기 위한 api
+  async getWritedPost(
+    _id: string | undefined,
+    page: number
+  ): Promise<IWritedPost> {
+    try {
+      const queryParams = `?page=${page}`;
+      const resp = await this.fetcher.get(
+        `/user/info/post/${_id}${queryParams}`
+      );
+      const data: Preview[] = await resp.data;
+      console.log(data);
+      return { posts: data };
+    } catch (err) {
+      console.error("유저 포스트 api error");
+      throw err;
+    }
+  }
+
+  // 메인 페이지
+  // async getPostListForMain(page = 1, type = "") {
+  //   try {
+  //     const queryParams = `?page=${page}${type !== "" ? `&type=${type}` : ""}`;
+  //     const resp = await this.fetcher.get(`/list${queryParams}`);
+
+  //     console.log("메인 페이지를 위한 데이터 GET: ", resp);
+
+  //     if (!resp) {
+  //       console.log("메인 페이지 GET /post/list error: 데이터 없음");
+  //       return { posts: [] };
+  //     }
+
+  //     const data: IPost[] = await resp.data;
+
+  //     console.log("메인 페이지 리스트", data);
+
+  //     return { posts: data };
+  //   } catch (error) {
+  //     console.error("Error fetching post list:", error);
+  //     throw error;
+  //   }
+  // }
 
   // 닉네임 변경 api
   async modifyUserNickname(nickname: string) {

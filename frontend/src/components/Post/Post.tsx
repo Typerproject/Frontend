@@ -5,6 +5,7 @@ import postAPI from "../../api/postDetailAPI";
 import { FaRegComment } from "react-icons/fa";
 import { FaRegBookmark } from "react-icons/fa";
 import { FaBookmark } from "react-icons/fa6";
+import { IWritedPost } from "../../api/userAPI";
 
 //const service = new userAPI(import.meta.env.VITE_BASE_URI);
 const postService = new postAPI(import.meta.env.VITE_SERVER_POST_API_URI);
@@ -31,6 +32,7 @@ interface User {
   id: string | undefined;
   nickname: string | undefined;
   profile: string | undefined;
+  //post: Preview;
   post: Preview;
 }
 
