@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import Navigator from "../../components/Navbar/Navbar";
 import postAPI, { IPostListForMain, IPost } from "../../api/postDetailAPI";
 import MainPost from "./component/Post";
 import PostLoading from "./component/PostLoading";
@@ -96,8 +95,6 @@ const MyComponent = () => {
 
   return (
     <div className="bg-gray-100 flex flex-col min-h-screen">
-      <Navigator />
-
       <div className="mt-[77px]">
         <SliderTest />
       </div>
@@ -137,7 +134,7 @@ const MyComponent = () => {
             </button>
           </div>
 
-          <div className="py-[20px] px-10">
+          <div className="py-[20px]">
             <div>
               {!postList || (postList.posts.length === 0 && isLoading) ? (
                 <div>
