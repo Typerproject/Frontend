@@ -12,9 +12,10 @@ const Redirect: React.FC = () => {
 
   useEffect(() => {
     const code = new URLSearchParams(location.search).get("code");
+    console.log(code)
     if (code) {
       axios
-        .post(`${import.meta.env.VITE_BASE_URI}auth`, {
+        .post(`${import.meta.env.VITE_BASE_URI}/auth`, {
           code: code,
         })
         .then((response) => {

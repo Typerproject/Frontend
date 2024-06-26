@@ -8,7 +8,6 @@ import PostEditPage from "./routes/postEdit/PostEditPage";
 
 import Info from "./components/info/info";
 import Layout from "./components/Layout";
-// import LoginModal from "./components/login/LoginModal";
 import Redirect from "./components/login/Redirect";
 import ScrapPage from "./routes/scrap/ScrapPage";
 
@@ -52,12 +51,8 @@ const routers = [
       }
     ],
   },
-  // {
-  //   path: "/kakao/auth",
-  //   element: <LoginModal isOpen={true} onRequestClose={() => false} />,
-  // },
   {
-    path: "/kakao/login",
+    path: "/kakao/api/login",
     element: <Redirect />,
   },
   {
@@ -65,7 +60,6 @@ const routers = [
     element: <Search />,
   },
   {
-    
     path: "/edit/:id",
     element: <PostEditPage />
   },
