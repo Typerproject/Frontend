@@ -149,7 +149,6 @@ const MyComponent = () => {
               )}
               <div ref={targetRef} className="h-1" />
             </div>
-            {/* 스크롤 맨 위로 올려주는 버튼 */}
             <div className="flex justify-end w-full">
               <button
                 onClick={scrollToTop}

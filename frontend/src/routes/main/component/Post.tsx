@@ -80,10 +80,7 @@ export default function MainPost({ post }: MainPostProps) {
                   <div className="flex flex-col mmd:flex-row mmd:justify-between gap-[1rem] w-full">
                     {/*유저 이름과 사진*/}
                     <div>
-                      <div
-                        // onClick={() => navigate(`/my/${post.writer.id}`)}
-                        className="flex gap-[0.5rem] items-center"
-                      >
+                      <div className="flex gap-[0.5rem] items-center">
                         <img
                           className="w-[40px] rounded-full"
                           src={post.writer.img}
@@ -99,7 +96,7 @@ export default function MainPost({ post }: MainPostProps) {
                   </div>
                   <div onClick={() => navigate(`/post/${post._id}`)}>
                     <div>
-                      <div className="text-3xl font-semibold mt-[1.2rem] max-w-lg overflow-hidden text-ellipsis whitespace-nowrap">
+                      <div className="text-3xl font-semibold mt-[1.2rem] max-w-full sm:max-w-4xl md:max-w-3xl lg:max-w-2xl xl:max-w-xl overflow-hidden text-ellipsis whitespace-normal">
                         {post.title}
                       </div>
                       <div className="text-base mt-[0.7rem] text-gray-500">
@@ -113,11 +110,10 @@ export default function MainPost({ post }: MainPostProps) {
               {/* 미리보기 오른쪽 */}
               <div
                 onClick={() => navigate(`/post/${post._id}`)}
-                className="flex-grow basis-1/4"
+                className="hidden md:flex md:flex-grow md:basis-1/4"
               >
-                <div className="flex w-full h-full phone:hidden">
+                <div className="flex w-full h-full">
                   <div
-                    // bg-center bg-cover
                     className="w-3/4 mmd:w-full h-full rounded"
                     style={{
                       backgroundImage: `url(${post.preview.img})`,
