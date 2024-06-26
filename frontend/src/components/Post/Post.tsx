@@ -5,6 +5,7 @@ import postAPI from "../../api/postDetailAPI";
 import { FaRegComment } from "react-icons/fa";
 import { FaRegBookmark } from "react-icons/fa";
 import { FaBookmark } from "react-icons/fa6";
+//import { IWritedPost } from "../../api/userAPI";
 
 //const service = new userAPI(import.meta.env.VITE_BASE_URI);
 const postService = new postAPI(import.meta.env.VITE_SERVER_POST_API_URI);
@@ -18,7 +19,6 @@ export interface Pre {
 interface Preview {
   title: string;
   _id: string;
-  //preview: object;
   preview: Pre;
   createdAt: string;
   public: boolean;
@@ -40,7 +40,6 @@ export default function Post({ id, nickname, profile, post }: User) {
 
   const userName: string | undefined = nickname;
   const userProfile: string | undefined = profile;
-  //const currentUser = useAppSelector((state) => state.user);
 
   //api호출을 통해 게시글 정보를 받아옴
   const title: string = post.title;
@@ -71,7 +70,6 @@ export default function Post({ id, nickname, profile, post }: User) {
     postService
       .scrapPost(postId)
       .then((result) => {
-        console.log("스크랩 하기", result);
         setValidLike(true);
         setLike(like + 1);
       })
@@ -85,7 +83,6 @@ export default function Post({ id, nickname, profile, post }: User) {
     postService
       .deleteScrapPost(postId)
       .then((result) => {
-        console.log("스크랩 취소", result);
         setValidLike(false);
         setLike(like - 1);
       })
@@ -119,10 +116,10 @@ export default function Post({ id, nickname, profile, post }: User) {
               </div>
               <div>
                 <div>
-                  <div className="text-3xl font-semibold mt-[1.2rem] max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">
+                  <div className="text-3xl phone:w-5/6 font-semibold mt-[1.2rem] max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">
                     {title}
                   </div>
-                  <div className="text-base mt-[0.7rem] text-gray-500 max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">
+                  <div className="text-base phone:w-5/6 mt-[0.7rem] text-gray-500 max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">
                     {content}
                   </div>
                 </div>
@@ -134,7 +131,6 @@ export default function Post({ id, nickname, profile, post }: User) {
           <div className="flex-grow basis-1/4 phone:hidden">
             <div className="flex w-full h-full">
               <div
-                // bg-center bg-cover
                 className="w-full h-full rounded"
                 style={{
                   backgroundImage: `url(${picture})`,
