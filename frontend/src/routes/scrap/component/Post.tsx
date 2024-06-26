@@ -13,13 +13,13 @@ type PostProps = {
 const service = new postAPI(import.meta.env.VITE_SERVER_POST_API_URI);
 
 export default function Post({ postInfo }: PostProps) {
-  const like: number = 10;
-  const comment: string = "zz";
 
   const navigate = useNavigate();
 
   const [scrap, setScrap] = useState<boolean>(true);
   const [updatedAt, setUpdatedAt] = useState<string>("");
+
+  const [scrapCount, setScrapCount] = useState<number>(postInfo.scrapingCount)
 
   const handleMarkClick = async (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -31,7 +31,8 @@ export default function Post({ postInfo }: PostProps) {
         .deleteScrapPost(postInfo._id)
         .then((res: IpostScrap) => {
           console.log(res);
-          setScrap(false);
+          setScrap(false);          
+          setScrapCount(prev => prev - 1);
         })
         .catch((e) => {
           console.log(e);
@@ -43,6 +44,7 @@ export default function Post({ postInfo }: PostProps) {
         .then((res: IpostScrap) => {
           console.log(res);
           setScrap(true);
+          setScrapCount(prev => prev + 1);
         })
         .catch((e) => {
           console.log(e);
@@ -71,7 +73,7 @@ export default function Post({ postInfo }: PostProps) {
     <div
       onClick={() => navigate(`/post/${postInfo._id}`)}
     //   border-bottom: 1px solid #80808059;
-      className="w-full p-[2rem] grid gap-[25px] grid-cols-8 cursor-pointer "
+      className="hover:bg-gray-100 hover:rounded-lg w-full p-[2rem] grid gap-[25px] grid-cols-8 cursor-pointer "
     >
       {/* 글쓴이, 제목, 내용, 스크랩 수, 댓글 수 */}
       <div className="flex justify-between col-span-6 w-full">
@@ -99,7 +101,7 @@ export default function Post({ postInfo }: PostProps) {
           <div className="flex gap-[1rem] my-[1rem] items-center">
             <div className="flex items-center gap-[1rem] mr-[10px]">
               <FaRegComment size={20} />
-              <p>{comment}</p>
+              <p>{postInfo.commentCount}</p>
             </div>
             <div
               className="flex gap-[1rem] items-center"
@@ -110,12 +112,13 @@ export default function Post({ postInfo }: PostProps) {
               ) : (
                 <IoBookmarkOutline size={20} />
               )}
-              <p>{like}</p>
+              {/* <p>{postInfo.scrapingCount}</p> */}
+              <p>{scrapCount}</p>
             </div>
           </div>
           {/* 날짜 */}
           <div className="absolute top-0 right-0">
-            <p className="text-sm text-gray-400">{updatedAt}</p>
+            <p className="text-[8px] md:text-xs text-gray-400">{updatedAt}</p>
           </div>
         </div>
       </div>

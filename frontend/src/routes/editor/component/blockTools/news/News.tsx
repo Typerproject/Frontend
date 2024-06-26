@@ -14,12 +14,28 @@ const StockNews: React.FC<StockNewsProps> = ({ newsData, setNewsData }) => {
   const [newsInfo, setNewsInfo] = useState<INewsData>(newsData);
   console.log("newsInfo", newsInfo);
 
-  const handlePaste = async (
+  const handleChange = async (
     e: React.ChangeEvent<HTMLInputElement>
   ): Promise<void> => {
     const url = e.target.value;
+    // console.log(url);
     try {
       const resp = await service.getNewsData(url);
+      console.log(resp);
+      setNewsInfo(resp.data);
+      setNewsData(resp.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handlePaste = async (
+    e: React.ClipboardEvent<HTMLInputElement>
+  ): Promise<void> => {
+    const url = e.clipboardData;
+
+    try {
+      const resp = await service.getNewsData(url.getData('Text'));
       console.log(resp);
       setNewsInfo(resp.data);
       setNewsData(resp.data);
@@ -31,9 +47,11 @@ const StockNews: React.FC<StockNewsProps> = ({ newsData, setNewsData }) => {
   if (!newsInfo || Object.keys(newsInfo).length === 0) {
     return (
       <input
+        type="text"
         className="w-full border border-gray-400	rounded-md p-[0.5rem]"
         placeholder="url을 붙여넣어 주세요!"
-        onChange={(e) => handlePaste(e)}
+        onChange={(e) => handleChange(e)}
+        onPaste={(e) => handlePaste(e)}
       />
     );
   }

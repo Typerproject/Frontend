@@ -25,6 +25,7 @@ export default function PostDetail() {
         .getPost(id)
         .then((res: IPostDetail) => {
           setPostDetail(res);
+          console.log(res);
           setIsWriter(userId === res.writer.writerId);
           setScrap(res.isScrapped);
           return res;
@@ -132,11 +133,12 @@ export default function PostDetail() {
           setScrap={setScrap}
           outputData={postDetail.content}
           scrapingCount={postDetail.scrapingCount}
+          writerId={postDetail.writer?.writerId}
         />
         {postDetail.writer && (
           <div
             id="mainBottom"
-            className="min-h-[150px] mmd:px-[18rem] px-[2rem] h-fit mb-[2rem] bg-[#ececec] absolute left-0 w-[100vw] px-[18rem] flex justify-between"
+            className="min-h-[150px] mmd:px-[18rem] px-[2rem] h-fit mb-[2rem] bg-[#ececec] absolute left-0 right-0 px-[18rem] flex justify-between"
           >
             <div>
               <div className="flex pt-[3rem] gap-[1rem] text-lg">
