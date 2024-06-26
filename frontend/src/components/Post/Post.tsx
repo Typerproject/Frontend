@@ -119,10 +119,10 @@ export default function Post({ id, nickname, profile, post }: User) {
               </div>
               <div>
                 <div>
-                  <div className="text-3xl font-semibold mt-[1.2rem] max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">
+                  <div className="text-3xl phone:w-5/6 font-semibold mt-[1.2rem] max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">
                     {title}
                   </div>
-                  <div className="text-base mt-[0.7rem] text-gray-500 max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">
+                  <div className="text-base phone:w-5/6 mt-[0.7rem] text-gray-500 max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">
                     {content}
                   </div>
                 </div>
