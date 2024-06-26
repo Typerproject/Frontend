@@ -19,7 +19,6 @@ export interface Pre {
 interface Preview {
   title: string;
   _id: string;
-  //preview: object;
   preview: Pre;
   createdAt: string;
   public: boolean;
@@ -32,7 +31,6 @@ interface User {
   id: string | undefined;
   nickname: string | undefined;
   profile: string | undefined;
-  //post: Preview;
   post: Preview;
 }
 

@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { useAppSelector } from "../../store";
 import FollowList from "./component/FollowList";
@@ -43,73 +43,66 @@ export default function MyPage() {
   //현재 접속한 마이 페이지의 유저 아이디
   const { id } = useParams<{ id: string }>(); // useParams의 반환 타입을 명시
 
-  //const [page, setPage] = useState(1);
-  //const [isLoading, setIsLoading] = useState(false);
-  //const [isEndOfPage, setIsEndOfPage] = useState(false);
-  //const mainPostContainerRef = useRef<HTMLDivElement | null>(null);
-  //const prevScrollY = useRef(0);
-
   //무한 스크롤
   const [page, setPage] = useState(1);
+  const observerRef = useRef<IntersectionObserver | null>(null);
   const loader = useRef<HTMLDivElement | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  // useEffect(() => {
+
+  //   fetchMorePosts();
+  // }, []);
+
+  const handleObserver = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      const target = entries[0];
+      if (target.isIntersecting && !isLoading) {
+        // setPage((prevPage) => prevPage + 1);
+        fetchMorePosts();
+      }
+    },
+    [page]
+  );
 
   useEffect(() => {
-    fetchMorePosts();
-  }, []);
-
-  const handleObserver = (entries: IntersectionObserverEntry[]) => {
-    const target = entries[0];
-    if (target.isIntersecting) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  };
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(handleObserver, {
+    observerRef.current = new IntersectionObserver(handleObserver, {
       threshold: 0, //  Intersection Observer의 옵션, 0일 때는 교차점이 한 번만 발생해도 실행, 1은 모든 영역이 교차해야 콜백 함수가 실행.
     });
     // 최하단 요소를 관찰 대상으로 지정함
     const observerTarget = document.getElementById("observer");
     // 관찰 시작
     if (observerTarget) {
-      observer.observe(observerTarget);
+      observerRef.current.observe(observerTarget);
     }
-  }, []);
 
-  // useEffect(() => {
-  //   const observer = new IntersectionObserver(handleObserver, {
-  //     threshold: 1.0,
-  //   });
-  //   if (loader.current) {
-  //     observer.observe(loader.current);
-  //   }
-  //   return () => {
-  //     if (loader.current) {
-  //       observer.unobserve(loader.current);
-  //     }
-  //   };
-  // }, []);
-
-  // const handleObserver = (entities: IntersectionObserverEntry[]) => {
-  //   const target = entities[0];
-  //   if (target.isIntersecting) {
-  //     setPage((prev) => prev + 1);
-  //   }
-  // };
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+  }, [handleObserver]);
 
   const fetchMorePosts = async () => {
+    if (observerRef.current) {
+      observerRef.current.disconnect();
+    }
     if (page === 1) {
       setPreviewPost({ posts: [] });
     }
     try {
-      //const response = await fetch(`/api/posts?page=${page}`);
+      setIsLoading(true);
       service.getWritedPost(id, page).then((data) => {
         console.log("유저가 작성한 글 가져옴: ", data.posts);
         setPreviewPost((prevPostList) => ({
-          ...prevPostList,
+          // ...prevPostList,
           posts:
             page === 1 ? data.posts : [...prevPostList.posts, ...data.posts],
         }));
+        if (data.posts.length !== 0) {
+          setPage((prevPage) => prevPage + 1);
+        }
+        setIsLoading(false);
       });
     } catch (error) {
       console.error("Error fetching posts:", error);
@@ -120,9 +113,9 @@ export default function MyPage() {
     fetchMorePosts();
   }, [page]);
 
-  console.log("마페에서 가져온 주인의 post, ", previewPost);
+  ///////
 
-  ////////
+  console.log("마페에서 가져온 주인의 post, ", previewPost);
 
   useEffect(() => {
     if (currentUserId) {
@@ -144,34 +137,6 @@ export default function MyPage() {
       console.log("ID 無", currentUserId);
     }
   }, [currentUser]);
-
-  //게시글 미리보기
-  // const [previewPost, setPreviewPost] = useState<Preview[]>([]);
-
-  // useEffect(() => {
-  //   // if (page === 1) {
-  //   //   // 첫 페이지 로드 시 초기화
-  //   //   setPreviewPost([]);
-  //   //   setIsEndOfPage(false);
-  //   // }
-
-  //   if (userInfo?.writerdPost) {
-  //     const tempPost: any = userInfo?.writerdPost.map((ele: Preview) => {
-  //       return {
-  //         title: ele.title,
-  //         _id: ele._id,
-  //         preview: ele.preview,
-  //         createdAt: ele.createdAt,
-  //         public: ele.public,
-  //         scrapingCount: ele.scrapingCount,
-  //         isScrapped: ele.isScrapped,
-  //         commentCount: ele.commentCount,
-  //       };
-  //     });
-
-  //     setPreviewPost(tempPost);
-  //   }
-  // }, [userInfo]);
 
   const [followerInfo, setFollowerInfo] = useState<IFollowerInfo | null>(null);
   const [refreshKey, setRefreshKey] = useState(0); // 상태 변경을 감지하기 위한 키
@@ -233,8 +198,6 @@ export default function MyPage() {
         console.log("--------", user);
 
         dispatch(setUser({ user }));
-        // setEditedComment("");
-        // setEditedNickname("");
       })
       .catch((err) => {
         console.error("comment 에러: ", err);
@@ -417,83 +380,6 @@ export default function MyPage() {
 
     return () => clearTimeout(timer);
   }, [flipped]);
-
-  //무한 스크롤
-  // const [page, setPage] = useState(1);
-  // const loader = useRef<HTMLDivElement | null>(null);
-
-  // useEffect(() => {
-  //   fetchMorePosts();
-  // }, []);
-
-  // useEffect(() => {
-  //   const observer = new IntersectionObserver(handleObserver, {
-  //     threshold: 1.0,
-  //   });
-  //   if (loader.current) {
-  //     observer.observe(loader.current);
-  //   }
-  //   return () => {
-  //     if (loader.current) {
-  //       observer.unobserve(loader.current);
-  //     }
-  //   };
-  // }, []);
-
-  // const handleObserver = (entities: IntersectionObserverEntry[]) => {
-  //   const target = entities[0];
-  //   if (target.isIntersecting) {
-  //     setPage((prev) => prev + 1);
-  //   }
-  // };
-
-  // const fetchMorePosts = async () => {
-  //   try {
-  //     const response = await fetch(`/api/posts?page=${page}`);
-  //     const data = await response.json();
-  //     setPreviewPost((prev) => [...prev, ...data]);
-  //   } catch (error) {
-  //     console.error("Error fetching posts:", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchMorePosts();
-  // }, [page]);
-
-  //조디 코드
-  // const handleScroll = () => {
-  //   const { current } = mainPostContainerRef;
-  //   if (
-  //     current &&
-  //     current.scrollTop + current.clientHeight >= current.scrollHeight - 50 &&
-  //     !isLoading &&
-  //     !isEndOfPage // 스크롤이 맨 밑으로 내렸을 때만 처리
-  //     // current.scrollTop > prevScrollY.current // 스크롤이 맨 밑으로 내렸을 때만 처리
-  //   ) {
-  //     setIsLoading(true);
-  //     setPage((prevPage) => prevPage + 1);
-  //   }
-  //   prevScrollY.current = current ? current.scrollTop : 0; // 현재 스크롤 위치
-  // };
-
-  // useEffect(() => {
-  //   const { current } = mainPostContainerRef;
-  //   if (current) {
-  //     current.addEventListener("scroll", handleScroll);
-  //     return () => {
-  //       current.removeEventListener("scroll", handleScroll);
-  //     };
-  //   }
-  // }, []);
-
-  // 스크롤 맨 위로 올리는 함수
-  // const scrollToTop = () => {
-  //   if (mainPostContainerRef.current) {
-  //     mainPostContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
-  //   }
-  //   window.scrollTo({ top: 0, behavior: "smooth" }); // 페이지의 스크롤도 맨 위로 이동
-  // };
 
   //팔로우 스크롤 감지
   const contentRef = useRef<HTMLDivElement>(null);
@@ -768,7 +654,11 @@ export default function MyPage() {
           </div>
         </div>
       </div>
-      <div id="observer" style={{ height: "10px" }}></div>
+      {isLoading ? (
+        <>loading..</>
+      ) : (
+        <div id="observer" style={{ height: "10px" }}></div>
+      )}
       {/* 스크롤 맨 위로 올려주는 버튼 */}
       {/* <div className="relative w-full">
         <button
