@@ -99,7 +99,7 @@ export default function MainPost({ post }: MainPostProps) {
                   </div>
                   <div onClick={() => navigate(`/post/${post._id}`)}>
                     <div>
-                      <div className="text-3xl font-semibold mt-[1.2rem] max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">
+                      <div className="text-3xl font-semibold mt-[1.2rem] max-w-lg overflow-hidden text-ellipsis whitespace-nowrap">
                         {post.title}
                       </div>
                       <div className="text-base mt-[0.7rem] text-gray-500">
