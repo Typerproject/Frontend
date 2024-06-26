@@ -26,7 +26,6 @@ const routers = [
   {
     path: "/my",
     element: <Layout />,
-    // index: true
     children: [
       {
         path: ":id",
@@ -38,12 +37,10 @@ const routers = [
   {
     path: "/editor",
     element: <EditorPage />,
-    // index: true
   },
   {
     path: "/post",
     element: <Layout />,
-    // index: true
     children: [
       {
         path: ":id",
@@ -57,10 +54,6 @@ const routers = [
       },
     ],
   },
-  // {
-  //   path: "/kakao/auth",
-  //   element: <LoginModal isOpen={true} onRequestClose={() => false} />,
-  // },
   {
     path: "/kakao/login",
     element: <Redirect />,

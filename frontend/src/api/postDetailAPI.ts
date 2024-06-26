@@ -126,8 +126,6 @@ export default class postAPI extends BaseApi {
 
       const data: IPost[] = await resp.data;
 
-      console.log("메인 페이지 리스트", data);
-
       return { posts: data };
     } catch (error: any) {
       if (error.response.status === 401) {
@@ -149,8 +147,6 @@ export default class postAPI extends BaseApi {
     return data;
   }
 
-  //title: string | null;
-  // content: OutputData;
   async patchPost(postId: string, title: string | null, content: OutputData) {
     const resp = await this.fetcher.patch(`${postId}`, {
       title,
