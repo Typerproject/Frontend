@@ -19,6 +19,8 @@ export default function Post({ postInfo }: PostProps) {
   const [scrap, setScrap] = useState<boolean>(true);
   const [updatedAt, setUpdatedAt] = useState<string>("");
 
+  const [scrapCount, setScrapCount] = useState<number>(postInfo.scrapingCount)
+
   const handleMarkClick = async (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ): Promise<void> => {
@@ -29,7 +31,8 @@ export default function Post({ postInfo }: PostProps) {
         .deleteScrapPost(postInfo._id)
         .then((res: IpostScrap) => {
           console.log(res);
-          setScrap(false);
+          setScrap(false);          
+          setScrapCount(prev => prev - 1);
         })
         .catch((e) => {
           console.log(e);
@@ -41,6 +44,7 @@ export default function Post({ postInfo }: PostProps) {
         .then((res: IpostScrap) => {
           console.log(res);
           setScrap(true);
+          setScrapCount(prev => prev + 1);
         })
         .catch((e) => {
           console.log(e);
@@ -108,7 +112,8 @@ export default function Post({ postInfo }: PostProps) {
               ) : (
                 <IoBookmarkOutline size={20} />
               )}
-              <p>{postInfo.scrapingCount}</p>
+              {/* <p>{postInfo.scrapingCount}</p> */}
+              <p>{scrapCount}</p>
             </div>
           </div>
           {/* 날짜 */}

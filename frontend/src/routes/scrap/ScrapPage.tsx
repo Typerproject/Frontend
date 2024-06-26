@@ -134,7 +134,7 @@ export default function ScrapPage() {
 
   return (
     <div className="flex flex-col min-h-[calc(100vh-76.5px)]">
-      <div className="w-[65%] mx-auto mt-[8rem] flex-grow">
+      <div className="phone:w-[100%] w-[65%] mx-auto mt-[8rem] flex-grow">
         {post.map((post) => (
           <div key={post._id}>
             <Post postInfo={post} />

@@ -3,25 +3,20 @@ import MainPage from "./routes/main/MainPage";
 import PostDetail from "./routes/postDetail/PostDetailPage";
 import MyPage from "./routes/my/MyPage";
 import EditorPage from "./routes/editor/EditorPage";
-import Search from "./components/search/Search";
+import Search from "./components/search/Search"
 import PostEditPage from "./routes/postEdit/PostEditPage";
 
 import Info from "./components/info/info";
 import Layout from "./components/Layout";
+// import LoginModal from "./components/login/LoginModal";
 import Redirect from "./components/login/Redirect";
 import ScrapPage from "./routes/scrap/ScrapPage";
 
 const routers = [
   {
     path: "/",
-    element: <Layout />,
-    children: [
-      {
-        path: "",
-        element: <MainPage />,
-        index: true,
-      },
-    ],
+    element: <MainPage />,
+    // index: true
   },
   {
     path: "/my",
@@ -54,25 +49,30 @@ const routers = [
         path: "scrap",
         element: <ScrapPage />,
         index: true,
-      },
+      }
     ],
   },
+  // {
+  //   path: "/kakao/auth",
+  //   element: <LoginModal isOpen={true} onRequestClose={() => false} />,
+  // },
   {
-    path: "/kakao/api/login",
+    path: "/kakao/login",
     element: <Redirect />,
   },
   {
-    path: "/search",
+    path:"/search",
     element: <Search />,
   },
   {
+    
     path: "/edit/:id",
-    element: <PostEditPage />,
+    element: <PostEditPage />
   },
   {
-    path: "/info",
-    element: <Info />,
-  },
+    path:"/info",
+    element:<Info/>
+  }
 ];
 
 const router = createBrowserRouter(routers);
