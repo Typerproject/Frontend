@@ -31,7 +31,12 @@ export default function CommentList({ comments }) {
 
   return (
     <div className="mb-[5rem]">
-      <p>댓글 {comments.length}</p>
+      <p>
+        댓글{" "}
+        {comments.reduce((acc, cur) => {
+          return acc + 1 + cur.replies.length;
+        }, 0)}
+      </p>
       <hr className="my-[2rem]" />
 
       {comments.map((ele, idx) => {
