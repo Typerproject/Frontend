@@ -111,7 +111,6 @@ export default function MyPage() {
   );
 
   useEffect(() => {
-    console.log("A");
     fetchMorePosts();
   }, [fetchMorePosts]);
 
