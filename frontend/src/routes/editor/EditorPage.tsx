@@ -63,7 +63,7 @@ export default function EditorPage() {
           >
             나가기
           </p>
-          <div className="flex items-center w-[10%] justify-between">
+          <div className="flex items-center gap-4">
             {isPublic ? (
               <IoMdUnlock
                 className="hover:opacity-80 cursor-pointer"

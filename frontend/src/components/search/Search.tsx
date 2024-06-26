@@ -66,14 +66,34 @@ export default function Search() {
           response = await axios.get(`${import.meta.env.VITE_SERVER_SEARCH_API_URI}?value=${searchtext}&page=${page}`);
           setTotalPage(response.data.total);
 
+          console.log(response.data)
+          const newWriterArray = response.data.new_array.map((item :any)=> {
+            if (item.preview.text.length > 50) {
+              item.preview.text = item.preview.text.slice(0, 50) + "...";
+            }
+            return item;
+          });
+          
+
           setPostdata((prevPostList) => 
-            [...prevPostList, ...response.data.new_array]
+            [...prevPostList, ...newWriterArray]
           );
         } else if (writer) {
           response = await axios.get(`${import.meta.env.VITE_SERVER_SEARCH_API_URI}/writer?value=${searchtext}&page=${page}`);
+
+          
+          const newWriterArray = response.data.new_array.map((item :any)=> {
+           
+            if (item.comment.length > 50) {
+              item.comment = item.comment.slice(0, 50) + "...";
+            }
+            return item;
+          });
+
+          
           setWriterdata((prevWriterList) => [
             ...prevWriterList,
-            ...response.data.new_array
+            ...newWriterArray
           ]);
           setTotalPage(response.data.total);
         }

@@ -6,6 +6,7 @@ import EditorPage from "./routes/editor/EditorPage";
 import Search from "./components/search/Search"
 import PostEditPage from "./routes/postEdit/PostEditPage";
 
+import Info from "./components/info/info";
 import Layout from "./components/Layout";
 // import LoginModal from "./components/login/LoginModal";
 import Redirect from "./components/login/Redirect";
@@ -64,8 +65,13 @@ const routers = [
     element: <Search />,
   },
   {
+    
     path: "/edit/:id",
     element: <PostEditPage />
+  },
+  {
+    path:"/info",
+    element:<Info/>
   }
 ];
 

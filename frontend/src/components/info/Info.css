@@ -1,0 +1,75 @@
+@keyframes glow {
+    0% {
+      text-shadow: 0 0 10px white, 0 0 20px white, 0 0 30px white, 0 0 40px white, 0 0 50px white, 0 0 60px white, 0 0 70px white;
+    }
+    100% {
+      text-shadow: 0 0 20px white, 0 0 30px white, 0 0 40px white, 0 0 50px white, 0 0 60px white, 0 0 70px white, 0 0 80px white;
+    }
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  @keyframes typing {
+    from {
+      width: 0;
+    }
+    to {
+      width: 100%;
+    }
+  }
+  
+  @keyframes blink {
+    50% {
+      border-color: transparent;
+    }
+  }
+  
+  @keyframes fadeInOut {
+    0%, 100% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+  
+  .glow {
+    animation: glow 1s ease-in-out infinite alternate;
+  }
+  
+  .rest {
+    opacity: 0;
+    animation: fadeIn 1s forwards;
+    animation-delay: 1s;
+  }
+  
+  .info-content {
+    opacity: 0;
+    animation: fadeIn 1s forwards;
+    animation-delay: 2s;
+  }
+  
+  .fade-in {
+    animation: fadeIn 3s forwards;
+  }
+  
+  .typing-text {
+    display: inline-block;
+    border-right: 2px solid;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: typing 3s steps(30, end), blink 1s step-end infinite;
+  }
+  
+  .fading-image {
+    animation: fadeInOut 2s infinite;
+  }
