@@ -298,6 +298,7 @@ const ChartModal = ({ setData, onExit }: ChartModalProps) => {
                     type="text"
                     name="stockCode"
                     placeholder="(ex. 삼성전자)"
+                    autoComplete="off"
                     value={codeSearch}
                     onChange={handleCodeChange}
                     onKeyDown={handleFocusToDropdown}
