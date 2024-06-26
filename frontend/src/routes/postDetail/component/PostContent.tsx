@@ -59,6 +59,7 @@ export default function PostContent({
           console.log(res);
           alert("스크랩 삭제 성공");
           setScrap(false);
+          location.reload();
         })
         .catch((e) => {
           console.log(e);
@@ -71,6 +72,7 @@ export default function PostContent({
           console.log(res);
           alert("스크랩 성공");
           setScrap(true);
+          location.reload();
         })
         .catch((e) => {
           console.log(e);
