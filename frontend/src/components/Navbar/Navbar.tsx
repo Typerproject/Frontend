@@ -115,7 +115,7 @@ export default function Navbar() {
                 </li>
                 <li className="px-4 py-2 hover:bg-gray-100">
                   <NavLink
-                    to={`/post/scrap/list`}
+                    to={`/post/scrap`}
                     className="text-black no-underline cursor-pointer"
                   >
                     Scrap List
