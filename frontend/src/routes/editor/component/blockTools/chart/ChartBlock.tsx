@@ -112,18 +112,18 @@ const ChartModal = ({ setData, onExit }: ChartModalProps) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(-1); // 선택된 항목의 인덱스
   const dropdownRef = useRef<HTMLUListElement>(null); // 드롭다운 요소의 ref
   const inputRef = useRef<HTMLInputElement>(null);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   useEffect(() => {
     service
       .getCodeList()
       .then((data) => {
-        console.log("Received data:", data.codeList);
-
         setCodeList(data.codeList);
       })
       .catch((err) => {
-        console.error("getCodeList Error: ", err);
         setCodeList([]);
+        console.error(err);
       });
   }, []);
 
@@ -132,8 +132,6 @@ const ChartModal = ({ setData, onExit }: ChartModalProps) => {
       const filtered = codeList.filter((item) => {
         return item.name.toLowerCase().includes(codeSearch.toLocaleLowerCase());
       });
-
-      console.log("제발제발 필터된 데이터", filtered);
 
       setShowDropdown(true);
       setFilteredCodes(filtered);
@@ -204,15 +202,10 @@ const ChartModal = ({ setData, onExit }: ChartModalProps) => {
   };
 
   const handleSelect = (item: CodeItem) => {
-    console.log("handleSelect: ", item);
-
     setCodeSearch(item.name);
     setFormData({ ...formData, stockCode: item.code });
     setFilteredCodes([]);
     setShowDropdown(false);
-    if (inputRef.current) {
-      inputRef.current.focus(); // 입력 필드로 포커스 이동
-    }
   };
 
   useEffect(() => {
@@ -240,25 +233,39 @@ const ChartModal = ({ setData, onExit }: ChartModalProps) => {
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+
+    if (name === "startDate") {
+      setStartDate(value);
+      const start = new Date(value);
+      start.setDate(start.getDate() + 100);
+
+      const end = start.toISOString().split("T")[0];
+
+      const today = new Date().toISOString().split("T")[0];
+
+      setEndDate(end < today ? end : today);
+    }
   };
 
   const handleSave = async () => {
     try {
+      const start = new Date(formData.startDate);
+      start.setDate(start.getDate() + 100);
+
+      console.log(start);
+
+      if (start.toISOString().split("T")[0] < formData.endDate) {
+        alert("조회 범위는 최대 100일 입니다.");
+        return;
+      }
+
       const stockResp = await service.getStockData(formData);
 
       setData(stockResp);
-      setFormData({
-        marketCode: "J",
-        stockCode: "",
-        startDate: "",
-        endDate: "",
-        period: "",
-        prc: "0",
-      });
+
       setShow(false);
     } catch (error) {
       console.error("Failed to fetch stock data", error);
-    } finally {
       setShow(false);
     }
   };
@@ -301,32 +308,35 @@ const ChartModal = ({ setData, onExit }: ChartModalProps) => {
                     type="text"
                     name="stockCode"
                     placeholder="(ex. 삼성전자)"
+                    autoComplete="off"
                     value={codeSearch}
                     onChange={handleCodeChange}
                     onKeyDown={handleFocusToDropdown}
                     className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                     required
                   />
-                  {showDropdown && filteredCodes.length > 0 && (
-                    <ul
-                      ref={dropdownRef}
-                      className="absolute z-10 border border-gray-300 mt-2 rounded-md shadow-sm max-h-40 overflow-y-auto bg-gray-100"
-                      onKeyDown={handleCodeKeyDown}
-                      tabIndex={0}
-                    >
-                      {filteredCodes.map((item, index) => (
-                        <li
-                          key={item.code}
-                          className={`p-2 hover:bg-gray-200 cursor-pointer ${
-                            index === selectedIndex ? "bg-gray-200" : ""
-                          }`}
-                          onClick={() => handleSelect(item)}
-                        >
-                          {item.name}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+                  {showDropdown &&
+                    filteredCodes.length > 0 &&
+                    codeSearch !== filteredCodes[0].name && (
+                      <ul
+                        ref={dropdownRef}
+                        className="absolute z-10 border border-gray-300 mt-2 rounded-md shadow-sm max-h-40 overflow-y-auto bg-gray-100"
+                        onKeyDown={handleCodeKeyDown}
+                        tabIndex={0}
+                      >
+                        {filteredCodes.map((item, index) => (
+                          <li
+                            key={item.code}
+                            className={`p-2 hover:bg-gray-200 cursor-pointer ${
+                              index === selectedIndex ? "bg-gray-200" : ""
+                            }`}
+                            onClick={() => handleSelect(item)}
+                          >
+                            {item.name}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                 </div>
                 <div className="mb-4">
                   <label className="block text-gray-700">
@@ -336,6 +346,7 @@ const ChartModal = ({ setData, onExit }: ChartModalProps) => {
                     type="date"
                     placeholder="조회 시작일자 (ex. 20220501)"
                     name="startDate"
+                    max={new Date().toISOString().split("T")[0]}
                     value={formData.startDate}
                     onChange={handleChange}
                     className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
@@ -349,6 +360,8 @@ const ChartModal = ({ setData, onExit }: ChartModalProps) => {
                   <input
                     type="date"
                     placeholder="조회 종료일자 (ex. 20220530)"
+                    min={startDate}
+                    max={endDate}
                     name="endDate"
                     value={formData.endDate}
                     onChange={handleChange}
@@ -397,7 +410,7 @@ const ChartModal = ({ setData, onExit }: ChartModalProps) => {
                 className="bg-blue-500 text-white px-4 py-2 rounded"
                 onClick={handleSave}
               >
-                차트 그리기
+                확인
               </button>
             </div>
           </div>
