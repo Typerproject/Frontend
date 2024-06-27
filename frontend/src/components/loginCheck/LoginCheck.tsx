@@ -14,15 +14,12 @@ export default function LoginCheck() {
       .then((isCookiePresent) => {
         if (!isCookiePresent) {
           dispatch(logoutUser());
-          console.log("쿠키 만료에 따른 로컬 스토리지 초기화");
-        } else {
-          console.log("쿠키 살아 있음");
         }
       })
       .catch((err) => {
         console.error("쿠키 유무 확인 에러: ", err);
       });
-  }, []);
+  }, [dispatch]);
 
   return null;
 }

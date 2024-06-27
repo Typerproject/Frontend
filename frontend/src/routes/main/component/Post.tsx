@@ -6,9 +6,6 @@ import { useNavigate } from "react-router-dom";
 
 const postService = new postAPI(import.meta.env.VITE_SERVER_POST_API_URI);
 
-// 스크랩/코멘트 누르면 로그인 요청 알럿 + login 창 뜨도록?
-// 스크랩 하기 => scrapPost / 취소 => deleteScrapPost
-
 interface MainPostProps {
   post: IPost;
 }
@@ -25,7 +22,6 @@ export default function MainPost({ post }: MainPostProps) {
       : post.preview.text;
 
   const koreaDate = new Date(post.createdAt);
-  //   const koreaDate = new Date(utcDate.getTime() + 9 * 60 * 60 * 1000);
 
   const formattedTime = koreaDate.toLocaleString("ko-KR", {
     year: "numeric",
@@ -41,12 +37,11 @@ export default function MainPost({ post }: MainPostProps) {
     postService
       .scrapPost(post._id)
       .then((result) => {
-        console.log("스크랩 하기", result);
         setIsScraped(true);
         setScrapCount(scrapCount + 1);
       })
       .catch((err) => {
-        console.log("스크랩 하기 error: ", err);
+        console.error("스크랩 하기 error: ", err);
       });
   };
 
@@ -55,7 +50,6 @@ export default function MainPost({ post }: MainPostProps) {
     postService
       .deleteScrapPost(post._id)
       .then((result) => {
-        console.log("스크랩 취소", result);
         setIsScraped(false);
         setScrapCount(scrapCount - 1);
       })

@@ -32,11 +32,13 @@ export default function Navbar() {
   };
 
   const handleLogout = () => {
-    service.logout().then((data) => {
-      console.log(data);
-      setMenuOpen(false);
-      dispatch(logoutUser());
-    });
+    service
+      .logout()
+      .then((data) => {
+        setMenuOpen(false);
+        dispatch(logoutUser());
+      })
+      .catch((err) => console.error(err));
   };
 
   const handleSearchClick = () => {
@@ -45,7 +47,6 @@ export default function Navbar() {
 
   const handleKeyDown = (e: any) => {
     if (e.key === "Enter" && searchtext.trim().length > 0) {
-      console.log(searchtext);
       handleSearchClick();
     }
   };
