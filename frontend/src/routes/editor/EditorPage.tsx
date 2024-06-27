@@ -50,7 +50,7 @@ export default function EditorPage() {
             type="text"
             className="block w-11/12 p-4 text-4xl outline-none"
             placeholder="제목을 입력해주세요"
-            maxLength={25}
+            maxLength={40}
             onChange={(e) => setTitle(e.target.value)}
           />
           <Timer />

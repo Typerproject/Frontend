@@ -35,6 +35,8 @@ const AnalystReportModal: React.FC<AnalystReportModalProps> = ({ createIframe, o
         params: { company: formData.company, fromDate: formData.fromDate, toDate: formData.toDate, page: 1 }
       });
 
+      console.log(response)
+      console.log("handlesave호출")
       if (response.data.result.length === 0) {
         alert('검색결과가 없네요!');
         onExit();
@@ -48,6 +50,7 @@ const AnalystReportModal: React.FC<AnalystReportModalProps> = ({ createIframe, o
       setMainLoading(false);
       setReports(response.data.result);
       setNextDate(response.data.nextDate);
+    
       setError("");
     } catch (err) {
       onExit();
@@ -56,7 +59,8 @@ const AnalystReportModal: React.FC<AnalystReportModalProps> = ({ createIframe, o
 
   const searchMore = async () => {
     try {
-      if ('2024-06-08'<formData.toDate){
+      if ('2024-06-08'<nextDate){
+        console.log(nextDate)
       const response = await axios.get(import.meta.env.VITE_SERVER_REPORT_API_URI, {
         params: { company: formData.company, fromDate: formData.fromDate, toDate: nextDate, page: nextPage  }
       });
@@ -71,9 +75,9 @@ const AnalystReportModal: React.FC<AnalystReportModalProps> = ({ createIframe, o
         }
       }
       else {
-
+        console.log("hi")
         const response = await axios.get(import.meta.env.VITE_SERVER_REPORT_API_URI, {
-          params: { company: formData.company, fromDate: formData.fromDate, toDate: formData.toDate, page: nextPage  }
+          params: { company: formData.company, fromDate: formData.fromDate, toDate: nextDate, page: nextPage  }
         });
             if (response.data.result.length>0){
             setMore(true);
@@ -87,34 +91,13 @@ const AnalystReportModal: React.FC<AnalystReportModalProps> = ({ createIframe, o
       }
 
 
-     
-
-      
     } catch (error) {
       onExit();
       console.error("Error fetching more reports:", error);
     }
   };
 
-  const handleScroll = () => {
-    if (modalBodyRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } = modalBodyRef.current;
-      if (scrollTop + clientHeight >= scrollHeight - 10) {
-        searchMore();
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (modalBodyRef.current) {
-      modalBodyRef.current.addEventListener("scroll", handleScroll);
-    }
-    return () => {
-      if (modalBodyRef.current) {
-        modalBodyRef.current.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, []);
+  
 
   return (
     <>
