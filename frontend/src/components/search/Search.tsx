@@ -33,10 +33,8 @@ export default function Search() {
         !isLoading &&
         !isEndOfPage
       ) {
-        console.log("Loading more content...");
         setIsLoading(true);
         setPage((prevPage) => prevPage + 1);
-        console.log(page);
       }
     }
   };
@@ -66,7 +64,6 @@ export default function Search() {
           );
           setTotalPage(response.data.total);
 
-          console.log(response.data);
           const newWriterArray = response.data.new_array.map((item: any) => {
             if (item.preview.text.length > 50) {
               item.preview.text = item.preview.text.slice(0, 50) + "...";
