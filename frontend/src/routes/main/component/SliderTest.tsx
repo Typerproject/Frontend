@@ -123,7 +123,9 @@ const SliderTest: React.FC = () => {
   }
 
   if (posts.length === 0) {
-    return <div>No posts available</div>;
+    return (
+      <div className="mt-8 mx-4 text-center">게시글이 하나도 없습니다!</div>
+    );
   }
 
   return (
@@ -442,7 +444,7 @@ const SliderTest: React.FC = () => {
             <div
               style={{
                 width: 300,
-                backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.5)), url(${posts[4].preview.img})`,
+                backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.5)), url(${posts[6].preview.img})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 transition: "transform 0.3s ease, filter 0.3s ease",
