@@ -55,7 +55,6 @@ export default function MyPage() {
       const target = entries[0];
       if (target.isIntersecting && !isLoading && !isDone) {
         setPage((page) => page + 1);
-        // fetchMorePosts();
       }
     },
     [isLoading, isDone]
@@ -111,7 +110,10 @@ export default function MyPage() {
   );
 
   useEffect(() => {
-    console.log("A");
+    setPage(1);
+  }, [id]);
+
+  useEffect(() => {
     fetchMorePosts();
   }, [fetchMorePosts]);
 
@@ -381,7 +383,7 @@ export default function MyPage() {
       window.removeEventListener("resize", handleResizeOrScroll);
       window.removeEventListener("scroll", handleResizeOrScroll);
     };
-  }, []);
+  }, [follow]);
 
   return (
     <div className="mt-[7rem] phone:mt-[5rem] flex flex-col min-h-[calc(100vh-76.5px)]">
@@ -399,7 +401,7 @@ export default function MyPage() {
             {/*가져온 글 목록을 map돌면서 출력*/}
             {previewPost.posts.map((post: Preview) => {
               return (
-                <div>
+                <div key={post._id}>
                   {/*주인의 아이디와 profile*/}
                   <Post
                     id={id}
@@ -447,7 +449,7 @@ export default function MyPage() {
               </div>
 
               <div className="phone:mt-[1rem] content-center">
-                <div className="flex gap-[1rem] items-center phone:justify-center">
+                <div className="flex flex-col gap-[0.5rem] phone:items-center phone:justify-center">
                   {/* 닉네임 */}
                   {isEditing ? (
                     <input
@@ -462,8 +464,58 @@ export default function MyPage() {
                     </p>
                   )}
 
+                  {/*팔로잉팔로워 수*/}
+                  {isEditing ? (
+                    <div></div>
+                  ) : (
+                    <div
+                      className={`flex gap-[1rem]  mt-[0.5rem] text-[#b1b2b3]  phone:justify-center phone:text-sm phone:py-[0.2rem]`}
+                    >
+                      <div className="relative">
+                        <span
+                          onClick={handleFollowerBtn}
+                          className={`hover:text-[#141414] cursor-pointer  ${
+                            follow === "follower"
+                              ? "text-[#141414]"
+                              : "text-[#b1b2b3]"
+                          }`}
+                        >
+                          {followerInfo?.followerCount} followers
+                        </span>
+                      </div>
+
+                      <div className="relative">
+                        <span
+                          onClick={handleFollowingBtn}
+                          className={`hover:text-[#141414] cursor-pointer ${
+                            follow === "following"
+                              ? "text-[#141414]"
+                              : "text-[#b1b2b3]"
+                          }`}
+                        >
+                          {followerInfo?.followingCount} following
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 코멘트 */}
+                  {isEditing ? (
+                    <textarea
+                      className="flex gap-10 text-[#88898a] text-blue-500 border-none italic w-54
+                shadow-md rounded px-8 pt-6 pb-8 bg-gray-50 
+                text-base mt-2 text-color text-blue-500 italic p-2 h-10"
+                      value={editedComment}
+                      onChange={(e) => setEditedComment(e.target.value)}
+                    />
+                  ) : (
+                    <div className="flex gap-10 text-[#88898a] w-64 phone:justify-center">
+                      <p className="break-words">{userInfo?.comment}</p>
+                    </div>
+                  )}
+
                   {/*버튼*/}
-                  <div className="grid place-items-start ">
+                  <div className="grid place-items-start mt-[0.2rem]">
                     {currentUser._id === id && isEditing ? (
                       <div className="flex gap-10 ">
                         <button
@@ -503,55 +555,6 @@ export default function MyPage() {
                     )}
                   </div>
                 </div>
-
-                {/*팔로잉팔로워 수*/}
-                {isEditing ? (
-                  <div></div>
-                ) : (
-                  <div
-                    className={`flex gap-5  mt-[0.5rem] text-[#b1b2b3]  phone:justify-center phone:text-sm phone:py-[0.2rem]`}
-                  >
-                    <div className="relative">
-                      <span
-                        onClick={handleFollowerBtn}
-                        className={`hover:text-[#141414] cursor-pointer  ${
-                          follow === "follower"
-                            ? "text-[#141414]"
-                            : "text-[#b1b2b3]"
-                        }`}
-                      >
-                        {followerInfo?.followerCount} followers
-                      </span>
-                    </div>
-
-                    <div className="relative">
-                      <span
-                        onClick={handleFollowingBtn}
-                        className={`hover:text-[#141414] cursor-pointer ${
-                          follow === "following"
-                            ? "text-[#141414]"
-                            : "text-[#b1b2b3]"
-                        }`}
-                      >
-                        {followerInfo?.followingCount} following
-                      </span>
-                    </div>
-                  </div>
-                )}
-                {/* 코멘트 */}
-                {isEditing ? (
-                  <textarea
-                    className="flex gap-10 text-[#88898a] text-blue-500 border-none italic w-54
-                shadow-md rounded px-8 pt-6 pb-8 bg-gray-50 
-                text-base mt-2 text-color text-blue-500 italic p-2 h-10"
-                    value={editedComment}
-                    onChange={(e) => setEditedComment(e.target.value)}
-                  />
-                ) : (
-                  <div className="flex justify-center gap-10 text-[#88898a] mt-[0.7rem] w-64 phone:justify-center">
-                    <p className="break-words">{userInfo?.comment}</p>
-                  </div>
-                )}
               </div>
             </div>
           </div>
