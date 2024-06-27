@@ -1,5 +1,5 @@
-import { NavLink, useNavigate } from "react-router-dom";
-import { IoMdSearch } from "react-icons/io";
+import { NavLink } from "react-router-dom";
+// import { IoMdSearch } from "react-icons/io";
 import { useAppSelector, useAppDispatch } from "../../store";
 import { BsPersonCircle } from "react-icons/bs";
 import { useState, useEffect, useRef } from "react";
