@@ -39,7 +39,7 @@ const FinanceModal:React.FC<FinanceReportModalProps> = ({creatediv,onExit}) => {
   
 
     const [fin,setFin]=useState<Fin>({
-      "수익(매출액)":false,
+      "매출액":false,
       "매출원가":false,
       "매출총이익":false,
       "판매비와관리비":false,
@@ -90,7 +90,7 @@ const FinanceModal:React.FC<FinanceReportModalProps> = ({creatediv,onExit}) => {
           onExit()
           return alert("검색 결과가 없습니다!");
         }
-        
+        console
         creatediv(data,formData.company);
         setShow(false);
       } catch (error:any){
@@ -112,15 +112,23 @@ const FinanceModal:React.FC<FinanceReportModalProps> = ({creatediv,onExit}) => {
         
 
 
-        const selectedKeys = Object.keys(fin).filter(key => fin[key as FinKeys]);
+      const response = data.data;
+      console.log(response)
 
-        const filteredData = data.data.filter((elem:any) => selectedKeys.includes(elem.account_nm));
+      const selectedKeys = Object.keys(fin).filter(key => fin[key as FinKeys]);
 
-   
-        console.log(filteredData)
+      const regexList = selectedKeys.map(key => new RegExp(key, 'i'));
 
-        return filteredData;
+      const filteredData = response.filter((elem: any) =>
+        regexList.some(regex => regex.test(elem.account_nm))
+      );
 
+      const uniqueFilteredData = Array.from(
+        new Map(filteredData.map(item => [`${item.account_nm}-${item.bsns_year}`, item])).values()
+      );
+      
+
+      return uniqueFilteredData;
     }
 
     const handleToggle = (key:any) => {
