@@ -24,17 +24,6 @@ export default function ChooseReportPage({
   onExit,
   setData,
 }: props) {
-  const [bgn, setBgn] = useState<string>("");
-  const [end, setEnd] = useState<string>("");
-
-  const reportList = useRef<reportType[]>([]);
-  const [list, setList] = useState<reportType[]>([]);
-  const [isMore, setMore] = useState<boolean>(false);
-  const [page, setPage] = useState<number>(2);
-  const [show, setShow] = useState<boolean>(true);
-
-  const [targetReport, setTargetReport] = useState<reportType | null>(null);
-
   const getToday = () => {
     const today = new Date();
     const year = today.getFullYear();
@@ -43,6 +32,17 @@ export default function ChooseReportPage({
 
     return `${year}-${month}-${day}`;
   };
+
+  const [bgn, setBgn] = useState<string>();
+  const [end, setEnd] = useState<string>();
+
+  const reportList = useRef<reportType[]>([]);
+  const [list, setList] = useState<reportType[]>([]);
+  const [isMore, setMore] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(2);
+  const [show, setShow] = useState<boolean>(true);
+
+  const [targetReport, setTargetReport] = useState<reportType | null>(null);
 
   const search = async () => {
     setPage(2);
@@ -54,8 +54,12 @@ export default function ChooseReportPage({
 
     const result = await service.getReportList(
       targetCorp.corpCode,
-      bgn,
-      end,
+      bgn.split("-").reduce((acc, cur) => {
+        return acc + cur;
+      }, ""),
+      end.split("-").reduce((acc, cur) => {
+        return acc + cur;
+      }, ""),
       1
     );
     if (result.status === "013") {
@@ -82,8 +86,12 @@ export default function ChooseReportPage({
   const searchMore = async () => {
     const res = await service.getReportList(
       targetCorp.corpCode,
-      bgn,
-      end,
+      bgn.split("-").reduce((acc, cur) => {
+        return acc + cur;
+      }, ""),
+      end.split("-").reduce((acc, cur) => {
+        return acc + cur;
+      }, ""),
       page
     );
 
@@ -145,15 +153,11 @@ export default function ChooseReportPage({
                 <label className="block text-gray-700">검색 시작 일자</label>
                 <input
                   type="date"
-                  max={getToday()}
+                  max={getToday() > end ? end : getToday()}
                   placeholder="조회 시작일자 (ex. 20220501)"
                   className="mt-1 block border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                   onChange={(e) => {
-                    const format = e.target.value
-                      .split("-")
-                      .reduce((acc, cur) => {
-                        return acc + cur;
-                      }, "");
+                    const format = e.target.value;
 
                     setBgn(format);
                   }}
@@ -163,15 +167,12 @@ export default function ChooseReportPage({
                 <label className="block text-gray-700">검색 종료 일자</label>
                 <input
                   type="date"
+                  min={bgn}
                   max={getToday()}
                   placeholder="조회 종료일자 (ex. 20220530)"
                   className="mt-1 block border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                   onChange={(e) => {
-                    const format = e.target.value
-                      .split("-")
-                      .reduce((acc, cur) => {
-                        return acc + cur;
-                      }, "");
+                    const format = e.target.value;
                     setEnd(format);
                   }}
                 />

@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Modal, Button, Form } from "react-bootstrap";
 
-interface FinanceReportModalProps{
-  creatediv:any;
+interface FinanceReportModalProps {
+  creatediv: any;
   onExit: () => void;
 }
 interface FormData {
@@ -14,29 +14,31 @@ interface FormData {
 
 interface Fin {
   "수익(매출액)": boolean;
-  "매출원가": boolean;
-  "매출총이익": boolean;
-  "판매비와관리비": boolean;
-  "당기순이익": boolean;
-  "영업활동현금흐름": boolean;
-  "투자활동현금흐름": boolean;
-  "재무활동현금흐름": boolean;
-  "재고자산": boolean;
-  "유동부채": boolean;
-  "단기차입금": boolean;
-  "자본금": boolean;
+  매출원가: boolean;
+  매출총이익: boolean;
+  판매비와관리비: boolean;
+  당기순이익: boolean;
+  영업활동현금흐름: boolean;
+  투자활동현금흐름: boolean;
+  재무활동현금흐름: boolean;
+  재고자산: boolean;
+  유동부채: boolean;
+  단기차입금: boolean;
+  자본금: boolean;
 }
 
 type FinKeys = keyof Fin;
 
-const FinanceModal:React.FC<FinanceReportModalProps> = ({creatediv,onExit}) => {
-    const [show, setShow] = useState<boolean>(true);
-    const [formData, setFormData] = useState<FormData>({
-      company: "",
-      startDate: 0,
-      endDate: 0
-    });
-  
+const FinanceModal: React.FC<FinanceReportModalProps> = ({
+  creatediv,
+  onExit,
+}) => {
+  const [show, setShow] = useState<boolean>(true);
+  const [formData, setFormData] = useState<FormData>({
+    company: "",
+    startDate: 2023,
+    endDate: 2023,
+  });
 
     const [fin,setFin]=useState<Fin>({
       "매출액":false,
@@ -53,13 +55,7 @@ const FinanceModal:React.FC<FinanceReportModalProps> = ({creatediv,onExit}) => {
       "자본금":false
     });
 
-    const [error, setError] = useState<String>("");
-  
-    const handleClose = () => setShow(false);
-    const handleChange = (e:any) => {
-      const { name, value } = e.target;
-      setFormData({ ...formData, [name]: value });
-    };
+  const [error, setError] = useState<String>("");
 
     const handleSave = async () => {
       
@@ -129,38 +125,99 @@ const FinanceModal:React.FC<FinanceReportModalProps> = ({creatediv,onExit}) => {
       
 
       return uniqueFilteredData;
+  const handleClose = () => setShow(false);
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSave = async () => {
+    // 입력 검증
+    if (!formData.company) {
+      onExit();
+      return alert("기업이름이 잘못되었습니다!");
+    }
+    if (!formData.startDate || !formData.endDate) {
+      onExit();
+      return alert("시작기간하고 종료기간이 잘못되었습니다.");
     }
 
-    const handleToggle = (key:any) => {
-      setFin((prevFin:any) => ({
-        ...prevFin,
-        [key]: !prevFin[key]
-      }));
-    };
-  
-    return (
-      <>
-        <Modal show={show} onHide={() => setShow(false)} >
-          <Modal.Header closeButton>
-            <Modal.Title>기업이름 입력해주세요!</Modal.Title>
-          </Modal.Header>
-          <Modal.Body className="modal-content" style={{height:"500px"}}>
-            <Form>
-              <Form.Group controlId="formStockCode">
-                <Form.Label>기업</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="기업이름"
-                  name="company"
-                  value={formData.company}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group> 
-              
-              <Form.Label>재무재표 요소 선택</Form.Label>
-            <Form.Group controlId="formFinanceElements" style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+    if (Number(formData.startDate) > Number(formData.endDate)) {
+      onExit();
+      return alert("시작년도는 종료년도보다 이후일 수 없습니다.");
+    }
+    try {
+      const data = await fetchData(formData);
 
+      if (data.length === 0) {
+        onExit();
+        return alert("검색 결과가 없습니다!");
+      }
+
+      creatediv(data, formData.company);
+      setShow(false);
+    } catch (error: any) {
+      if (error.response && error.response.status === 403) {
+        return alert("회사 이름이 잘못되었습니다!");
+      }
+
+      alert("입력 형식이 잘못되었습니다!");
+      onExit();
+    }
+  };
+
+  const fetchData = async (d: FormData) => {
+    const data = await axios.get(
+      `${import.meta.env.VITE_SERVER_FINANCE_API_URI}?company=${
+        formData.company
+      }&startdate=${formData.startDate}&enddate=${formData.endDate}`
+    );
+
+    const selectedKeys = Object.keys(fin).filter((key) => fin[key as FinKeys]);
+
+    console.log(data);
+
+    const filteredData = data.data.filter((elem: any) =>
+      selectedKeys.includes(elem.account_nm)
+    );
+
+    console.log(filteredData);
+
+    return filteredData;
+  };
+
+  const handleToggle = (key: any) => {
+    setFin((prevFin: any) => ({
+      ...prevFin,
+      [key]: !prevFin[key],
+    }));
+  };
+
+  return (
+    <>
+      <Modal show={show} onHide={() => setShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>기업이름 입력해주세요!</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="modal-content" style={{ height: "500px" }}>
+          <Form>
+            <Form.Group controlId="formStockCode">
+              <Form.Label>기업</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="기업이름"
+                name="company"
+                value={formData.company}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
+
+            <Form.Label>재무재표 요소 선택</Form.Label>
+            <Form.Group
+              controlId="formFinanceElements"
+              style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}
+            >
               {Object.keys(fin).map((key) => (
                 <Button
                   key={key}
@@ -171,48 +228,73 @@ const FinanceModal:React.FC<FinanceReportModalProps> = ({creatediv,onExit}) => {
                   {key}
                 </Button>
               ))}
-              
             </Form.Group>
 
-              <Form.Group controlId="formS
-              tartDate">
-                <Form.Label>입력 년도 (시작)</Form.Label>
-                <Form.Control
-                  type="input"
-                  placeholder="조회 시작은 2015년도 부터 가능합니다."
-                  name="startDate"
-                  value={formData.startDate}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
-              <Form.Group controlId="formEndDate">
-                <Form.Label>입력 년도 (종료) </Form.Label>
-                <Form.Control
-                  type="input"
-                  placeholder="조회 끝은 2023년도까지입니다!"
-                  name="endDate"
-                  value={formData.endDate}
-                  onChange={handleChange}
-                  required
-                />
-              </Form.Group>
-              
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={()=>{handleClose(),onExit()}}>
-              닫기
-            </Button>
-            <Button variant="primary" onClick={handleSave}>
-              재무재표 나오게 하기
-            </Button>
-          </Modal.Footer>
-        </Modal>
-        
-      </>
-    );
-  };
+            <Form.Group
+              controlId="formS
+              tartDate"
+            >
+              <Form.Label>입력 년도 (시작)</Form.Label>
+              {/* <Form.Control
+                type="input"
+                placeholder="조회 시작은 2015년도 부터 가능합니다."
+                name="startDate"
+                value={formData.startDate}
+                onChange={handleChange}
+                required
+              /> */}
+              <Form.Select name="startDate" onChange={handleChange}>
+                <option>2023</option>
+                <option>2022</option>
+                <option>2021</option>
+                <option>2020</option>
+                <option>2019</option>
+                <option>2018</option>
+                <option>2017</option>
+                <option>2016</option>
+                <option>2015</option>
+              </Form.Select>
+            </Form.Group>
+            <Form.Group controlId="formEndDate">
+              <Form.Label>입력 년도 (종료) </Form.Label>
+              {/* <Form.Control
+                type="input"
+                placeholder="조회 끝은 2023년도까지입니다!"
+                name="endDate"
+                value={formData.endDate}
+                onChange={handleChange}
+                required
+              /> */}
+              <Form.Select name="endDate" onChange={handleChange}>
+                <option>2023</option>
+                <option>2022</option>
+                <option>2021</option>
+                <option>2020</option>
+                <option>2019</option>
+                <option>2018</option>
+                <option>2017</option>
+                <option>2016</option>
+                <option>2015</option>
+              </Form.Select>
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              handleClose(), onExit();
+            }}
+          >
+            닫기
+          </Button>
+          <Button variant="primary" onClick={handleSave}>
+            확인
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
+};
 
-
-  export default FinanceModal;
+export default FinanceModal;
