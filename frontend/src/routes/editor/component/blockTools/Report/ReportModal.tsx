@@ -48,7 +48,6 @@ const AnalystReportModal: React.FC<AnalystReportModalProps> = ({ createIframe, o
       setMainLoading(false);
       setReports(response.data.result);
       setNextDate(response.data.nextDate);
-      onExit();
       setError("");
     } catch (err) {
       onExit();
