@@ -36,7 +36,7 @@ export default function Editor({ setContent }: Props) {
             defaultLevel: 1,
           },
         },
-      
+
         image: ImageBlock,
         charts: ChartBLock,
         news: NewsBlock,
@@ -47,10 +47,18 @@ export default function Editor({ setContent }: Props) {
       autofocus: true,
     });
 
-    document.addEventListener('paste', handlePaste);
+    const editorElement = document.getElementById("editorjs");
+    if (editorElement) {
+      editorElement.addEventListener("paste", handlePaste);
+    }
+
+    // document.addEventListener('paste', handlePaste);
 
     return () => {
-      document.removeEventListener('paste', handlePaste);
+      // document.removeEventListener('paste', handlePaste);
+      if (editorElement) {
+        editorElement.removeEventListener("paste", handlePaste);
+      }
       ejInstance?.current?.destroy();
       ejInstance.current = null;
     };
@@ -61,7 +69,7 @@ export default function Editor({ setContent }: Props) {
     if (event.clipboardData) {
       const items = event.clipboardData.items;
       for (let i = 0; i < items.length; i++) {
-        if (items[i].type.indexOf('image') !== -1) {
+        if (items[i].type.indexOf("image") !== -1) {
           const file = items[i].getAsFile();
           if (file) {
             const reader = new FileReader();
@@ -78,9 +86,9 @@ export default function Editor({ setContent }: Props) {
 
   const insertImageBlock = (imageDataUrl: string) => {
     if (ejInstance.current) {
-      ejInstance.current.blocks.insert('image', {
-          url: imageDataUrl
-      })
+      ejInstance.current.blocks.insert("image", {
+        url: imageDataUrl,
+      });
     }
   };
 
@@ -91,9 +99,6 @@ export default function Editor({ setContent }: Props) {
   }, []);
 
   return (
-    <div
-      id="editorjs"
-      className="w-[90%] mt-2 mb-5 overflow-y-auto"
-    ></div>
+    <div id="editorjs" className="w-[90%] mt-2 mb-5 overflow-y-auto"></div>
   );
 }
