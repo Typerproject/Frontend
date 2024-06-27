@@ -515,7 +515,7 @@ export default function MyPage() {
                   )}
 
                   {/*버튼*/}
-                  <div className="grid place-items-start ">
+                  <div className="grid place-items-start mt-[0.2rem]">
                     {currentUser._id === id && isEditing ? (
                       <div className="flex gap-10 ">
                         <button
