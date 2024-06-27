@@ -18,8 +18,11 @@ const MyComponent = () => {
   const targetRef = useRef<HTMLDivElement | null>(null); // 무한 스크롤 감지를 위한 마지막 요소의 참조를 저장
   const observerRef = useRef<IntersectionObserver | null>(null); //Intersection Observer 객체 저장
 
-  const fetchPostList = async (): Promise<void> => {
+  const fetchPostList = useCallback(async (): Promise<void> => {
     try {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
       setIsLoading(true);
       const data = await postService.getPostListForMain(
         page,
@@ -44,11 +47,11 @@ const MyComponent = () => {
       console.error(error);
       setIsLoading(false);
     }
-  };
+  }, [activeButton, page]);
 
   useEffect(() => {
     fetchPostList();
-  }, [page, activeButton]);
+  }, [fetchPostList]);
 
   const callback = useCallback(
     // IntersectionObserver를 사용하여 targetRef가 화면에 보이는지 감지
@@ -145,19 +148,21 @@ const MyComponent = () => {
               ) : postList.posts.length === 0 ? (
                 <div className="text-center mt-8">게시글이 없습니다!</div>
               ) : (
-                postList.posts.map((post: IPost) => (
-                  <>
-                    <MainPost post={post} />
-                    <div
-                      style={{
-                        width: "100%",
-                      }}
-                      className="h-0.5 bg-gray-200 mb-4"
-                    />
-                  </>
-                ))
+                <>
+                  {postList.posts.map((post: IPost) => (
+                    <>
+                      <MainPost post={post} />
+                      <div
+                        style={{
+                          width: "100%",
+                        }}
+                        className="h-0.5 bg-gray-200 mb-4"
+                      />
+                    </>
+                  ))}
+                  <div ref={targetRef} className="h-1" />
+                </>
               )}
-              <div ref={targetRef} className="h-1" />
             </div>
             <div className="flex justify-end w-full">
               <button
