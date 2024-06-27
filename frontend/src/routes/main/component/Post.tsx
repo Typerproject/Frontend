@@ -6,9 +6,6 @@ import { useNavigate } from "react-router-dom";
 
 const postService = new postAPI(import.meta.env.VITE_SERVER_POST_API_URI);
 
-// 스크랩/코멘트 누르면 로그인 요청 알럿 + login 창 뜨도록?
-// 스크랩 하기 => scrapPost / 취소 => deleteScrapPost
-
 interface MainPostProps {
   post: IPost;
 }
@@ -25,7 +22,6 @@ export default function MainPost({ post }: MainPostProps) {
       : post.preview.text;
 
   const koreaDate = new Date(post.createdAt);
-  //   const koreaDate = new Date(utcDate.getTime() + 9 * 60 * 60 * 1000);
 
   const formattedTime = koreaDate.toLocaleString("ko-KR", {
     year: "numeric",
@@ -41,7 +37,6 @@ export default function MainPost({ post }: MainPostProps) {
     postService
       .scrapPost(post._id)
       .then((result) => {
-        console.log("스크랩 하기", result);
         setIsScraped(true);
         setScrapCount(scrapCount + 1);
       })
@@ -55,7 +50,6 @@ export default function MainPost({ post }: MainPostProps) {
     postService
       .deleteScrapPost(post._id)
       .then((result) => {
-        console.log("스크랩 취소", result);
         setIsScraped(false);
         setScrapCount(scrapCount - 1);
       })
@@ -80,10 +74,7 @@ export default function MainPost({ post }: MainPostProps) {
                   <div className="flex flex-col mmd:flex-row mmd:justify-between gap-[1rem] w-full">
                     {/*유저 이름과 사진*/}
                     <div>
-                      <div
-                        // onClick={() => navigate(`/my/${post.writer.id}`)}
-                        className="flex gap-[0.5rem] items-center"
-                      >
+                      <div className="flex gap-[0.5rem] items-center">
                         <img
                           className="w-[40px] rounded-full"
                           src={post.writer.img}
@@ -117,7 +108,6 @@ export default function MainPost({ post }: MainPostProps) {
               >
                 <div className="flex w-full h-full phone:hidden">
                   <div
-                    // bg-center bg-cover
                     className="w-3/4 mmd:w-full h-full rounded"
                     style={{
                       backgroundImage: `url(${post.preview.img})`,
