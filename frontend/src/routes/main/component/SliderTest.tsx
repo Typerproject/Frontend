@@ -45,7 +45,6 @@ const SliderTest: React.FC = () => {
     postService
       .getPostListForSlide()
       .then((data) => {
-        console.log("슬라이드 데이터 체크", data);
         setPosts(data);
         setLoading(false);
       })
