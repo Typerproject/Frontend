@@ -138,7 +138,7 @@ export default function Search() {
   };
 
   return (
-    <div>
+    <div className="">
       <Navbar />
       <div className="py-[3rem] px-[2rem]">
         <div className="flex justify-center items-center py-12">
@@ -170,10 +170,10 @@ export default function Search() {
         </div>
         <hr></hr>
         <div
-          className="flex flex-col items-center mt-10"
+          className="flex flex-col items-center mt-10 px-[0.75rem]"
           ref={mainPostContainerRef}
         >
-          <div className="w-full max-w-4xl ">
+          <div className="w-full">
             {post &&
               (postdata.length === 0 ? (
                 <div className="text-center text-3xl">검색 결과가 없습니다</div>
@@ -183,7 +183,7 @@ export default function Search() {
                   {postdata.map((elem: any, idx) => (
                     <div key={idx}>
                       <Card
-                        className="card border-none rounded-lg cursor-pointer h-auto flex flex-row rounded hover:bg-gray-200"
+                        className="card border-none rounded-lg cursor-pointer h-[15rem] flex flex-row rounded hover:bg-gray-200"
                         onClick={() => navigate(`/post/${elem._id}`)}
                       >
                         <div className="flex flex-col p-4 w-2/3">
@@ -196,13 +196,13 @@ export default function Search() {
                             <div className="font-bold">{elem.nickname}</div>
                           </div>
                           <div
-                            className="font-bold text-xl mb-4 mt-2
+                            className="font-bold text-2xl mb-4 mt-2
                           max-w-xs overflow-hidden text-ellipsis whitespace-nowrap"
                           >
                             {elem.title}
                           </div>
                           <div
-                            className="text-gray-800
+                            className="text-gray-500
                           max-w-xs overflow-hidden text-ellipsis whitespace-nowrap"
                           >
                             {elem.preview.text}
@@ -224,7 +224,7 @@ export default function Search() {
               (writerdata.length === 0 ? (
                 <div className="text-center text-3xl">검색 결과가 없습니다</div>
               ) : (
-                <div className="container mx-auto">
+                <div className="">
                   <div className="mb-4">작가 {writerdata.length}건</div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {writerdata.map((elem: any, idx) => (
@@ -233,13 +233,13 @@ export default function Search() {
                           className="card border rounded-lg cursor-pointer w-200 h-auto flex flex-col rounded hover:bg-gray-200"
                           onClick={() => navigate(`/my/${elem.userId}`)}
                         >
-                          <div className="flex flex-col p-4 w-full">
+                          <div className="flex flex-col p-4 w-full mr-[1rem]">
                             <div className="flex items-center justify-between mb-2">
-                              <div className="flex flex-col">
+                              <div className="flex flex-col mr-[1rem]">
                                 <div className="font-bold text-xl">
                                   {elem.nickname}
                                 </div>
-                                <div className="mt-2 text-lg">
+                                <div className="mt-2 text-lg max-w-auto overflow-hidden text-ellipsis whitespace-nowrap">
                                   {elem.comment}
                                 </div>
                               </div>
@@ -260,7 +260,6 @@ export default function Search() {
           {isLoading && <div>Loading...</div>}
         </div>
       </div>
-      <Footbar />
     </div>
   );
 }
