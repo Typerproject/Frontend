@@ -75,22 +75,22 @@ export default function Navbar() {
         </NavLink>
       </div>
       <div className="flex gap-[1rem] items-center">
-        <div>
+        <div className="flex gap-[1rem] items-center">
+          <NavLink
+            to="/search"
+            className="text-[#E5E5E5] text-xl hover:text-white cursor-pointer"
+          >
+            Search
+          </NavLink>
           {userInfo._id ? (
-            <div className="flex gap-[1rem] items-center">
-              <NavLink
-                to="/search"
-                className="text-[#E5E5E5] text-xl hover:text-white cursor-pointer"
-              >
-                Search
-              </NavLink>
-              <NavLink to="/editor">
-                <p className="text-[#E5E5E5] text-xl hover:text-white cursor-pointer">
-                  Write
-                </p>
-              </NavLink>
-            </div>
+            // <div className="flex gap-[1rem] items-center">
+            <NavLink to="/editor">
+              <p className="text-[#E5E5E5] text-xl hover:text-white cursor-pointer">
+                Write
+              </p>
+            </NavLink>
           ) : (
+            // </div>
             <p
               onClick={handleLoginClick}
               className="text-[#E5E5E5] text-xl hover:text-white cursor-pointer"
