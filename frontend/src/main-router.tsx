@@ -10,6 +10,7 @@ import Info from "./components/info/info";
 import Layout from "./components/Layout";
 import Redirect from "./components/login/Redirect";
 import ScrapPage from "./routes/scrap/ScrapPage";
+import NotFoundPage from "./routes/notFound/NotFoundPage";
 
 const routers = [
   {
@@ -67,9 +68,13 @@ const routers = [
     element: <PostEditPage />,
   },
   {
-    path: "/info",
-    element: <Info />,
+    path:"/info",
+    element:<Info/>
   },
+  {
+    path: "*",
+    element: <NotFoundPage />
+  }
 ];
 
 const router = createBrowserRouter(routers);
