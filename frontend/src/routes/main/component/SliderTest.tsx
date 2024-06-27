@@ -16,7 +16,7 @@ const StyledSlider = styled(Slider)`
     z-index: 1;
 
     &:before {
-      font-size: 50px;
+      font-size: 80px;
     }
   }
 
@@ -25,6 +25,12 @@ const StyledSlider = styled(Slider)`
     .slick-list {
       height: 400px;
     }
+
+    .slick-prev:before,
+    .slick-next:before {
+      display: none;
+    }
+
     height: 400px;
   }
 `;
@@ -39,7 +45,6 @@ const SliderTest: React.FC = () => {
     postService
       .getPostListForSlide()
       .then((data) => {
-        console.log("슬라이드 데이터 체크", data);
         setPosts(data);
         setLoading(false);
       })
@@ -94,8 +99,8 @@ const SliderTest: React.FC = () => {
         style={{
           ...style,
           display: "block",
-          marginRight: "30px",
-          opacity: 0.25,
+          marginRight: "60px",
+          opacity: 0.35,
         }}
         onClick={onClick}
       />
@@ -111,7 +116,7 @@ const SliderTest: React.FC = () => {
           ...style,
           display: "block",
           marginLeft: "30px",
-          opacity: 0.25,
+          opacity: 0.35,
         }}
         onClick={onClick}
       />
@@ -119,7 +124,18 @@ const SliderTest: React.FC = () => {
   }
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <>
+        <div className="w-[100%] h-[400px] flex flex-row gap-[20px]">
+          <div className="w-[20%] flex flex-col gap-[20px]">
+            <div className="bg-gray-200 h-[50%] rounded-md" />
+            <div className="bg-gray-200 h-[50%] rounded-md" />
+          </div>
+          <div className="bg-gray-200 w-[60%] rounded-md" />
+          <div className="bg-gray-200 w-[20%] rounded-md" />
+        </div>
+      </>
+    );
   }
 
   if (posts.length === 0) {

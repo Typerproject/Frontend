@@ -252,17 +252,13 @@ const ChartModal = ({ setData, onExit }: ChartModalProps) => {
       const start = new Date(formData.startDate);
       start.setDate(start.getDate() + 100);
 
-      console.log(start);
-
       if (start.toISOString().split("T")[0] < formData.endDate) {
         alert("조회 범위는 최대 100일 입니다.");
         return;
       }
 
       const stockResp = await service.getStockData(formData);
-
       setData(stockResp);
-
       setShow(false);
     } catch (error) {
       console.error("Failed to fetch stock data", error);

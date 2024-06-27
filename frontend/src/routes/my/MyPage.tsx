@@ -133,8 +133,6 @@ export default function MyPage() {
           console.error("마이페이지 접근 유저", err);
           navigate("/notfound")
         });
-
-      console.log("ID 有", currentUserId);
     } else {
       console.log("ID 無", currentUserId);
     }
@@ -237,8 +235,6 @@ export default function MyPage() {
           console.error("마이페이지 팔로우", err);
           navigate("/notfound");
         });
-
-      console.log("ID 有", currentUser);
     } else {
       console.log("ID 無", currentUser);
     }
