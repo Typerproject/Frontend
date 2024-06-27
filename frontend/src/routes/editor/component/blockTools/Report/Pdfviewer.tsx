@@ -32,6 +32,7 @@ const PdfViewer: React.FC<PdfViewerProps> = ({ url, pageNumber = 1, onRenderComp
         setNumPages(pdf.numPages);
         renderPage(pdf, pageNum, scale);
       } catch (error) {
+        onExit();
         console.error('Error loading PDF:', error);
       }
     };
@@ -64,6 +65,7 @@ const PdfViewer: React.FC<PdfViewerProps> = ({ url, pageNumber = 1, onRenderComp
         }
       }
     } catch (error) {
+      onExit();
       console.error('Error rendering page:', error);
     }
   };
@@ -133,7 +135,6 @@ const PdfViewer: React.FC<PdfViewerProps> = ({ url, pageNumber = 1, onRenderComp
     <div className="relative flex flex-col items-center justify-center mx-auto">
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>드래그 하고 영역선택한 뒤 밑에 캡처를 눌러주세요!</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div style={{ position: 'relative' }}>
