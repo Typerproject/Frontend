@@ -547,7 +547,7 @@ export default function MyPage() {
                     onChange={(e) => setEditedComment(e.target.value)}
                   />
                 ) : (
-                  <div className="flex justify-center gap-10 text-[#88898a] mt-[0.7rem] w-64 phone:justify-center">
+                  <div className="flex gap-10 text-[#88898a] mt-[0.7rem] w-64 phone:justify-center">
                     <p className="break-words">{userInfo?.comment}</p>
                   </div>
                 )}
