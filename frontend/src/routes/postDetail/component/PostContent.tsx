@@ -33,7 +33,7 @@ export default function PostContent({
   scrapingCount,
   writerId,
 }: Props) {
-  const [vaildComment, setValidComment] = useState<boolean>(false);
+  // const [vaildComment, setValidComment] = useState<boolean>(false);
   const currentUserId = useAppSelector((state) => state.user._id);
   const { id } = useParams<{ id: string }>() as { id: string };
   const navigate = useNavigate();
@@ -176,7 +176,7 @@ export default function PostContent({
           </p>
           <div
             className="cursor-pointer"
-            onClick={() => setValidComment((prev) => !prev)}
+            // onClick={() => setValidComment((prev) => !prev)}
           >
             <FaRegComment />
           </div>
@@ -203,7 +203,7 @@ export default function PostContent({
         </div>
       </div>
 
-      {vaildComment && <CommentList comments={comments} />}
+      {comments && <CommentList comments={comments} />}
     </>
   );
 }
