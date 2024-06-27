@@ -92,7 +92,7 @@ export default function Comment({ comment, service }) {
         </div>
         {currentUserId === comment.writerId.id && (
           <div
-            className="flex w-[5%] h-fit justify-center hover:bg-red-200 rounded"
+            className="flex w-[5%] h-fit justify-center hover:bg-red-200 rounded-full cursor-pointer"
             onClick={deleteComment}
           >
             삭제
@@ -100,12 +100,12 @@ export default function Comment({ comment, service }) {
         )}
       </div>
       {validInput && (
-        <div className="pl-[32px] w-full flex flex-col gap-[1rem] items-end	">
+        <div className="pl-[32px] w-full flex flex-col gap-[1rem] items-end	pb-[2rem]">
           <textarea
             onChange={(e) => {
               setText(e.target.value);
             }}
-            className="resize-none	w-full h-[80px] border border-gray-300 outline-none	rounded-md"
+            className="p-[1rem] resize-none	w-full h-[80px] border border-gray-300 outline-none	rounded-md"
           />
           <button
             onClick={submitComment}
