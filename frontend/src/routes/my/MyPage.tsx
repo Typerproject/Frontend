@@ -110,6 +110,10 @@ export default function MyPage() {
   );
 
   useEffect(() => {
+    setPage(1);
+  }, [id]);
+
+  useEffect(() => {
     fetchMorePosts();
   }, [fetchMorePosts]);
 
@@ -397,7 +401,7 @@ export default function MyPage() {
             {/*가져온 글 목록을 map돌면서 출력*/}
             {previewPost.posts.map((post: Preview) => {
               return (
-                <div>
+                <div key={post._id}>
                   {/*주인의 아이디와 profile*/}
                   <Post
                     id={id}
