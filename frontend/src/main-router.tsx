@@ -11,6 +11,7 @@ import Layout from "./components/Layout";
 // import LoginModal from "./components/login/LoginModal";
 import Redirect from "./components/login/Redirect";
 import ScrapPage from "./routes/scrap/ScrapPage";
+import NotFoundPage from "./routes/notFound/NotFoundPage";
 
 const routers = [
   {
@@ -72,6 +73,10 @@ const routers = [
   {
     path:"/info",
     element:<Info/>
+  },
+  {
+    path: "*",
+    element: <NotFoundPage />
   }
 ];
 
