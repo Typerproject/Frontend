@@ -143,16 +143,26 @@ const MyComponent = () => {
                   <PostLoading />
                 </div>
               ) : postList.posts.length === 0 ? (
-                <div>No content</div>
+                <div className="text-center mt-8">게시글이 없습니다!</div>
               ) : (
-                postList.posts.map((post: IPost) => <MainPost post={post} />)
+                postList.posts.map((post: IPost) => (
+                  <>
+                    <MainPost post={post} />
+                    <div
+                      style={{
+                        width: "100%",
+                      }}
+                      className="h-0.5 bg-gray-200 mb-4"
+                    />
+                  </>
+                ))
               )}
               <div ref={targetRef} className="h-1" />
             </div>
             <div className="flex justify-end w-full">
               <button
                 onClick={scrollToTop}
-                className="flex mt-4 bg-gray-900 text-gray-100 rounded-md hover:bg-gray-100 hover:text-gray-900 border-[1px] border-black duration-100"
+                className="flex mt-4 mr-4 bg-gray-900 text-gray-100 rounded-md hover:bg-gray-100 hover:text-gray-900 border-[1px] border-black duration-100"
               >
                 <IoMdArrowDropup size={30} />
               </button>
