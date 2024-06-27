@@ -166,7 +166,7 @@ export default function PostDetail() {
                   ))}
               </div>
               <p className="pt-[1rem] pb-[2rem] text-gray-500 text-sm">
-                조디한줄소개
+                {postDetail.writer.comment}
               </p>
             </div>
             <div>
