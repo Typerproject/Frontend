@@ -53,7 +53,7 @@ export default function Reply({ reply, service }) {
       </div>
       {currentUserId === reply.writerId.id && (
         <div
-          className="flex w-[5%] h-fit justify-center hover:bg-red-200 rounded"
+          className="flex w-[5%] h-fit justify-center hover:bg-red-200 rounded-full cursor-pointer"
           onClick={deleteComment}
         >
           삭제

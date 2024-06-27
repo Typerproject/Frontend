@@ -30,24 +30,24 @@ export default function Post({ postInfo }: PostProps) {
       service
         .deleteScrapPost(postInfo._id)
         .then((res: IpostScrap) => {
-          console.log(res);
+          // console.log(res);
           setScrap(false);          
           setScrapCount(prev => prev - 1);
         })
         .catch((e) => {
-          console.log(e);
+          // console.log(e);
           alert("스크랩 삭제에 실패하였습니다.");
         });
     } else {
       service
         .scrapPost(postInfo._id)
         .then((res: IpostScrap) => {
-          console.log(res);
+          // console.log(res);
           setScrap(true);
           setScrapCount(prev => prev + 1);
         })
         .catch((e) => {
-          console.log(e);
+          // console.log(e);
           alert("스크랩에 실패하였습니다.");
         });
     }
