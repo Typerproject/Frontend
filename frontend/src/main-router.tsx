@@ -55,7 +55,7 @@ const routers = [
     ],
   },
   {
-    path: "/kakao/login",
+    path: "/kakao/api/login",
     element: <Redirect />,
   },
   {
