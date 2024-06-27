@@ -57,80 +57,6 @@ const FinanceModal: React.FC<FinanceReportModalProps> = ({
 
   const [error, setError] = useState<String>("");
 
-    const handleSave = async () => {
-      
-      
-      // 입력 검증
-      if (!formData.company) {
-        onExit()
-        return alert("기업이름이 잘못되었습니다!")
-        
-      }
-      if( !formData.startDate || !formData.endDate){
-        onExit()
-        return alert("시작기간하고 종료기간이 잘못되었습니다.")
-      }
-
-      if (formData.startDate<2015 && formData.endDate>2023){
-        onExit()
-        return alert("시작 년도는 2015년부터 끝년도는 2023년도 입니다.")
-      }
-  
-      try {
-        const data = await fetchData(formData);
-
-        
-
-       
-        if (data.length === 0) {
-          onExit()
-          return alert("검색 결과가 없습니다!");
-        }
-        console
-        creatediv(data,formData.company);
-        setShow(false);
-      } catch (error:any){
-        if (error.response && error.response.status === 403) {
-          return alert("회사 이름이 잘못되었습니다!");
-        }
-      
-        
-        alert("입력 형식이 잘못되었습니다!")
-        onExit()
-      } 
-      
-    };
-
-    
-    const fetchData=async (d:FormData)=>{
-        const data=await axios.get(`${import.meta.env.VITE_SERVER_FINANCE_API_URI}?company=${formData.company}&startdate=${formData.startDate}&enddate=${formData.endDate}`)
-
-        
-
-
-      const response = data.data;
-      console.log(response)
-
-      const selectedKeys = Object.keys(fin).filter(key => fin[key as FinKeys]);
-
-      const regexList = selectedKeys.map(key => new RegExp(key, 'i'));
-
-      const filteredData = response.filter((elem: any) =>
-        regexList.some(regex => regex.test(elem.account_nm))
-      );
-
-      const uniqueFilteredData = Array.from(
-        new Map(filteredData.map(item => [`${item.account_nm}-${item.bsns_year}`, item])).values()
-      );
-      
-
-      return uniqueFilteredData;
-  const handleClose = () => setShow(false);
-  const handleChange = (e: any) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
   const handleSave = async () => {
     // 입력 검증
     if (!formData.company) {
@@ -166,24 +92,38 @@ const FinanceModal: React.FC<FinanceReportModalProps> = ({
     }
   };
 
+
+  const handleClose = () => setShow(false);
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  
+
   const fetchData = async (d: FormData) => {
-    const data = await axios.get(
-      `${import.meta.env.VITE_SERVER_FINANCE_API_URI}?company=${
-        formData.company
-      }&startdate=${formData.startDate}&enddate=${formData.endDate}`
-    );
+    const data=await axios.get(`${import.meta.env.VITE_SERVER_FINANCE_API_URI}?company=${formData.company}&startdate=${formData.startDate}&enddate=${formData.endDate}`)
 
-    const selectedKeys = Object.keys(fin).filter((key) => fin[key as FinKeys]);
+        
 
-    console.log(data);
 
-    const filteredData = data.data.filter((elem: any) =>
-      selectedKeys.includes(elem.account_nm)
-    );
+      const response = data.data;
+      console.log(response)
 
-    console.log(filteredData);
+      const selectedKeys = Object.keys(fin).filter(key => fin[key as FinKeys]);
 
-    return filteredData;
+      const regexList = selectedKeys.map(key => new RegExp(key, 'i'));
+
+      const filteredData = response.filter((elem: any) =>
+        regexList.some(regex => regex.test(elem.account_nm))
+      );
+
+      const uniqueFilteredData = Array.from(
+        new Map(filteredData.map(item => [`${item.account_nm}-${item.bsns_year}`, item])).values()
+      );
+      
+
+      return uniqueFilteredData;
   };
 
   const handleToggle = (key: any) => {
