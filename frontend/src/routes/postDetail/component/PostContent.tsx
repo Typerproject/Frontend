@@ -45,8 +45,13 @@ export default function PostContent({
 
   useEffect(() => {
     const fetcthComments = async () => {
-      const resp = await commentService.getCommentList(id);
-      setComments(resp);
+      commentService.getCommentList(id)
+      .then(resp=>{
+        setComments(resp);
+      })
+      .catch(()=>{
+        navigate("/notfound")
+      })
     };
     fetcthComments();
   }, []);

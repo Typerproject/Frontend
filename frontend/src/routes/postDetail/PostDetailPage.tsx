@@ -29,6 +29,9 @@ export default function PostDetail() {
           setIsWriter(userId === res.writer.writerId);
           setScrap(res.isScrapped);
           return res;
+        })
+        .catch(() => {
+          navigate("/notfound");
         });
 
       // writer가 팔로우 리스트에 있는지 확인
