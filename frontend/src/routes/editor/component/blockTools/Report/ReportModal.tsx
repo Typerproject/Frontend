@@ -37,6 +37,7 @@ const AnalystReportModal: React.FC<AnalystReportModalProps> = ({ createIframe, o
 
       if (response.data.result.length === 0) {
         alert('검색결과가 없네요!');
+        onExit();
         setReportshow(false);
         setMainLoading(false);
         return;
@@ -91,6 +92,7 @@ const AnalystReportModal: React.FC<AnalystReportModalProps> = ({ createIframe, o
 
       
     } catch (error) {
+      onExit();
       console.error("Error fetching more reports:", error);
     }
   };
