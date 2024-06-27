@@ -6,8 +6,8 @@ export default function Timer() {
   const currentTimer = () => {
     const date = new Date();
     const year = date.getFullYear();
-    const month = date.getMonth();
-    const day = date.getDay();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
     const hours = String(date.getHours()).padStart(2, "0");
     const minutes = String(date.getMinutes()).padStart(2, "0");
     setTimer(`${year}년 ${month}월 ${day}일 ${hours}:${minutes}`);
