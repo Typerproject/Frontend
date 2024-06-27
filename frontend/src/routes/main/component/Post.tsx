@@ -41,7 +41,6 @@ export default function MainPost({ post }: MainPostProps) {
     postService
       .scrapPost(post._id)
       .then((result) => {
-        console.log("스크랩 하기", result);
         setIsScraped(true);
         setScrapCount(scrapCount + 1);
       })
@@ -55,7 +54,6 @@ export default function MainPost({ post }: MainPostProps) {
     postService
       .deleteScrapPost(post._id)
       .then((result) => {
-        console.log("스크랩 취소", result);
         setIsScraped(false);
         setScrapCount(scrapCount - 1);
       })
@@ -96,7 +94,7 @@ export default function MainPost({ post }: MainPostProps) {
                   </div>
                   <div onClick={() => navigate(`/post/${post._id}`)}>
                     <div>
-                      <div className="text-3xl font-semibold mt-[1.2rem] max-w-full sm:max-w-4xl md:max-w-3xl lg:max-w-2xl xl:max-w-xl overflow-hidden text-ellipsis whitespace-normal">
+                      <div className="text-3xl font-semibold mt-[1.2rem] max-w-full sm:max-w-4xl md:max-w-3xl lg:max-w-2xl xl:max-w-xl overflow-hidden xl:text-ellipsis whitespace-normal">
                         {post.title}
                       </div>
                       <div className="text-base mt-[0.7rem] text-gray-500">

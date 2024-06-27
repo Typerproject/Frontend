@@ -89,7 +89,8 @@ export default function ScrapPage() {
         data.scrappedPosts.length === 0 &&
         observerRef.current &&
         targetRef.current
-      ) { //page state를 업데이트 하지 않으므로 추가 요청을 보내지 않게 됨
+      ) {
+        //page state를 업데이트 하지 않으므로 추가 요청을 보내지 않게 됨
         setIsLoading(false);
         console.log(data.scrappedPosts.length);
         setPostInfo((prevData) => [...prevData, ...data.scrappedPosts]);
@@ -133,7 +134,7 @@ export default function ScrapPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-76.5px)]">
+    <div className="flex flex-col min-h-screen">
       <div className="phone:w-[100%] w-[65%] mx-auto mt-[8rem] flex-grow">
         {post.map((post) => (
           <div key={post._id}>
