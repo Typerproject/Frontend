@@ -119,16 +119,21 @@ export default class postAPI extends BaseApi {
       const queryParams = `?page=${page}${type !== "" ? `&type=${type}` : ""}`;
       const resp = await this.fetcher.get(`/list${queryParams}`);
 
-      if (!resp) {
+      if (resp.data.length === 0) {
+        console.log("메인 페이지 GET /post/list error: 데이터 없음");
         return { posts: [] };
       }
 
       const data: IPost[] = await resp.data;
 
       return { posts: data };
-    } catch (error) {
-      console.error("Error fetching post list:", error);
-      throw error;
+    } catch (error: any) {
+      if (error.response.status === 401) {
+        alert("로그인이 필요합니다.");
+        return { posts: [] };
+      }
+
+      return { posts: [] };
     }
   }
 
@@ -137,15 +142,15 @@ export default class postAPI extends BaseApi {
 
     const data: IPostSlider[] = resp.data.randomPosts;
 
+    console.log("슬라이드 리스트 데이터", data);
+
     return data;
   }
 
-  //title: string | null;
-  // content: OutputData;
-  async patchPost(postId:string, title:string | null, content: OutputData) {
+  async patchPost(postId: string, title: string | null, content: OutputData) {
     const resp = await this.fetcher.patch(`${postId}`, {
       title,
-      content
+      content,
     });
 
     return resp;
