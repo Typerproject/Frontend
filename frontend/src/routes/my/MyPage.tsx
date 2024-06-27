@@ -383,7 +383,7 @@ export default function MyPage() {
       window.removeEventListener("resize", handleResizeOrScroll);
       window.removeEventListener("scroll", handleResizeOrScroll);
     };
-  }, []);
+  }, [follow]);
 
   return (
     <div className="mt-[7rem] phone:mt-[5rem] flex flex-col min-h-[calc(100vh-76.5px)]">
