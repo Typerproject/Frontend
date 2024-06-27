@@ -12,10 +12,10 @@ const service = new userAPI(import.meta.env.VITE_BASE_URI);
 export default function Navbar() {
   const userInfo = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const [menuOpen, setMenuOpen] = useState(false);
-  const [searchtext, setSearchText] = useState("");
+  // const [searchtext, setSearchText] = useState("");
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -39,16 +39,16 @@ export default function Navbar() {
     });
   };
 
-  const handleSearchClick = () => {
-    navigate(`/search?text=${searchtext}`);
-  };
+  // const handleSearchClick = () => {
+  //   navigate(`/search?text=${searchtext}`);
+  // };
 
-  const handleKeyDown = (e: any) => {
-    if (e.key === "Enter" && searchtext.trim().length > 0) {
-      console.log(searchtext);
-      handleSearchClick();
-    }
-  };
+  // const handleKeyDown = (e: any) => {
+  //   if (e.key === "Enter" && searchtext.trim().length > 0) {
+  //     console.log(searchtext);
+  //     handleSearchClick();
+  //   }
+  // };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -71,26 +71,23 @@ export default function Navbar() {
             <span className="text-[35px]">T</span>yper
           </p>
         </NavLink>
-        <div className="relative hidden md:inline-block">
-          <IoMdSearch
-            className="absolute top-[25%] left-[10px]"
-            onClick={handleSearchClick}
-          />
-          <input
-            className="h-[30px] rounded-full pl-[30px] pr-[10px] py-[5px] bg-white"
-            onChange={(e) => setSearchText(e.target.value)}
-            onKeyDown={handleKeyDown}
-          />
-        </div>
       </div>
       <div className="flex gap-[1rem] items-center">
         <div>
           {userInfo._id ? (
-            <NavLink to="/editor">
-              <p className="text-[#E5E5E5] text-xl hover:text-white cursor-pointer">
-                Write
-              </p>
-            </NavLink>
+            <div className="flex gap-[1rem] items-center">
+              <NavLink
+                to="/search"
+                className="text-[#E5E5E5] text-xl hover:text-white cursor-pointer"
+              >
+                Search
+              </NavLink>
+              <NavLink to="/editor">
+                <p className="text-[#E5E5E5] text-xl hover:text-white cursor-pointer">
+                  Write
+                </p>
+              </NavLink>
+            </div>
           ) : (
             <p
               onClick={handleLoginClick}
