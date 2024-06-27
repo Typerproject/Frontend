@@ -33,10 +33,8 @@ export default function Search() {
         !isLoading &&
         !isEndOfPage
       ) {
-        console.log("Loading more content...");
         setIsLoading(true);
         setPage((prevPage) => prevPage + 1);
-        console.log(page);
       }
     }
   };
@@ -66,7 +64,6 @@ export default function Search() {
           );
           setTotalPage(response.data.total);
 
-          console.log(response.data);
           const newWriterArray = response.data.new_array.map((item: any) => {
             if (item.preview.text.length > 50) {
               item.preview.text = item.preview.text.slice(0, 50) + "...";
@@ -143,11 +140,11 @@ export default function Search() {
       <div className="py-[3rem] px-[2rem]">
         <div className="flex justify-center items-center py-12">
           <input
-            className="w-full h-[3rem] shadow-sm py-[1rem] text-xl border rounded"
+            className="w-full h-[3rem] shadow-sm p-[1rem] text-xl border rounded"
             //value={searchtext}
             onChange={(e) => setSearchtext(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder=" 상세 검색어를 입력해주세요."
+            placeholder=" 검색어를 입력해주세요."
           />
         </div>
         <div className="flex gap-[5px]">
@@ -225,7 +222,7 @@ export default function Search() {
                 <div className="text-center text-3xl">검색 결과가 없습니다</div>
               ) : (
                 <div className="">
-                  <div className="mb-4">작가 {writerdata.length}건</div>
+                  <div className="mb-[1rem]">작가 {writerdata.length}건</div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {writerdata.map((elem: any, idx) => (
                       <div key={idx}>
@@ -233,21 +230,20 @@ export default function Search() {
                           className="card border rounded-lg cursor-pointer w-200 h-auto flex flex-col rounded hover:bg-gray-200"
                           onClick={() => navigate(`/my/${elem.userId}`)}
                         >
-                          <div className="flex flex-col p-4 w-full mr-[1rem]">
-                            <div className="flex items-center justify-between mb-2">
-                              <div className="flex flex-col mr-[1rem]">
-                                <div className="font-bold text-xl">
-                                  {elem.nickname}
-                                </div>
-                                <div className="mt-2 text-lg max-w-auto overflow-hidden text-ellipsis whitespace-nowrap">
-                                  {elem.comment}
-                                </div>
+                          <div className="flex gap-[1rem] px-[0.5rem] py-[0.7rem] w-full mr-[1rem]">
+                            <img
+                              className="size-16 object-cover rounded-full"
+                              src={elem.profile}
+                              alt="Profile"
+                            />
+
+                            <div className="flex flex-col mr-[1rem]">
+                              <div className="font-bold text-lg">
+                                {elem.nickname}
                               </div>
-                              <img
-                                className="w-24 h-24 object-cover rounded-full"
-                                src={elem.profile}
-                                alt="Profile"
-                              />
+                              <div className="mt-2 text-base max-w-[10rem] overflow-hidden text-ellipsis whitespace-nowrap">
+                                {elem.comment}
+                              </div>
                             </div>
                           </div>
                         </Card>

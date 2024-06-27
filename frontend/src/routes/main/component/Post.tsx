@@ -41,7 +41,6 @@ export default function MainPost({ post }: MainPostProps) {
     postService
       .scrapPost(post._id)
       .then((result) => {
-        console.log("스크랩 하기", result);
         setIsScraped(true);
         setScrapCount(scrapCount + 1);
       })
@@ -55,7 +54,6 @@ export default function MainPost({ post }: MainPostProps) {
     postService
       .deleteScrapPost(post._id)
       .then((result) => {
-        console.log("스크랩 취소", result);
         setIsScraped(false);
         setScrapCount(scrapCount - 1);
       })

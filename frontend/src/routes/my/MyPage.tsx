@@ -128,8 +128,6 @@ export default function MyPage() {
         .catch((err) => {
           console.error("마이페이지 접근 유저", err);
         });
-
-      console.log("ID 有", currentUserId);
     } else {
       console.log("ID 無", currentUserId);
     }
@@ -231,8 +229,6 @@ export default function MyPage() {
         .catch((err) => {
           console.error("마이페이지 팔로우", err);
         });
-
-      console.log("ID 有", currentUser);
     } else {
       console.log("ID 無", currentUser);
     }
