@@ -19,10 +19,7 @@ const Redirect: React.FC = () => {
         })
         .then((response) => {
           const user = response.data;
-          console.log("유저어", user);
-
           dispatch(setUser(user));
-
           navigate("/");
         })
         .catch((err) => {
@@ -31,7 +28,7 @@ const Redirect: React.FC = () => {
     } else {
       console.error("인가 코드가 URL에 없습니다.");
     }
-  }, [location]);
+  }, [location, dispatch, navigate]);
 
   return (
     <div>
