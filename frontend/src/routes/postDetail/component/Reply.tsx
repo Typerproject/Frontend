@@ -37,7 +37,7 @@ export default function Reply({ reply, service }) {
   };
 
   return (
-    <div className="flex gap-[1rem] my-[36px] pl-[32px] w-full">
+    <div className="flex gap-[1rem] my-[36px] pl-[32px] w-full relative">
       <div
         style={{
           backgroundImage: `url(${reply.writerId.profile})`,
@@ -53,7 +53,7 @@ export default function Reply({ reply, service }) {
       </div>
       {currentUserId === reply.writerId.id && (
         <div
-          className="flex w-[5%] h-fit justify-center hover:bg-red-200 rounded-full cursor-pointer"
+          className="absolute right-0 text-xs border-[1px] bg-red-500 text-gray-50 rounded-full border-red-500 text-sm px-[0.7rem] pt-[0.3rem] pb-[0.2rem] hover:bg-white hover:text-red-500 duration-300 cursor-pointer mr-[3px]"
           onClick={deleteComment}
         >
           삭제
