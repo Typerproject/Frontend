@@ -68,7 +68,7 @@ export default function Comment({ comment, service }) {
   return (
     <>
       <div className="flex gap-[1rem] my-[36px] w-full justify-between items-center">
-        <div className="flex gap-[1rem] my-[36px] w-full">
+        <div className="flex gap-[1rem] my-[36px] w-full relative">
           <div
             style={{
               backgroundImage: `url(${comment.writerId.profile})`,
@@ -81,7 +81,7 @@ export default function Comment({ comment, service }) {
               <p className="text-xs text-gray-500">{parsingDate()}</p>
             </div>
 
-            <p className="mb-[1rem]">{comment.text}</p>
+            <p className="mb-[1rem] break-words break-all">{comment.text}</p>
             <button
               onClick={() => setValidInput((prev) => !prev)}
               className="text-xs text-gray-500"
@@ -89,15 +89,23 @@ export default function Comment({ comment, service }) {
               답글 달기
             </button>
           </div>
+          {currentUserId === comment.writerId.id && (
+            <div
+              className="absolute right-0 text-xs border-[1px] bg-red-500 text-gray-50 rounded-full border-red-500 text-sm px-[0.7rem] pt-[0.3rem] pb-[0.2rem] hover:bg-white hover:text-red-500 duration-300 cursor-pointer mr-[3px]"
+              onClick={deleteComment}
+            >
+              삭제
+            </div>
+          )}
         </div>
-        {currentUserId === comment.writerId.id && (
+        {/* {currentUserId === comment.writerId.id && (
           <div
             className="flex w-[5%] h-fit justify-center hover:bg-red-200 rounded-full cursor-pointer"
             onClick={deleteComment}
           >
             삭제
           </div>
-        )}
+        )} */}
       </div>
       {validInput && (
         <div className="pl-[32px] w-full flex flex-col gap-[1rem] items-end	pb-[2rem]">

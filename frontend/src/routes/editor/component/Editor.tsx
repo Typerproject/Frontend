@@ -37,6 +37,7 @@ export default function Editor({ setContent }: Props) {
           },
         },
 
+
         image: ImageBlock,
         charts: ChartBLock,
         news: NewsBlock,
@@ -47,10 +48,18 @@ export default function Editor({ setContent }: Props) {
       autofocus: true,
     });
 
-    document.addEventListener("paste", handlePaste);
+    const editorElement = document.getElementById("editorjs");
+    if (editorElement) {
+      editorElement.addEventListener("paste", handlePaste);
+    }
+
+    // document.addEventListener('paste', handlePaste);
 
     return () => {
-      document.removeEventListener("paste", handlePaste);
+      // document.removeEventListener('paste', handlePaste);
+      if (editorElement) {
+        editorElement.removeEventListener("paste", handlePaste);
+      }
       ejInstance?.current?.destroy();
       ejInstance.current = null;
     };
