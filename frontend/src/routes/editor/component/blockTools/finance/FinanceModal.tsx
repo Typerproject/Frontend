@@ -66,14 +66,17 @@ const FinanceModal:React.FC<FinanceReportModalProps> = ({creatediv,onExit}) => {
       
       // 입력 검증
       if (!formData.company) {
+        onExit()
         return alert("기업이름이 잘못되었습니다!")
         
       }
       if( !formData.startDate || !formData.endDate){
+        onExit()
         return alert("시작기간하고 종료기간이 잘못되었습니다.")
       }
 
       if (formData.startDate<2015 && formData.endDate>2023){
+        onExit()
         return alert("시작 년도는 2015년부터 끝년도는 2023년도 입니다.")
       }
   
@@ -84,12 +87,12 @@ const FinanceModal:React.FC<FinanceReportModalProps> = ({creatediv,onExit}) => {
 
        
         if (data.length === 0) {
+          onExit()
           return alert("검색 결과가 없습니다!");
         }
         
         creatediv(data,formData.company);
         setShow(false);
-        
       } catch (error:any){
         if (error.response && error.response.status === 403) {
           return alert("회사 이름이 잘못되었습니다!");
@@ -97,6 +100,7 @@ const FinanceModal:React.FC<FinanceReportModalProps> = ({creatediv,onExit}) => {
       
         
         alert("입력 형식이 잘못되었습니다!")
+        onExit()
       } 
       
     };

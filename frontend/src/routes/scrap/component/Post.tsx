@@ -99,21 +99,26 @@ export default function Post({ postInfo }: PostProps) {
           </p>
           {/* 하단 스크랩, 댓글 수 */}
           <div className="flex gap-[1rem] my-[1rem] items-center">
-            <div className="flex items-center gap-[1rem] mr-[10px]">
+            {/* <div className="flex items-center gap-[1rem] mr-[10px]">
               <FaRegComment size={20} />
               <p>{postInfo.commentCount}</p>
-            </div>
+            </div> */}
             <div
-              className="flex gap-[1rem] items-center"
+              className="flex gap-[0.5rem] items-center mr-[10px]"
               onClick={(e) => handleMarkClick(e)}
             >
               {scrap ? (
                 <IoBookmark size={20} />
               ) : (
-                <IoBookmarkOutline size={20} />
+                <IoBookmarkOutline color="gray" size={20} />
               )}
+              
               {/* <p>{postInfo.scrapingCount}</p> */}
-              <p>{scrapCount}</p>
+              <p className="text-gray-500">{scrapCount}</p>
+            </div>
+            <div className="flex items-center gap-[0.5rem]">
+              <FaRegComment color="gray" size={20} />
+              <p className="text-gray-500">{postInfo.commentCount}</p>
             </div>
           </div>
           {/* 날짜 */}
