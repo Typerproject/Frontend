@@ -40,28 +40,22 @@ const FinanceModal: React.FC<FinanceReportModalProps> = ({
     endDate: 2023,
   });
 
-  const [fin, setFin] = useState<Fin>({
-    "수익(매출액)": false,
-    매출원가: false,
-    매출총이익: false,
-    판매비와관리비: false,
-    당기순이익: false,
-    영업활동현금흐름: false,
-    투자활동현금흐름: false,
-    재무활동현금흐름: false,
-    재고자산: false,
-    유동부채: false,
-    단기차입금: false,
-    자본금: false,
-  });
+    const [fin,setFin]=useState<Fin>({
+      "매출액":false,
+      "매출원가":false,
+      "매출총이익":false,
+      "판매비와관리비":false,
+      "당기순이익":false,
+      "영업활동현금흐름":false,
+      "투자활동현금흐름":false,
+      "재무활동현금흐름":false,
+      "재고자산":false,
+      "유동부채":false,
+      "단기차입금":false,
+      "자본금":false
+    });
 
   const [error, setError] = useState<String>("");
-
-  const handleClose = () => setShow(false);
-  const handleChange = (e: any) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
 
   const handleSave = async () => {
     // 입력 검증
@@ -98,24 +92,38 @@ const FinanceModal: React.FC<FinanceReportModalProps> = ({
     }
   };
 
+
+  const handleClose = () => setShow(false);
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  
+
   const fetchData = async (d: FormData) => {
-    const data = await axios.get(
-      `${import.meta.env.VITE_SERVER_FINANCE_API_URI}?company=${
-        formData.company
-      }&startdate=${formData.startDate}&enddate=${formData.endDate}`
-    );
+    const data=await axios.get(`${import.meta.env.VITE_SERVER_FINANCE_API_URI}?company=${formData.company}&startdate=${formData.startDate}&enddate=${formData.endDate}`)
 
-    const selectedKeys = Object.keys(fin).filter((key) => fin[key as FinKeys]);
+        
 
-    console.log(data);
 
-    const filteredData = data.data.filter((elem: any) =>
-      selectedKeys.includes(elem.account_nm)
-    );
+      const response = data.data;
+      console.log(response)
 
-    console.log(filteredData);
+      const selectedKeys = Object.keys(fin).filter(key => fin[key as FinKeys]);
 
-    return filteredData;
+      const regexList = selectedKeys.map(key => new RegExp(key, 'i'));
+
+      const filteredData = response.filter((elem: any) =>
+        regexList.some(regex => regex.test(elem.account_nm))
+      );
+
+      const uniqueFilteredData = Array.from(
+        new Map(filteredData.map(item => [`${item.account_nm}-${item.bsns_year}`, item])).values()
+      );
+      
+
+      return uniqueFilteredData;
   };
 
   const handleToggle = (key: any) => {
