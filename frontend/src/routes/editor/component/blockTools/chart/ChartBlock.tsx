@@ -410,7 +410,7 @@ const ChartModal = ({ setData, onExit }: ChartModalProps) => {
                 className="bg-blue-500 text-white px-4 py-2 rounded"
                 onClick={handleSave}
               >
-                차트 그리기
+                확인
               </button>
             </div>
           </div>
