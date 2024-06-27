@@ -156,7 +156,6 @@ export default function MainPost({ post }: MainPostProps) {
           </div>
         </div>
       </div>
-      <div className="w-full h-[2px] bg-gray-200 mb-4" />
     </>
   );
 }
