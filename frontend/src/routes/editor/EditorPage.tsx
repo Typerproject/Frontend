@@ -1,21 +1,21 @@
 import { useEffect, useState } from "react";
 import Editor from "./component/Editor";
 import Timer from "./component/Timer";
-import { IoMdLock, IoMdUnlock } from "react-icons/io";
+// import { IoMdLock, IoMdUnlock } from "react-icons/io";
 import { OutputData } from "@editorjs/editorjs";
 import postAPI from "../../api/postDetailAPI";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../store";
 const service = new postAPI(import.meta.env.VITE_SERVER_POST_API_URI);
 export default function EditorPage() {
-  const [isPublic, setPublic] = useState(true);
+  // const [isPublic, setPublic] = useState(true);
   const [title, setTitle] = useState<string | null>(null);
   const [content, setContent] = useState<OutputData>();
   const currentUser = useAppSelector((state) => state.user);
   const navigate = useNavigate();
-  const changeVisibility = () => {
-    setPublic(!isPublic);
-  };
+  // const changeVisibility = () => {
+  //   setPublic(!isPublic);
+  // };
 
   useEffect(() => {
     if (!currentUser || currentUser._id === null) {
@@ -37,7 +37,7 @@ export default function EditorPage() {
     const result = await service.addPost({
       title: title,
       content: content,
-      public: isPublic,
+      public: true,
     });
     navigate(`/post/${result._id}`);
   };
@@ -64,7 +64,7 @@ export default function EditorPage() {
             나가기
           </p>
           <div className="flex items-center gap-4">
-            {isPublic ? (
+            {/* {isPublic ? (
               <IoMdUnlock
                 className="hover:opacity-80 cursor-pointer"
                 color={"white"}
@@ -80,7 +80,7 @@ export default function EditorPage() {
                 onClick={changeVisibility}
                 title="비공개"
               />
-            )}
+            )} */}
             <p
               className="text-white text-xl cursor-pointer hover:opacity-80"
               onClick={publish}
