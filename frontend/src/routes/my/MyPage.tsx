@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAppSelector } from "../../store";
 import FollowList from "./component/FollowList";
 import Post from "../../components/Post/Post";
@@ -49,6 +49,8 @@ export default function MyPage() {
   const loader = useRef<HTMLDivElement | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isDone, setIsDone] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleObserver = useCallback(
     (entries: IntersectionObserverEntry[]) => {
@@ -101,6 +103,8 @@ export default function MyPage() {
               setIsDone(() => true);
             }
             setIsLoading(false);
+          }).catch(()=>{
+            navigate("/notfound");
           });
         } catch (error) {
           console.error("Error fetching posts:", error);
@@ -127,6 +131,7 @@ export default function MyPage() {
         })
         .catch((err) => {
           console.error("마이페이지 접근 유저", err);
+          navigate("/notfound")
         });
 
       console.log("ID 有", currentUserId);
@@ -230,6 +235,7 @@ export default function MyPage() {
         })
         .catch((err) => {
           console.error("마이페이지 팔로우", err);
+          navigate("/notfound");
         });
 
       console.log("ID 有", currentUser);
