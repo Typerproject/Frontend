@@ -25,7 +25,7 @@ export default function PostDetail() {
         .getPost(id)
         .then((res: IPostDetail) => {
           setPostDetail(res);
-          console.log(res);
+          // console.log(res);
           setIsWriter(userId === res.writer.writerId);
           setScrap(res.isScrapped);
           return res;
@@ -61,7 +61,7 @@ export default function PostDetail() {
     } else {
       alert("팔로우 실패");
     }
-    console.log("followingUser result:", result);
+    // console.log("followingUser result:", result);
   }
 
   async function handleUnfollowClick() {
@@ -73,7 +73,7 @@ export default function PostDetail() {
     } else {
       alert("언팔로우 실패");
     }
-    console.log("unfollow..", result);
+    // console.log("unfollow..", result);
   }
 
   //progress, opacity 등 동적으로 바뀌는 스타일

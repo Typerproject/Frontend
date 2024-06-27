@@ -24,7 +24,7 @@ export default function PostEditPage() {
     const fetchPostData = async (): Promise<void> => {
       service.getPost(id).then((res: IPostDetail) => {
         // setPostDetail(res);
-        console.log(res);
+        // console.log(res);
         setTitle(res.title);
         setContent(res.content);
         return res;
@@ -41,12 +41,12 @@ export default function PostEditPage() {
       service
         .patchPost(id, title, content)
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           alert("수정이 완료되었습니다.");
           navigate(-1);
         })
         .catch((e) => {
-          console.log(e);
+          // console.log(e);
           alert("수정에 실패하였습니다!");
         //   navigate(-1);
         });

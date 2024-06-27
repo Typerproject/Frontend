@@ -31,7 +31,7 @@ export default function Comment({ comment, service }) {
         parentCommentId: comment._id,
       });
 
-      console.log(resp);
+      // console.log(resp);
       if (resp.status !== 201) {
         throw Error("댓글 작성 실패");
       } else {
@@ -40,7 +40,7 @@ export default function Comment({ comment, service }) {
         location.reload();
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       alert("댓글 작성에 실패했습니다.");
     }
   };
@@ -51,11 +51,11 @@ export default function Comment({ comment, service }) {
     if (!confirm("정말 삭제하시겠습니까?")) {
       return;
     }
-    console.log(comment._id);
+    // console.log(comment._id);
 
     const res = await service.deleteComment(comment._id);
 
-    console.log(res);
+    // console.log(res);
     if (res.status === 200) {
       history.scrollRestoration = "auto";
       location.reload();

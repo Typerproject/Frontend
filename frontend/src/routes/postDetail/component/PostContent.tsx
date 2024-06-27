@@ -61,26 +61,26 @@ export default function PostContent({
       service
         .deleteScrapPost(id)
         .then((res: IpostScrap) => {
-          console.log(res);
+          // console.log(res);
           alert("스크랩 삭제 성공");
           setScrap(false);
           location.reload();
         })
         .catch((e) => {
-          console.log(e);
+          // console.log(e);
           alert("스크랩 삭제에 실패하였습니다.");
         });
     } else {
       service
         .scrapPost(id)
         .then((res: IpostScrap) => {
-          console.log(res);
+          // console.log(res);
           alert("스크랩 성공");
           setScrap(true);
           location.reload();
         })
         .catch((e) => {
-          console.log(e);
+          // console.log(e);
           alert("스크랩에 실패하였습니다.");
         });
     }
