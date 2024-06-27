@@ -28,8 +28,6 @@ export default class editorAPI extends BaseApi {
   async getCodeList() {
     const resp = await this.fetcher.get("/stock/code");
 
-    console.log("주식 종목 리스트", resp.data.codeList);
-
     return resp.data;
   }
 

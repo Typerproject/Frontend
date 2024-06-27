@@ -120,7 +120,6 @@ export default class postAPI extends BaseApi {
       const resp = await this.fetcher.get(`/list${queryParams}`);
 
       if (resp.data.length === 0) {
-        console.log("메인 페이지 GET /post/list error: 데이터 없음");
         return { posts: [] };
       }
 
@@ -141,8 +140,6 @@ export default class postAPI extends BaseApi {
     const resp = await this.fetcher.get("/random");
 
     const data: IPostSlider[] = resp.data.randomPosts;
-
-    console.log("슬라이드 리스트 데이터", data);
 
     return data;
   }

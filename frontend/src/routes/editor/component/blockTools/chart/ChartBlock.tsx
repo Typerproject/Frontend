@@ -258,9 +258,7 @@ const ChartModal = ({ setData, onExit }: ChartModalProps) => {
       }
 
       const stockResp = await service.getStockData(formData);
-
       setData(stockResp);
-
       setShow(false);
     } catch (error) {
       console.error("Failed to fetch stock data", error);

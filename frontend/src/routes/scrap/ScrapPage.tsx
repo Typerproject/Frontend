@@ -55,7 +55,7 @@ export default function ScrapPage() {
       // 타겟 요소가 루트 요소와 교차하는 점이 없으면 콜백을 호출했으되, 조기에 탈출 (예외처리)
       const entry: IntersectionObserverEntry = entries[0];
       //target지정 한개만 하니까 entries의 길이는 아마도 1
-      console.log(entry);
+      // console.log(entry);
 
       if (entry.isIntersecting) {
         fetchScrapList();
@@ -83,28 +83,29 @@ export default function ScrapPage() {
       }
 
       const data = await service.getScrapList(currentPage);
-      console.log("page", page);
+      // console.log("page", page);
 
       if (
         data.scrappedPosts.length === 0 &&
         observerRef.current &&
         targetRef.current
-      ) { //page state를 업데이트 하지 않으므로 추가 요청을 보내지 않게 됨
+      ) {
+        //page state를 업데이트 하지 않으므로 추가 요청을 보내지 않게 됨
         setIsLoading(false);
-        console.log(data.scrappedPosts.length);
+        // console.log(data.scrappedPosts.length);
         setPostInfo((prevData) => [...prevData, ...data.scrappedPosts]);
         return false;
       }
 
       if (data.scrappedPosts.length > 0) {
-        console.log(data.scrappedPosts);
+        // console.log(data.scrappedPosts);
         setPage((prevPage) => prevPage + 1);
         setPostInfo((prevData) => [...prevData, ...data.scrappedPosts]);
         setIsLoading(false);
         return true; // 데이터를 가져오는 작업 완료 후 상태 변경
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
     return false;
   };
@@ -133,7 +134,7 @@ export default function ScrapPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-76.5px)]">
+    <div className="flex flex-col min-h-screen">
       <div className="phone:w-[100%] w-[65%] mx-auto mt-[8rem] flex-grow">
         {post.map((post) => (
           <div key={post._id}>
