@@ -79,7 +79,7 @@ export default function MainPost({ post }: MainPostProps) {
                           className="w-[40px] rounded-full"
                           src={post.writer.img}
                         />
-                        <div className="text-base min-w-full">
+                        <div className="text-base min-w-full break-words break-all">
                           {post.writer.nickname}
                         </div>
                       </div>
