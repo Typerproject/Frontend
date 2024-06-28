@@ -172,7 +172,7 @@ export default function MyPage() {
             _id: currentUser._id || "",
             nickname: editedNickname || "",
             email: currentUser.email || null,
-            comment: currentUser.comment || null,
+            comment: editedComment || null,
             profile: currentUser.profile || null,
           };
 
