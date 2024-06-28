@@ -62,10 +62,6 @@ const routers = [
   },
   {
     path: "/search",
-    element: <Search />,
-  },
-  {
-    path: "/search/test",
     element: <SearchPage />,
   },
   {
