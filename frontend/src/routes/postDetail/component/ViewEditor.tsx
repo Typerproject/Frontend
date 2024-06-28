@@ -8,6 +8,7 @@ import { ReportBlock } from "../../editor/component/blockTools/Report/ReportBloc
 import { FinanceBlock } from "../../editor/component/blockTools/finance/FinanceBlock";
 import { DisclosureBlock } from "../../editor/component/blockTools/disclosure/DisclosureBlock";
 import { ImageBlock } from "../../editor/component/blockTools/image/ImageBlock";
+import "./editor.css"
 
 type props = {
   outPutData: OutputData;
