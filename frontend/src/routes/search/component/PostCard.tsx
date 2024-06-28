@@ -20,7 +20,7 @@ export default function PostCard({ searchText }: Props) {
     (entries: IntersectionObserverEntry[]) => {
       const target = entries[0];
       if (target.isIntersecting && !isLoading && !isDone) {
-        console.log('인식됨!!');
+        console.log("인식됨!!");
         setPage((page) => page + 1);
       }
     },
@@ -52,7 +52,7 @@ export default function PostCard({ searchText }: Props) {
   const fetchMorePosts = useCallback(
     () =>
       (async () => {
-        if(!searchText) {
+        if (!searchText) {
           return;
         }
         if (observerRef.current) {
@@ -106,16 +106,18 @@ export default function PostCard({ searchText }: Props) {
     fetchMorePosts();
   }, [fetchMorePosts]);
 
-  useEffect(()=>{
-    if(!searchText) {
+  useEffect(() => {
+    if (!searchText) {
       setPostData([]);
       setTotal(0);
     }
-  }, [searchText])
+  }, [searchText]);
 
   return (
     <div>
-      <p className="text-gray-500 pb-[2rem]">검색 결과 : {total ? total : 0}개</p>
+      <p className="text-gray-500 pb-[2rem]">
+        검색 결과 : {total ? total : 0}개
+      </p>
       {postData.length !== 0 &&
         postData?.map((post) => (
           <>
