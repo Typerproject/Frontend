@@ -462,13 +462,14 @@ export default function MyPage() {
                   {/* 닉네임 */}
                   {isEditing ? (
                     <input
-                      className="bg-gray-50 shadow-md rounded px-8 pt-6 pb-8 text-base mt-2 text-color text-blue-500 italic p-2  h-10"
+                      className="bg-gray-50 shadow-md rounded px-8 pt-6 pb-8 text-base mt-2 text-color text-blue-500 italic p-2 h-10"
                       type="text"
                       value={editedNickname}
                       onChange={(e) => setEditedNickname(e.target.value)}
+                      maxLength={10}
                     />
                   ) : (
-                    <p className="text-3xl phone:text-xl">
+                    <p className="text-3xl phone:text-xl break-words break-all">
                       {userInfo?.nickname}
                     </p>
                   )}
