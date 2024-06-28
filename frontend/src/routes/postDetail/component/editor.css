@@ -1,0 +1,4 @@
+div.ce-paragraph.cdx-block {
+    word-break: break-all;
+    overflow-wrap: break-word;
+}

@@ -1,5 +1,4 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { IoMdSearch } from "react-icons/io";
 import { useAppSelector, useAppDispatch } from "../../store";
 import { BsPersonCircle } from "react-icons/bs";
 import { useState, useEffect, useRef } from "react";
@@ -15,11 +14,12 @@ export default function Navbar() {
   const navigate = useNavigate();
 
   const [menuOpen, setMenuOpen] = useState(false);
-  const [searchtext, setSearchText] = useState("");
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const profileRef = useRef<HTMLImageElement | null>(null);
 
   const handleToggleMenu = () => {
+    event?.stopPropagation();
     setMenuOpen((prev) => !prev);
   };
 
@@ -32,27 +32,32 @@ export default function Navbar() {
   };
 
   const handleLogout = () => {
-    service.logout().then((data) => {
-      console.log(data);
-      setMenuOpen(false);
-      dispatch(logoutUser());
-    });
+    service
+      .logout()
+      .then((data) => {
+        setMenuOpen(false);
+        dispatch(logoutUser());
+      })
+      .catch((err) => console.error(err));
   };
 
-  const handleSearchClick = () => {
-    navigate(`/search?text=${searchtext}`);
+  const handleMyPage = () => {
+    setMenuOpen(false);
+    navigate(`/my/${userInfo._id}`);
   };
 
-  const handleKeyDown = (e: any) => {
-    if (e.key === "Enter" && searchtext.trim().length > 0) {
-      console.log(searchtext);
-      handleSearchClick();
-    }
+  const handleScrapList = () => {
+    setMenuOpen(false);
+    navigate(`/post/scrap`);
   };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target as Node) &&
+        !profileRef.current?.contains(event.target as Node)
+      ) {
         setMenuOpen(false);
       }
     };
@@ -61,7 +66,7 @@ export default function Navbar() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [menuRef]);
+  }, []);
 
   return (
     <nav className="bg-black fixed w-full h-fit py-[0.75em] px-[1.5rem] top-0 flex justify-between items-center z-[100]">
@@ -71,20 +76,15 @@ export default function Navbar() {
             <span className="text-[35px]">T</span>yper
           </p>
         </NavLink>
-        <div className="relative hidden md:inline-block">
-          <IoMdSearch
-            className="absolute top-[25%] left-[10px]"
-            onClick={handleSearchClick}
-          />
-          <input
-            className="h-[30px] rounded-full pl-[30px] pr-[10px] py-[5px] bg-white"
-            onChange={(e) => setSearchText(e.target.value)}
-            onKeyDown={handleKeyDown}
-          />
-        </div>
       </div>
       <div className="flex gap-[1rem] items-center">
-        <div>
+        <div className="flex gap-[1rem] items-center">
+          <NavLink
+            to="/search"
+            className="text-[#E5E5E5] text-xl hover:text-white cursor-pointer"
+          >
+            Search
+          </NavLink>
           {userInfo._id ? (
             <NavLink to="/editor">
               <p className="text-[#E5E5E5] text-xl hover:text-white cursor-pointer">
@@ -103,6 +103,7 @@ export default function Navbar() {
         <div>
           {userInfo.profile ? (
             <img
+              ref={profileRef}
               onClick={handleToggleMenu}
               className="w-[40px] rounded-full cursor-pointer transition duration-200 ease-in-out transform hover:opacity-80"
               src={userInfo.profile}
@@ -116,13 +117,11 @@ export default function Navbar() {
               className="absolute right-0 mt-2 w-36 bg-white rounded-md shadow-lg z-10"
             >
               <ul className="py-2">
-                <li className="px-4 py-2 hover:bg-gray-100">
-                  <NavLink
-                    to={`/my/${userInfo._id}`}
-                    className="text-black no-underline cursor-pointer"
-                  >
-                    My page
-                  </NavLink>
+                <li
+                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                  onClick={handleMyPage}
+                >
+                  My page
                 </li>
                 <li
                   className="px-4 py-2 cursor-pointer hover:bg-gray-100"
@@ -130,13 +129,11 @@ export default function Navbar() {
                 >
                   Logout
                 </li>
-                <li className="px-4 py-2 hover:bg-gray-100">
-                  <NavLink
-                    to={`/post/scrap`}
-                    className="text-black no-underline cursor-pointer"
-                  >
-                    Scrap List
-                  </NavLink>
+                <li
+                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                  onClick={handleScrapList}
+                >
+                  Scrap List
                 </li>
               </ul>
             </div>

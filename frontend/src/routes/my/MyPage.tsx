@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAppSelector } from "../../store";
 import FollowList from "./component/FollowList";
 import Post from "../../components/Post/Post";
@@ -50,6 +50,8 @@ export default function MyPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isDone, setIsDone] = useState(false);
 
+  const navigate = useNavigate();
+
   const handleObserver = useCallback(
     (entries: IntersectionObserverEntry[]) => {
       const target = entries[0];
@@ -89,19 +91,24 @@ export default function MyPage() {
         }
         try {
           setIsLoading(true);
-          service.getWritedPost(id, page).then((data) => {
-            setPreviewPost((prevPostList) => ({
-              posts:
-                page === 1
-                  ? data.posts
-                  : [...prevPostList.posts, ...data.posts],
-            }));
+          service
+            .getWritedPost(id, page)
+            .then((data) => {
+              setPreviewPost((prevPostList) => ({
+                posts:
+                  page === 1
+                    ? data.posts
+                    : [...prevPostList.posts, ...data.posts],
+              }));
 
-            if (data.posts.length === 0) {
-              setIsDone(() => true);
-            }
-            setIsLoading(false);
-          });
+              if (data.posts.length === 0) {
+                setIsDone(() => true);
+              }
+              setIsLoading(false);
+            })
+            .catch(() => {
+              navigate("/notfound");
+            });
         } catch (error) {
           console.error("Error fetching posts:", error);
         }
@@ -127,6 +134,7 @@ export default function MyPage() {
         })
         .catch((err) => {
           console.error("마이페이지 접근 유저", err);
+          navigate("/notfound");
         });
     } else {
       console.log("ID 無", currentUserId);
@@ -156,39 +164,43 @@ export default function MyPage() {
 
   // 저장 버튼 클릭 시 수정 내용을 저장하고 수정 모드 종료
   const handleSaveClick = () => {
-    service
-      .modifyUserNickname(editedNickname)
-      .then((data) => {
-        const user = {
-          _id: currentUser._id || "",
-          nickname: editedNickname || "",
-          email: currentUser.email || null,
-          comment: currentUser.comment || null,
-          profile: currentUser.profile || null,
-        };
+    if (editedNickname !== currentUser.nickname) {
+      service
+        .modifyUserNickname(editedNickname)
+        .then((data) => {
+          const user = {
+            _id: currentUser._id || "",
+            nickname: editedNickname || "",
+            email: currentUser.email || null,
+            comment: currentUser.comment || null,
+            profile: currentUser.profile || null,
+          };
 
-        dispatch(setUser({ user }));
-      })
-      .catch((err) => {
-        console.error("닉 에러: ", err);
-      });
+          dispatch(setUser({ user }));
+        })
+        .catch((err) => {
+          console.error("nickname 에러: ", err);
+        });
+    }
 
-    service
-      .updateUserComment(editedComment)
-      .then((data) => {
-        const user = {
-          _id: currentUser._id || "",
-          nickname: editedNickname || "",
-          email: currentUser.email || null,
-          comment: editedComment || null,
-          profile: currentUser.profile || null,
-        };
+    if (editedComment !== currentUser.comment) {
+      service
+        .updateUserComment(editedComment)
+        .then((data) => {
+          const user = {
+            _id: currentUser._id || "",
+            nickname: editedNickname || "",
+            email: currentUser.email || null,
+            comment: editedComment || null,
+            profile: currentUser.profile || null,
+          };
 
-        dispatch(setUser({ user }));
-      })
-      .catch((err) => {
-        console.error("comment 에러: ", err);
-      });
+          dispatch(setUser({ user }));
+        })
+        .catch((err) => {
+          console.error("comment 에러: ", err);
+        });
+    }
 
     setIsEditing(false);
   };
@@ -228,11 +240,12 @@ export default function MyPage() {
         })
         .catch((err) => {
           console.error("마이페이지 팔로우", err);
+          navigate("/notfound");
         });
     } else {
       console.log("ID 無", currentUser);
     }
-  }, [currentUser, id, isFollowing, refreshKey, isEditing]);
+  }, [currentUser, id, isFollowing, refreshKey, isEditing, navigate]);
 
   const handleFollowerBtn = () => {
     if (follow != "follower") {

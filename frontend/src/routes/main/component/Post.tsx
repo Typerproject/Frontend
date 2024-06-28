@@ -6,9 +6,6 @@ import { useNavigate } from "react-router-dom";
 
 const postService = new postAPI(import.meta.env.VITE_SERVER_POST_API_URI);
 
-// 스크랩/코멘트 누르면 로그인 요청 알럿 + login 창 뜨도록?
-// 스크랩 하기 => scrapPost / 취소 => deleteScrapPost
-
 interface MainPostProps {
   post: IPost;
 }
@@ -25,7 +22,6 @@ export default function MainPost({ post }: MainPostProps) {
       : post.preview.text;
 
   const koreaDate = new Date(post.createdAt);
-  //   const koreaDate = new Date(utcDate.getTime() + 9 * 60 * 60 * 1000);
 
   const formattedTime = koreaDate.toLocaleString("ko-KR", {
     year: "numeric",
@@ -45,7 +41,7 @@ export default function MainPost({ post }: MainPostProps) {
         setScrapCount(scrapCount + 1);
       })
       .catch((err) => {
-        console.log("스크랩 하기 error: ", err);
+        console.error("스크랩 하기 error: ", err);
       });
   };
 
@@ -94,10 +90,10 @@ export default function MainPost({ post }: MainPostProps) {
                   </div>
                   <div onClick={() => navigate(`/post/${post._id}`)}>
                     <div>
-                      <div className="text-3xl font-semibold mt-[1.2rem] max-w-full sm:max-w-4xl md:max-w-3xl lg:max-w-2xl xl:max-w-xl overflow-hidden xl:text-ellipsis whitespace-normal">
+                      <div className="text-3xl font-semibold mt-[1.2rem] max-w-full sm:max-w-4xl md:max-w-3xl lg:max-w-2xl xl:max-w-xl overflow-hidden xl:text-ellipsis whitespace-normal break-words break-all">
                         {post.title}
                       </div>
-                      <div className="text-base mt-[0.7rem] text-gray-500">
+                      <div className="text-base mt-[0.7rem] text-gray-500 break-words break-all">
                         {truncateText}
                       </div>
                     </div>

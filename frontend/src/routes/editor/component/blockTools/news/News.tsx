@@ -17,6 +17,7 @@ const StockNews: React.FC<StockNewsProps> = ({ newsData, setNewsData }) => {
   const handleChange = async (
     e: React.ChangeEvent<HTMLInputElement>
   ): Promise<void> => {
+    e.stopPropagation();
     const url = e.target.value;
     // console.log(url);
     try {
@@ -32,10 +33,11 @@ const StockNews: React.FC<StockNewsProps> = ({ newsData, setNewsData }) => {
   const handlePaste = async (
     e: React.ClipboardEvent<HTMLInputElement>
   ): Promise<void> => {
+    e.stopPropagation();
     const url = e.clipboardData;
 
     try {
-      const resp = await service.getNewsData(url.getData('Text'));
+      const resp = await service.getNewsData(url.getData("Text"));
       console.log(resp);
       setNewsInfo(resp.data);
       setNewsData(resp.data);

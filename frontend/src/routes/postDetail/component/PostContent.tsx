@@ -33,7 +33,7 @@ export default function PostContent({
   scrapingCount,
   writerId,
 }: Props) {
-  const [vaildComment, setValidComment] = useState<boolean>(false);
+  // const [vaildComment, setValidComment] = useState<boolean>(false);
   const currentUserId = useAppSelector((state) => state.user._id);
   const { id } = useParams<{ id: string }>() as { id: string };
   const navigate = useNavigate();
@@ -45,8 +45,13 @@ export default function PostContent({
 
   useEffect(() => {
     const fetcthComments = async () => {
-      const resp = await commentService.getCommentList(id);
-      setComments(resp);
+      commentService.getCommentList(id)
+      .then(resp=>{
+        setComments(resp);
+      })
+      .catch(()=>{
+        navigate("/notfound")
+      })
     };
     fetcthComments();
   }, []);
@@ -56,26 +61,26 @@ export default function PostContent({
       service
         .deleteScrapPost(id)
         .then((res: IpostScrap) => {
-          console.log(res);
+          // console.log(res);
           alert("스크랩 삭제 성공");
           setScrap(false);
           location.reload();
         })
         .catch((e) => {
-          console.log(e);
+          // console.log(e);
           alert("스크랩 삭제에 실패하였습니다.");
         });
     } else {
       service
         .scrapPost(id)
         .then((res: IpostScrap) => {
-          console.log(res);
+          // console.log(res);
           alert("스크랩 성공");
           setScrap(true);
           location.reload();
         })
         .catch((e) => {
-          console.log(e);
+          // console.log(e);
           alert("스크랩에 실패하였습니다.");
         });
     }
@@ -171,7 +176,7 @@ export default function PostContent({
           </p>
           <div
             className="cursor-pointer"
-            onClick={() => setValidComment((prev) => !prev)}
+            // onClick={() => setValidComment((prev) => !prev)}
           >
             <FaRegComment />
           </div>
@@ -198,7 +203,7 @@ export default function PostContent({
         </div>
       </div>
 
-      {vaildComment && <CommentList comments={comments} />}
+      {comments && <CommentList comments={comments} />}
     </>
   );
 }

@@ -1,4 +1,3 @@
-import React from "react";
 import ReactApexChart from "react-apexcharts";
 import { stockResp } from "./ChartBlock";
 import { ApexOptions } from "apexcharts";

@@ -152,12 +152,9 @@ const MyComponent = () => {
                   {postList.posts.map((post: IPost) => (
                     <>
                       <MainPost post={post} />
-                      <div
-                        style={{
-                          width: "100%",
-                        }}
-                        className="h-0.5 bg-gray-200 mb-4"
-                      />
+                      <div className="mx-8">
+                        <hr className="border-t-2 border-gray-400" />
+                      </div>
                     </>
                   ))}
                   <div ref={targetRef} className="h-1" />
