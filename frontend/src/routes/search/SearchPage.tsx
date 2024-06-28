@@ -64,7 +64,7 @@ export default function SearchPage() {
       <div className="py-[3rem] px-[2rem]">
         <div className="flex justify-center items-center py-12">
           <input
-            className="w-full h-[3rem] shadow-sm p-[1rem] text-xl border rounded"
+            className="w-full h-[3rem] shadow-sm p-[1rem] text-xl border rounded outline-none"
             //value={searchtext}
             onChange={(e) => setSearchText(e.target.value)}
             // onKeyDown={handleKeyDown}
@@ -100,87 +100,6 @@ export default function SearchPage() {
             ) : (
               <WriterCard searchText={searchText} />
             )}
-            {/* {post &&
-              (postdata.length === 0 ? (
-                <div className="text-center text-3xl">검색 결과가 없습니다</div>
-              ) : (
-                <div className="grid grid-cols-1 gap-6">
-                  <div>글 {totalpage}건</div>
-                  {postdata.map((elem: any, idx) => (
-                    <div key={idx}>
-                      <Card
-                        className="card border-none rounded-lg cursor-pointer h-[15rem] flex flex-row rounded hover:bg-gray-200"
-                        onClick={() => navigate(`/post/${elem._id}`)}
-                      >
-                        <div className="flex flex-col p-4 w-2/3">
-                          <div className="flex items-center mb-2">
-                            <img
-                              className="w-12 h-12 object-cover rounded-full mr-4"
-                              src={elem.profile}
-                              alt="Profile"
-                            />
-                            <div className="font-bold">{elem.nickname}</div>
-                          </div>
-                          <div
-                            className="font-bold text-2xl mb-4 mt-2
-                          max-w-xs overflow-hidden text-ellipsis whitespace-nowrap"
-                          >
-                            {elem.title}
-                          </div>
-                          <div
-                            className="text-gray-500
-                          max-w-xs overflow-hidden text-ellipsis whitespace-nowrap"
-                          >
-                            {elem.preview.text}
-                          </div>
-                        </div>
-                        <img
-                          className="w-1/3 h-auto object-cover rounded"
-                          src={elem.preview.img}
-                          alt="Preview"
-                        />
-                      </Card>
-                      <hr className="mt-[2rem]" style={{ color: "gray" }}></hr>
-                    </div>
-                  ))}
-                </div>
-              ))} */}
-
-            {/* {writer &&
-              (writerdata.length === 0 ? (
-                <div className="text-center text-3xl">검색 결과가 없습니다</div>
-              ) : (
-                <div className="">
-                  <div className="mb-[1rem]">작가 {writerdata.length}건</div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {writerdata.map((elem: any, idx) => (
-                      <div key={idx}>
-                        <Card
-                          className="card border rounded-lg cursor-pointer w-200 h-auto flex flex-col rounded hover:bg-gray-200"
-                          onClick={() => navigate(`/my/${elem.userId}`)}
-                        >
-                          <div className="flex gap-[1rem] px-[0.5rem] py-[0.7rem] w-full mr-[1rem]">
-                            <img
-                              className="size-16 object-cover rounded-full"
-                              src={elem.profile}
-                              alt="Profile"
-                            />
-
-                            <div className="flex flex-col mr-[1rem]">
-                              <div className="font-bold text-lg">
-                                {elem.nickname}
-                              </div>
-                              <div className="mt-2 text-base max-w-[10rem] overflow-hidden text-ellipsis whitespace-nowrap">
-                                {elem.comment}
-                              </div>
-                            </div>
-                          </div>
-                        </Card>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))} */}
           </div>
         </div>
       </div>
