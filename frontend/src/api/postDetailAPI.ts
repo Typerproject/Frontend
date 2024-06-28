@@ -7,6 +7,7 @@ export interface IPostDetail {
   id: string;
   title: string;
   content: OutputData;
+  image: string;
   public: boolean;
   writer: IPostWriter;
   writedAt: Date;
@@ -17,6 +18,7 @@ export interface IPostWriter {
   writerId: string;
   name: string;
   img: string;
+  comment: string;
 }
 
 export interface IPostBody {

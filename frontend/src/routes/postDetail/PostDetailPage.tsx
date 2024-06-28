@@ -116,9 +116,19 @@ export default function PostDetail() {
 
   return (
     <div>
-      <div className="w-[100vw] bg-[#000000b5] mmd:px-[18rem] px-[2rem] fixed top-0 z-[9] flex items-center h-[70vh]">
+      <div
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5)), url(${postDetail.image})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          opacity: `${opacity}`,
+        }}
+        className="w-[100vw] mmd:px-[18rem] px-[2rem] fixed top-0 z-[9] flex items-center h-[70vh]"
+      >
         <div style={{ opacity: `${opacity}` }}>
-          <p className={`text-white text-5xl pb-[1rem]`}>{postDetail.title}</p>
+          <p className={`text-white text-5xl pb-[1rem] break-words break-all`}>
+            {postDetail.title}
+          </p>
           {postDetail.writer ? (
             <p className="text-white">{postDetail.writer.name}</p>
           ) : (
@@ -168,7 +178,7 @@ export default function PostDetail() {
                     </button>
                   ))}
               </div>
-              <p className="pt-[1rem] pb-[2rem] text-gray-500 text-sm">
+              <p className="pt-[1rem] pb-[2rem] text-gray-500 text-sm break-words break-all">
                 {postDetail.writer.comment}
               </p>
             </div>
