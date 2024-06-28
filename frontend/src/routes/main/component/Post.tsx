@@ -90,10 +90,10 @@ export default function MainPost({ post }: MainPostProps) {
                   </div>
                   <div onClick={() => navigate(`/post/${post._id}`)}>
                     <div>
-                      <div className="text-3xl font-semibold mt-[1.2rem] max-w-full sm:max-w-4xl md:max-w-3xl lg:max-w-2xl xl:max-w-xl overflow-hidden xl:text-ellipsis whitespace-normal">
+                      <div className="text-3xl font-semibold mt-[1.2rem] max-w-full sm:max-w-4xl md:max-w-3xl lg:max-w-2xl xl:max-w-xl overflow-hidden xl:text-ellipsis whitespace-normal break-words break-all">
                         {post.title}
                       </div>
-                      <div className="text-base mt-[0.7rem] text-gray-500">
+                      <div className="text-base mt-[0.7rem] text-gray-500 break-words break-all">
                         {truncateText}
                       </div>
                     </div>
