@@ -107,7 +107,9 @@ export default function Post({ id, nickname, profile, post }: User) {
                     className="flex gap-[0.5rem] items-center"
                   >
                     <img className="w-[40px] rounded-full" src={userProfile} />
-                    <div className="text-base min-w-full">{userName}</div>
+                    <div className="text-base min-w-full break-words break-all">
+                      {userName}
+                    </div>
                   </div>
                 </div>
                 <div>

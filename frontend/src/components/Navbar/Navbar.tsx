@@ -51,6 +51,11 @@ export default function Navbar() {
     navigate(`/post/scrap`);
   };
 
+  const handleEditorPage = () => {
+    setMenuOpen(false);
+    navigate(`/editor`);
+  };
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -86,7 +91,7 @@ export default function Navbar() {
             Search
           </NavLink>
           {userInfo._id ? (
-            <NavLink to="/editor">
+            <NavLink to="/editor" className="phone:hidden">
               <p className="text-[#E5E5E5] text-xl hover:text-white cursor-pointer">
                 Write
               </p>
