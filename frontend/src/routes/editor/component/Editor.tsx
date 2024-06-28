@@ -8,6 +8,7 @@ import { ReportBlock } from "./blockTools/Report/ReportBlock";
 import { type ToolConstructable, OutputData } from "@editorjs/editorjs";
 import { DisclosureBlock } from "./blockTools/disclosure/DisclosureBlock";
 import { ImageBlock } from "./blockTools/image/ImageBlock";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   setContent: (value: OutputData) => void;
@@ -15,6 +16,7 @@ type Props = {
 
 export default function Editor({ setContent }: Props) {
   const ejInstance = useRef<EditorJS | null>(null);
+  const navigate = new useNavigate();
 
   const initEditor = () => {
     const editor = new EditorJS({
@@ -36,7 +38,6 @@ export default function Editor({ setContent }: Props) {
             defaultLevel: 1,
           },
         },
-
 
         image: ImageBlock,
         charts: ChartBLock,
@@ -95,6 +96,12 @@ export default function Editor({ setContent }: Props) {
 
   useEffect(() => {
     if (ejInstance.current === null) {
+      if (window.innerWidth <= 768) {
+        alert("에디터는 모바일에서 사용할 수 없습니다. PC를 사용해주세요");
+        navigate(-1);
+        return;
+      }
+
       initEditor();
     }
   }, []);
