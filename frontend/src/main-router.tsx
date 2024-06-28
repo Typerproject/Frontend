@@ -11,6 +11,7 @@ import Layout from "./components/Layout";
 import Redirect from "./components/login/Redirect";
 import ScrapPage from "./routes/scrap/ScrapPage";
 import NotFoundPage from "./routes/notFound/NotFoundPage";
+import SearchPage from "./routes/search/SearchPage";
 
 const routers = [
   {
@@ -64,17 +65,21 @@ const routers = [
     element: <Search />,
   },
   {
+    path: "/search/test",
+    element: <SearchPage />,
+  },
+  {
     path: "/edit/:id",
     element: <PostEditPage />,
   },
   {
-    path:"/info",
-    element:<Info/>
+    path: "/info",
+    element: <Info />,
   },
   {
     path: "*",
-    element: <NotFoundPage />
-  }
+    element: <NotFoundPage />,
+  },
 ];
 
 const router = createBrowserRouter(routers);
