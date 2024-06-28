@@ -66,7 +66,7 @@ export default function SearchPage() {
           <input
             className="w-full h-[3rem] shadow-sm p-[1rem] text-xl border rounded"
             //value={searchtext}
-            // onChange={(e) => setSearchtext(e.target.value)}
+            onChange={(e) => setSearchText(e.target.value)}
             // onKeyDown={handleKeyDown}
             placeholder=" 검색어를 입력해주세요."
           />
@@ -95,7 +95,11 @@ export default function SearchPage() {
           //   ref={mainPostContainerRef}
         >
           <div className="w-full">
-            {activeTab === "글" ? <PostCard /> : <WriterCard />}
+            {activeTab === "글" ? (
+              <PostCard searchText={searchText} />
+            ) : (
+              <WriterCard searchText={searchText} />
+            )}
             {/* {post &&
               (postdata.length === 0 ? (
                 <div className="text-center text-3xl">검색 결과가 없습니다</div>
