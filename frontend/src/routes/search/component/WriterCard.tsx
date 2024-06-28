@@ -2,6 +2,6 @@
 
 // type Props = {};
 
-// export default function WriterCard({}: Props) {
-//   return <div>WriterCard</div>;
-// }
+export default function WriterCard() {
+  return <div>WriterCard</div>;
+}
