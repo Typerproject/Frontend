@@ -1,168 +1,84 @@
-import { useState, useEffect, useRef } from "react";
-import Navbar from "../Navbar/Navbar";
-import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
+// import React from 'react'
 import { Card, Button } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
-import Footbar from "../Footbar/Footbar";
+import { useState, useRef, useEffect } from "react";
+import Navbar from "../../components/Navbar/Navbar";
+import { useNavigate } from "react-router-dom";
+import PostCard from "./component/PostCard";
+import WriterCard from "./component/WriterCard";
 
-//쿼리문 필요없으니까 삭제해도 될듯?
-const useQuery = () => {
-  return new URLSearchParams(useLocation().search);
-};
+export interface Pre {
+  text: string;
+  img: string;
+}
 
-export default function Search() {
-  const [postdata, setPostdata] = useState<any[]>([]);
-  const [writerdata, setWriterdata] = useState<any[]>([]);
-  const [activeTab, setActiveTab] = useState("글");
-  //여기서 boolean 타입 왜 필요한지 모르게씀
-  const [post, setPost] = useState(true);
-  const [writer, setWriter] = useState(false);
-  //여기도 필요없으니까 삭제
-  const query = useQuery();
-  //여기선 쿼리말고 인풋박스 텍스트로
-  const [searchtext, setSearchtext] = useState(query.get("text") || "");
+interface Preview {
+  profile: string;
+  nickname: string;
+  _id: string;
+  title: string;
+  preview: Pre;
+}
+
+interface Writer {
+  userId: string;
+  profile: string;
+  nickname: string;
+  comment: string;
+}
+
+// type Props = {}
+type active = "글" | "작가";
+
+export default function SearchPage() {
   const navigate = useNavigate();
-  const [page, setPage] = useState(1);
-  //totalPage는 전체 검색결과 개수를 의미함
-  //그냥 postdata의 length를 세면 되지 않을까..?
-  //페이지네이션때문에 안됨
-  const [totalpage, setTotalPage] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
-  //const [isEndOfPage, setIsEndOfPage] = useState(false);
-  const mainPostContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const handleScroll = () => {
-    const { current } = mainPostContainerRef;
-    if (current) {
-      if (
-        window.innerHeight + window.scrollY >= document.body.offsetHeight - 5 &&
-        !isLoading
-        //&& !isEndOfPage
-      ) {
-        setIsLoading(true);
-        setPage((prevPage) => prevPage + 1);
-      }
-    }
-  };
+  const [activeTab, setActiveTab] = useState<active>("글");
+  //검색어 상태
+  const [searchText, setSearchText] = useState<string>("");
+  //정보 가져오는 상태
+  const [postData, setPostData] = useState<Preview>();
+  const [writerData, setWriterData] = useState<Writer>();
+  const [total, setTotal] = useState<number>(0);
+  //스크롤 관련 상태
+  const [page, setPage] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isDone, setIsDone] = useState<boolean>(false);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  console.log(activeTab);
 
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [isLoading /*isEndOfPage*/]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (page === 1) {
-          setPostdata([]);
-          setWriterdata([]);
-          //setIsEndOfPage(false);
-        }
-
-        let response: any;
-        if (post) {
-          response = await axios.get(
-            `${
-              import.meta.env.VITE_SERVER_SEARCH_API_URI
-            }?value=${searchtext}&page=${page}`
-          );
-          setTotalPage(response.data.total);
-          console.log("what is total? ", totalpage);
-
-          const newWriterArray = response.data.new_array.map((item: any) => {
-            if (item.preview.text.length > 50) {
-              item.preview.text = item.preview.text.slice(0, 50) + "...";
-            }
-            return item;
-          });
-
-          setPostdata((prevPostList) => [...prevPostList, ...newWriterArray]);
-        } else if (writer) {
-          response = await axios.get(
-            `${
-              import.meta.env.VITE_SERVER_SEARCH_API_URI
-            }/writer?value=${searchtext}&page=${page}`
-          );
-
-          const newWriterArray = response.data.new_array.map((item: any) => {
-            if (item.comment.length > 50) {
-              item.comment = item.comment.slice(0, 50) + "...";
-            }
-            return item;
-          });
-
-          setWriterdata((prevWriterList) => [
-            ...prevWriterList,
-            ...newWriterArray,
-          ]);
-          setTotalPage(response.data.total);
-        }
-
-        if (
-          (post && response.data.new_array.length === 0) ||
-          (writer && response.data.new_array.length === 0)
-        ) {
-          //setIsEndOfPage(true);
-        }
-        setIsLoading(false);
-      } catch (error) {
-        console.error(error);
-        setIsLoading(false);
-      }
-    };
-
-    if (searchtext) {
-      fetchData();
-    }
-  }, [page, searchtext, post, writer]);
-
-  const handleSearchClick = () => {
-    navigate(`/search?text=${searchtext}`);
-    setPage(1); // 새로운 검색 시 페이지를 1로 초기화
-  };
-
-  const handleKeyDown = (e: any) => {
-    if (e.key === "Enter" && searchtext.trim().length > 0) {
-      handleSearchClick();
-    }
-  };
-
-  const handleTabClick = (tab: string) => {
+  const handleTabClick = (tab: active) => {
     setActiveTab(tab);
-    setPage(1); // 탭 변경 시 페이지를 1로 초기화
-    if (tab === "글") {
-      setPost(true);
-      setWriter(false);
-    } else {
-      setPost(false);
-      setWriter(true);
-    }
+    setPage(1); // 탭 변경 시 페이지를 1로 초기화 (이건 필요할 듯)
+    // if (tab === "글") {
+    //   setPost(true);
+    //   setWriter(false);
+    // } else {
+    //   setPost(false);
+    //   setWriter(true);
+    // }
   };
 
   return (
-    <div className="">
+    <>
       <Navbar />
       <div className="py-[3rem] px-[2rem]">
         <div className="flex justify-center items-center py-12">
           <input
             className="w-full h-[3rem] shadow-sm p-[1rem] text-xl border rounded"
             //value={searchtext}
-            onChange={(e) => setSearchtext(e.target.value)}
-            onKeyDown={handleKeyDown}
+            // onChange={(e) => setSearchtext(e.target.value)}
+            // onKeyDown={handleKeyDown}
             placeholder=" 검색어를 입력해주세요."
           />
         </div>
         <div className="flex gap-[5px]">
           <Button
             onClick={() => handleTabClick("글")}
-            className={`bg-white border-none hover:text-gray-500 ${
-              activeTab === "글" ? "text-black" : "text-gray-500"
-            }`}
+            className={`bg-white border-none hover:text-gray-500 
+                ${activeTab === "글" ? "text-black" : "text-gray-500"}
+              `}
           >
-            글 검색
+            글
           </Button>
           <Button
             onClick={() => handleTabClick("작가")}
@@ -176,10 +92,11 @@ export default function Search() {
         <hr></hr>
         <div
           className="flex flex-col items-center mt-10 px-[0.75rem]"
-          ref={mainPostContainerRef}
+          //   ref={mainPostContainerRef}
         >
           <div className="w-full">
-            {post &&
+            {activeTab === "글" ? <PostCard /> : <WriterCard />}
+            {/* {post &&
               (postdata.length === 0 ? (
                 <div className="text-center text-3xl">검색 결과가 없습니다</div>
               ) : (
@@ -223,9 +140,9 @@ export default function Search() {
                     </div>
                   ))}
                 </div>
-              ))}
+              ))} */}
 
-            {writer &&
+            {/* {writer &&
               (writerdata.length === 0 ? (
                 <div className="text-center text-3xl">검색 결과가 없습니다</div>
               ) : (
@@ -259,11 +176,10 @@ export default function Search() {
                     ))}
                   </div>
                 </div>
-              ))}
+              ))} */}
           </div>
-          {isLoading && <div>Loading...</div>}
         </div>
       </div>
-    </div>
+    </>
   );
 }

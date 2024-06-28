@@ -506,7 +506,9 @@ export default function MyPage() {
                     />
                   ) : (
                     <div className="flex gap-10 text-[#88898a] w-64 phone:justify-center">
-                      <p className="break-words">{userInfo?.comment}</p>
+                      <p className="break-words break-all">
+                        {userInfo?.comment}
+                      </p>
                     </div>
                   )}
 
