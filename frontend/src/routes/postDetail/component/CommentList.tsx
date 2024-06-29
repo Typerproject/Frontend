@@ -15,7 +15,6 @@ export default function CommentList({ comments }) {
     try {
       const resp = await service.postComment({ text, postId: id });
 
-      // console.log(resp);
       if (resp.status !== 201) {
         throw Error("댓글 작성 실패");
       } else {
@@ -24,7 +23,6 @@ export default function CommentList({ comments }) {
         location.reload();
       }
     } catch (error) {
-      // console.log(error);
       alert("댓글 작성에 실패했습니다.");
     }
   };

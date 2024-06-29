@@ -26,7 +26,6 @@ export default function Reply({ reply, service }) {
 
     const res = await service.deleteComment(reply._id);
 
-    console.log(res);
     if (res.status === 200) {
       history.scrollRestoration = "auto";
       location.reload();

@@ -42,7 +42,6 @@ export class ImageBlock {
   }
 
   save(blockContent: string) {
-    console.log(this.data);
     return this.data;
   }
 }

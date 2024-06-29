@@ -10,23 +10,19 @@ type StockNewsProps = {
 };
 
 const StockNews: React.FC<StockNewsProps> = ({ newsData, setNewsData }) => {
-  // export default function StockNews({ newsData, setNewsData }: StockNewsProps) {
   const [newsInfo, setNewsInfo] = useState<INewsData>(newsData);
-  console.log("newsInfo", newsInfo);
 
   const handleChange = async (
     e: React.ChangeEvent<HTMLInputElement>
   ): Promise<void> => {
     e.stopPropagation();
     const url = e.target.value;
-    // console.log(url);
     try {
       const resp = await service.getNewsData(url);
-      console.log(resp);
       setNewsInfo(resp.data);
       setNewsData(resp.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -38,11 +34,10 @@ const StockNews: React.FC<StockNewsProps> = ({ newsData, setNewsData }) => {
 
     try {
       const resp = await service.getNewsData(url.getData("Text"));
-      console.log(resp);
       setNewsInfo(resp.data);
       setNewsData(resp.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

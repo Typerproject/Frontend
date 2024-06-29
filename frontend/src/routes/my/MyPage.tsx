@@ -136,8 +136,6 @@ export default function MyPage() {
           console.error("마이페이지 접근 유저", err);
           navigate("/notfound");
         });
-    } else {
-      console.log("ID 無", currentUserId);
     }
   }, [currentUser]);
 
@@ -242,8 +240,6 @@ export default function MyPage() {
           console.error("마이페이지 팔로우", err);
           navigate("/notfound");
         });
-    } else {
-      console.log("ID 無", currentUser);
     }
   }, [currentUser, id, isFollowing, refreshKey, isEditing, navigate]);
 
@@ -301,10 +297,10 @@ export default function MyPage() {
 
             setIsFollowing(true);
           } else {
-            console.log("이미 팔로우한 사용자입니다.");
+            alert("이미 팔로우한 사용자입니다.");
           }
         } else {
-          console.log("팔로우 요청이 실패했습니다.");
+          alert("팔로우 요청이 실패했습니다.");
         }
       })
       .catch((error) => {
@@ -342,14 +338,14 @@ export default function MyPage() {
 
             setIsFollowing(false);
           } else {
-            console.log("이미 언팔로우한 사용자입니다.");
+            alert("이미 언팔로우한 사용자입니다.");
           }
         } else {
-          console.log("언팔로우 요청이 실패했습니다.");
+          alert("언팔로우 요청이 실패했습니다.");
         }
       })
       .catch((err) => {
-        console.error("언팔 오류지롱: ", err);
+        console.error("언팔로우 오류: ", err);
       });
   };
 
@@ -640,11 +636,7 @@ export default function MyPage() {
           </div>
         </div>
       </div>
-      {isLoading ? (
-        <>loading..</>
-      ) : (
-        <div id="observer" style={{ height: "10px" }}></div>
-      )}
+      {isLoading ? <></> : <div id="observer" style={{ height: "10px" }}></div>}
 
       <div ref={footerRef}>
         <Footbar />

@@ -45,13 +45,14 @@ export default function PostContent({
 
   useEffect(() => {
     const fetcthComments = async () => {
-      commentService.getCommentList(id)
-      .then(resp=>{
-        setComments(resp);
-      })
-      .catch(()=>{
-        navigate("/notfound")
-      })
+      commentService
+        .getCommentList(id)
+        .then((resp) => {
+          setComments(resp);
+        })
+        .catch(() => {
+          navigate("/notfound");
+        });
     };
     fetcthComments();
   }, []);
@@ -61,26 +62,22 @@ export default function PostContent({
       service
         .deleteScrapPost(id)
         .then((res: IpostScrap) => {
-          // console.log(res);
           alert("스크랩 삭제 성공");
           setScrap(false);
           location.reload();
         })
         .catch((e) => {
-          // console.log(e);
           alert("스크랩 삭제에 실패하였습니다.");
         });
     } else {
       service
         .scrapPost(id)
         .then((res: IpostScrap) => {
-          // console.log(res);
           alert("스크랩 성공");
           setScrap(true);
           location.reload();
         })
         .catch((e) => {
-          // console.log(e);
           alert("스크랩에 실패하였습니다.");
         });
     }
@@ -102,10 +99,6 @@ export default function PostContent({
 
     const postEndPosition =
       postEnd && Math.floor(scrollY + postEnd.getBoundingClientRect().top);
-
-    // console.log("scrollY : ", scrollY);
-    // console.log("progressPostion : ", progressPostion);
-    // console.log("postEndPosition : ", postEndPosition);
 
     // window.innerHeight + scrollY가 mainBottomPosition아래로 내려가면 -> progress bar width는 100%이상이 되어야 한다...
     setProgress({
@@ -141,11 +134,11 @@ export default function PostContent({
     navigate(-1);
   };
 
-  const clickEdit = ():void => {
-    if(window.confirm("게시글을 수정하시겠습니까?")){
+  const clickEdit = (): void => {
+    if (window.confirm("게시글을 수정하시겠습니까?")) {
       navigate(`/edit/${id}`);
     }
-  }
+  };
 
   return (
     <>

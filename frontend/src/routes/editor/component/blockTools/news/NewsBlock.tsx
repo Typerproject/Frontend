@@ -49,7 +49,6 @@ export class NewsBlock {
   }
 
   save() {
-    // console.log(this.data)
     return this.data;
   }
 }
