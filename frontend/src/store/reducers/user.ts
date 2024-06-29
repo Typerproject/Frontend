@@ -25,8 +25,6 @@ const userSlice = createSlice({
   initialState: initialState,
   reducers: {
     setUser: (state, action: PayloadAction<userInfo>) => {
-      console.log(state);
-      console.log(action);
       //PayloadAction은 action 객체의 payload에 대해 redux toolkit에서 제공하는 type
       //로그인 했을 때 로직
       state._id = action.payload.user._id;
@@ -36,7 +34,6 @@ const userSlice = createSlice({
       state.profile = action.payload.user.profile;
     },
     logoutUser: (state) => {
-      console.log(state);
       //로그아웃
       state._id = null;
       state.nickname = null;
