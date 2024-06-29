@@ -76,10 +76,10 @@ export default function MainPost({ post }: MainPostProps) {
                     <div>
                       <div className="flex gap-[0.5rem] items-center">
                         <img
-                          className="w-[40px] rounded-full"
+                          className="w-[40px] h-[40px] rounded-full"
                           src={post.writer.img}
                         />
-                        <div className="text-base min-w-full break-words break-all">
+                        <div className="text-base break-words break-all">
                           {post.writer.nickname}
                         </div>
                       </div>
